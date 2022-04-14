@@ -1,0 +1,693 @@
+Bosses:
+
+  configVersion: 1.7.0  # This is important to check for an outdated config file. do not change or remove it. to update your config, please consider saving your current config file and using the "resetConfig" Option below.
+  # after this you can paste your original values at the appropriate positions if you wish to. (Alternatively to reset the config you can delete the entire config file instead of using the reset option)
+  enablePlugin: true
+  resetConfig: false  #If set true this will set your configuration to a state that definitely works, aka the state you found it in when you first opened this file.
+  #For the resetConfig setting to work, you must restart your server or type '/rl confirm'. The command for reloading the config file will not work here.
+
+  PluginLanguage: EN  # Currently implemented Languages: EN (English), GER (German), CN (Chinese)
+  #In case the entered language is not implemented. it will default to English
+
+  enableBossKilledMessage: true
+  disableBlazeBossesSpawningFromSpawners: false #no bosses except for the blaze boss can spawn from spawners. setting this to true will disable Blaze bosses from spawning from spawners aswell.
+
+  bossesGetGlowingPotionEffect: false
+  # The following 4 lines are for people who want to discourage autoclicking to farm mobs/bosses.
+  # enable the setting a
+
+  enableAntiAFKTeleports: false # If set to true mobs will have a chance to be teleported to the attacking player. If the player is afk the mob could kill the player. This should discourage from using autoclickers and afk farming mobs.
+  AntiAFKChance: 100   # 1 = 0.1% chance. 10 = 1% chance. after the AntiAFKHitLimit is reached this is the % chance to teleport the hit mob directly onto the player.
+  AntiAFKHitLimit: 15 #This is the amount of hits the player has to land on mobs until the Mob can teleport to them. Boss abilities are separate from this.
+  AntiAFKWarningMessage: "You should move a little more while hitting monsters, shouldn't you? \n AntiAFK Grinder Warning" #\n = new line
+
+  #optional, to use a command from this list add ':<numberOfCommand>' at the end of a 'worldsLocationsTimer'
+  # The numbers of commands start at 0. so to use the first command in the list below you have to use '0', to use the second one you use '1'
+  # <killer> to only apply this command to the killer
+  # <25> to get all players within a radius (doesn't have to be 25) (radius will have the killed boss at the center)
+  # @a to select all players on the server. This does not work with the /items command.
+  # <mostDamage> to input the player which did the most damage to the boss which died.
+  # <killedName> to input the Dead Bosses name. This should not be necessary often, but is possible. (possibly necessary to name items or put text in a book or so?)
+
+  # to disable OP players being able to see /give messages and /tp messages go into your server file and disable the broadcast-console-to-ops setting.
+  # for the /items command the only currently working syntax is /items <itemname> <killer>.
+
+  CommandsExecutedOnBossDeath:  # first command is an example of how to set an empty command. selecting '0' as a command for a boss with the command being empty will result in no command being executed.
+    - ""
+    - "give <10> minecraft:diamond 5"   # in case you have essentials installed you may have to remove the 'minecraft:', aka just use the item name.
+
+
+  MaxSpawnChance: 1000 # This is the way to modify the boss spawnchance even more. with a spawnchance of 50 and this set to 1000, every 20th mob will be a boss.
+  # if you set this to 10000, but leave the spawnchance at 50, the bosses will be 10 times more rare!
+
+
+  #Most things about the config will be explained inside the SkeletonBoss section! make sure to read carefully if you want to edit this file!
+
+  ########################################################################################################################
+  SkeletonBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "The Skeleton King"  # To remove the name, replace with "" and set 'showDisplayNameAlways' to 'false'
+    displayNameColor: "#7B7B7B" #Hex color codes, use a website with a Hex Color code picker or similar programs to get this code from the wanted color.
+    showDisplayNameAlways: true
+    health: 25
+    DamageModifier: 1.0
+    spawnChance: 5        # 1 = 0.1% of Skeletons will be bosses. 1000 = 100% of Skeletons will be bosses.
+    dropArmorChance: 0.0  # recommended to keep at 0 or at least pretty low since the armor is pretty op.
+    dropOffHandChance: 1  # 0.1 = 10% chance of dropping the item. 1 = 100% chance of dropping it.
+    ProtectionMin: 5      # Armor Protection Enchantment level
+    ProtectionMax: 12     # ^^
+
+    killedMessage: "<killedName> was slain by <killer>" #<killedName> is replaced by the name of the killed Entity
+    #<killer> is replaced by the name of the killer
+
+    spawnWorlds:
+    #  - world
+    #  - world2
+    #List all world names which you want this boss to spawn in. list none to enable spawning in all worlds.
+    # disable the "spawnNaturally" setting to disable natural spawning.
+
+
+
+    # MaterialToDrop: the item you wish the entity to drop upon death
+    # minAmount: this is the minimum amount of items the boss will drop upon death.
+    # maxAmount: this is the maximum amount of items the boss can drop upon death.
+    # Chance: This chance defines, how many items the boss will drop on average. this chance is applied for (maxAmount - minAmount) items.
+    # using ':' you split your entries. Do not use ':' anywhere except for the places it shows in the syntax below!
+
+    #syntax:  'MaterialToDrop:minimumAmount:maximumAmount:Chance'
+
+    droppedItems:
+      - BONE:5:10:75
+      - BONE:0:10:33
+
+    droppedXP: 125    #sets the amount of experience points dropped on death of the boss
+
+    summonedTNTDoesBlockDamage: false # If this setting is set to true, the tnt summoned by the Skeletor will blow up blocks and items.
+
+    CommandToBeExecutedOnDeath: 0 #insert the commands you want executed whenever a naturally spawned boss is killed. remember that the numbers start at 0!
+
+    onHitEvents: #Chances in % on each hit. only one of these events can be activated each hit.
+      invulnerability:
+        chance: 3
+        durationInSeconds: 7
+      spawnMinions:
+        chance: 2
+        abilityRemovesBlocks: true     #This ability will not remove following blocks under any circumstance: Obsidian, Bedrock, Beacon
+      reflectDamage:
+        chance: 7
+        damageMultiplier: 0.5
+
+
+    spawnNaturally: true    #if set to false, specify worlds and locations below or leave the list empty.
+
+    # worldName: (just copy paste the name of the world in the server files)
+    # X,Y,Z: Coordinates at which the boss will be spawning and respawning
+    # secondsToRespawnAfterDeath: time, which the boss will take to respawn after dying
+    # CommandToExecuteOnDeath: number of the command you want the boss to execute upon dying. The first entry in the list at the top of the config is the number 0, the second is the number 1, ...
+    # CommandTimer: in seconds, this defines how long after the boss' death the specified command will activate.
+
+    worldsLocationsTimer:   # syntax:  'worldName:X:Y:Z:secondsToRespawnAfterDeath:CommandToExecuteOnDeath:CommandTimer'  This will spawn a respawning boss in your world upon reload. be careful!
+    #     - world:0.0:0.0:0.0:120:1:5      #This is an example. replace the '#' at the beginning with a space to make it active. then you can copy/paste it to every spot you need it.
+
+    #make sure there is a 2 space difference between the 'worldsLocationsTimer' and the '-' below.
+
+    enableBossBars: true
+    bossBarColor: blue
+
+  ######################################################################################################################
+  CreeperBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "Bomby the Bomber"
+    displayNameColor: "#1DE00C"
+    showDisplayNameAlways: true
+    DamageModifier: 1.0
+    health: 50
+    spawnChance: 20
+    thrownTNT:
+      throwTNTEnable: true            #creeper will throw TNT in all directions when it blows up. The creeper will not die to exploding like a normal creeper
+      TNTYield: 4                     #recommended to keep low, especially if you intend to set the TNTDoesNoBlockDamage to false. You have been warned!
+      TNTFuse: 4                      #in seconds
+      TNTSpreadMultiplier: 1.0
+      TNTDoesNoBlockDamage: true # If set to false the TNT the creeper boss throws out will do damage to the environment and items.
+
+    killedMessage: "<killedName> was slain by <killer>"
+
+    spawnWorlds:
+
+    droppedItems:
+      - TNT:2:4:75
+      - DIAMOND:0:1:25
+
+    droppedXP: 50
+
+    CommandToBeExecutedOnDeath: 0
+
+    disableVanillaDrops: false
+
+    spawnNaturally: true
+
+    worldsLocationsTimer:
+      - world:0.0:0.0:0.0:120:1:5
+
+    enableBossBars: true
+    bossBarColor: blue
+
+  ######################################################################################################################
+  SpiderBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "Dolores"
+    displayNameColor: "#A70FE1"
+    showDisplayNameAlways: true
+    DamageModifier: 1.0
+    health: 30
+    spawnChance: 20
+    killedMessage: "<killedName> was slain by <killer>"
+
+    spawnWorlds:
+
+    droppedItems:
+      - OBSIDIAN:2:4:50
+      - FERMENTED_SPIDER_EYE:2:8:25
+
+    droppedXP: 90
+
+    CommandToBeExecutedOnDeath: 0
+
+    disableVanillaDrops: true
+
+    onHitEvents:
+      invisibility:
+        chance: 5           # 1 = 1%
+        duration: 3         # in seconds
+        teleportToPlayer: true
+        teleportBack: true
+
+      leap:
+        chance: 15           # 1 = 1%
+        maxDelayAfterHit: 2 #in seconds
+
+    spawnNaturally: true
+
+    worldsLocationsTimer:
+
+    enableBossBars: true
+    bossBarColor: blue
+
+  ######################################################################################################################
+
+  BlazeBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "Blaze Warden"
+    displayNameColor: "#FF7501"
+    showDisplayNameAlways: true
+    DamageModifier: 1.0
+    health: 75
+    spawnChance: 50
+    killedMessage: "<killedName> was slain by <killer>"
+
+    spawnWorlds:
+
+    droppedItems:
+      - BLAZE_ROD:2:4:50
+
+    droppedXP: 50
+
+    CommandToBeExecutedOnDeath: 0
+
+    disableVanillaDrops: true
+
+    onHitEvents:
+      spectralArrowDamageMultiplier: 2
+      dropItemOnHitBySpectralArrow: BLAZE_POWDER #replace with 'AIR' to disable this drop.
+
+    blazeShootEventsChances:
+      witherSkull: 20
+      enderDragonFireBall: 5
+      largeFireBall: 20
+
+    spawnNaturally: true
+
+    worldsLocationsTimer:
+
+    enableBossBars: true
+    bossBarColor: blue
+
+  ######################################################################################################################
+
+  EndermanBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "Edna"
+    displayNameColor: "#682294"
+    showDisplayNameAlways: true
+    DamageModifier: 1.0
+    health: 50
+    spawnChance: 15
+    killedMessage: "<killedName> was slain by <killer>"
+
+    spawnWorlds:
+
+    droppedItems:
+      - ENDER_PEARL:3:8:66
+
+    droppedXP: 50
+
+    CommandToBeExecutedOnDeath: 0
+
+    disableVanillaDrops: true
+
+    onHitEvents:
+      potionEffects:  #syntax:  'Potiontype:amplifier:duration:chance'     duration in seconds, chance in %
+        - Increase_Damage:2:20:20
+        - Speed:1:10:10
+
+      teleportBehindPlayer:
+        enabled: true
+        teleportBackToOldLocation: true
+        teleportBackDelay: 4  #in seconds
+        chance: 5    #in %
+        invisibility: true
+        invisibilityDuration: 3
+
+      endermiteSpawnOnTeleport:
+        enabled: true
+        amount: 2
+
+    spawnNaturally: true
+
+    worldsLocationsTimer:
+
+    enableBossBars: true
+    bossBarColor: blue
+
+  ######################################################################################################################
+
+  ZombieBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "Bob"
+    displayNameColor: "#249400"
+    showDisplayNameAlways: true
+    DamageModifier: 1.0
+    health: 50
+    spawnChance: 5
+    killedMessage: "<killedName> was slain by <killer>"
+
+    spawnWorlds:
+
+    droppedItems:
+      - IRON_INGOT:3:8:66
+
+    droppedXP: 50
+
+    CommandToBeExecutedOnDeath: 0
+
+    disableVanillaDrops: true
+
+    spawnNaturally: true
+
+    worldsLocationsTimer:
+
+    enableBossBars: true
+    bossBarColor: blue
+
+  ######################################################################################################################
+
+  Zombified_PiglinBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "The Butcher"
+    displayNameColor: "#850000"
+    showDisplayNameAlways: true
+    DamageModifier: 1.0
+    health: 50
+    spawnChance: 10
+    killedMessage: "<killedName> was slain by <killer>"
+
+    spawnWorlds:
+
+    droppedItems:
+      - GOLD_INGOT:5:10:66
+
+    droppedXP: 50
+
+    CommandToBeExecutedOnDeath: 0
+
+    disableVanillaDrops: true
+
+    spawnNaturally: true
+
+    worldsLocationsTimer:
+
+    enableBossBars: true
+    bossBarColor: blue
+
+  ######################################################################################################################
+
+  WitchBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "Margeret"
+    displayNameColor: "#440D8A"
+    showDisplayNameAlways: true
+    health: 45
+    spawnChance: 50
+    killedMessage: "<killedName> was slain by <killer>"
+
+    spawnWorlds:
+
+    droppedItems:
+      - NETHER_WART:0:1:20
+      - GLOWSTONE_DUST:2:5:66
+      - BLAZE_POWDER:0:3:20
+
+    droppedXP: 50
+
+    CommandToBeExecutedOnDeath: 0
+
+    disableVanillaDrops: true
+
+    onHitEvents:
+      PlayersSwitchPlaces:
+        enabled: true
+        chance: 10
+        applyNausea: true
+        cooldown: 10  # This is the minimum number of hits a boss Witch will take between activating this ability
+        canSwitchWithOtherEntities: true  # leave this enabled if youre alone, or this ability will not work at all.
+
+
+    dropCustomPotionsChances:    #each of the following will be dropped with the set chance. Dropping is not exclusive, so theoretically all of them can drop at once.
+      - 15    # Potion of harming
+      - 10    # Potion of poison
+      - 15    # Potion of blindness
+      - 5     # Potion of wither
+      - 10    # Potion of hunger
+
+
+    customThrownPotions:
+      Harm: # The types of Potions cannot currently be edited, only the values of each one can. IMPORTANT: The values you type in will be used in the drops too!
+        amplifier: 4
+        chance: 20    #in %, chances have to add up to 100 or be less than 100. if the sum of chances is less than 100, vanilla potions will be thrown sometimes.
+      Poison:         # if the sum of chances is over 100, chances will not be applied properly
+        amplifier: 4
+        duration: 20 #in seconds
+        chance: 20
+      Blindness:
+        duration: 20
+        chance: 20
+      Wither:
+        amplifier: 4
+        duration: 15
+        chance: 20
+      Hunger:
+        amplifier: 2
+        duration: 20
+        chance: 20
+
+    spawnNaturally: true
+
+    worldsLocationsTimer:
+
+    enableBossBars: true
+    bossBarColor: blue
+
+  ######################################################################################################################
+
+  SlimeBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "Chester"
+    displayNameColor: "#4AD502"
+    showDisplayNameAlways: true
+    DamageModifier: 1.0
+    health: 45
+    spawnChance: 50
+    killedMessage: "<killedName> was slain by <killer>"
+
+    spawnWorlds:
+
+    droppedItems:
+      - Slime_Ball:2:6:66
+
+    droppedXP: 50
+
+    CommandToBeExecutedOnDeath: 0
+
+    disableVanillaDrops: false
+
+    onHitEvents:
+      JumpSlam: # throws all nearby Players in the air.
+        enabled: true
+        chance: 15
+
+    spawnNaturally: true
+
+    worldsLocationsTimer:
+
+    enableBossBars: true
+    bossBarColor: blue
+
+  ######################################################################################################################
+  WitherBoss:
+    enabled: true
+    enableSummonCommand: true
+    removeNetheriteBlockOnSpawn: true
+    displayName: "X AE A-12"
+    displayNameColor: "#1B1D19"
+    showDisplayNameAlways: true
+    DamageModifier: 1.0
+    Health: 750  #standard health of the boss is 750 (pretty hard without spectral arrows)
+    killedMessage: "<killedName> was slain by <killer>"
+
+    droppedItems:
+
+    droppedXP: 250
+
+    CommandToBeExecutedOnDeath: 0
+
+    onHitEvents:
+      spectralArrowDamageMultiplier: 4
+      dropItemOnHitBySpectralArrow: WITHER_ROSE #to disable drops like this, replace with "AIR"
+
+    worldsLocationsTimer:
+
+  ######################################################################################################################
+
+  Magma_cubeBoss:
+    enabled: true
+    enableSummonCommand: true
+    displayName: "Chesters' younger brother"
+    displayNameColor: "#FF0000"
+    showDisplayNameAlways: true
+    DamageModifier: 1.0
+    health: 90
+    spawnChance: 75
+    killedMessage: "<killedName> was slain by <killer>"
+
+    spawnWorlds:
+
+    droppedItems:
+      - MAGMA_CREAM:2:12:66
+
+    droppedXP: 50
+
+    CommandToBeExecutedOnDeath: 0
+
+    disableVanillaDrops: false
+
+    onHitEvents:
+      BurningAir: # makes an area around the boss burn entities
+        enabled: true
+        chance: 15 # in %
+        range: 8 #range of this ability in blocks
+        time: 10  #how long the entities within the range stay on fire for in seconds
+
+    spawnNaturally: true
+
+    worldsLocationsTimer:
+
+    enableBossBars: true
+    bossBarColor: blue
+
+Items:
+
+  DisableRepairAndEnchant: false   #if enabled this will prevent repair, combining and renaming of items added by this plugin (at an anvil)
+
+  WitherEgg:
+    witherBossDropsEgg: true
+    timeToHatch: 10  #in seconds (Don't reload the plugin or the server while this timer is active, spawning won't work properly if you do. Recommended low values so this wont happen.)
+    petWitherHP: 1500
+    enableSpawnCommand: true
+    arrowDamageMultiplier: 0.3 #sets the multiplier for the arrows the pet wither shoots. will only target Monsters.
+    arrowRange: 15
+
+
+  cloakOfInvisibility:
+    enableDropping: true
+    chance: 5
+    enableSpawnCommand: true
+    #keep this next one at or above 3 seconds!
+    delayBetweenChecks: 5  #in seconds, tells the plugin how often to check if a player is wearing an invisibility cloak. If you are experiencing lag spikes, try increasing this number.
+    enableChecks: true # if disabled, the cloak of Invisibility will no longer work. Only use this setting for troubleshooting lag causes.
+    enableDamageCloakEachCheck: true  # if enabled, the cloak will take the specified amount of damage per Check. (delayBetweenChecks defines how quickly it will be damaged)
+    damagePerCheckAmount: 1           # will only be done if above 0, this amount of damage will be done to the cloak every check if worn.
+    enableCraftingRecipe: true
+    Lore:
+      - Makes the wearer almost completely invisible!
+
+    recipeShape:
+      - "E E"   #always keep at 3 letters (including space to keep that slot empty). declare all letters you use in this down below in the recipeIngredients
+      - "BDB"   # ^^
+      - "IPI"   # ^^
+    recipeIngredients: # syntax: "Letter:MaterialType"
+      - E:Ender_Eye
+      - B:Enchanted_Book
+      - D:Diamond_Block
+      - I:Iron_Ingot
+      - P:pot             #pot = invisibility potion.
+        #to include items from this plugin in crafting recipes, use the following words: (BaseballBat, Blazer, ButchersAxe, InvisibilityCloak,
+        #                                                                             Skeletor, Slimeboots, BouncySlime, Slingshot, Pot, HeatedCream1, HeatedCream2, HeatedCream3)
+      # Using one of these words as a materialType in the syntax for recipeIngredients will make the recipe require the specified special Item at the specified slot.
+
+  slingshot:
+    itemMaterial: Wooden_Hoe  # Must be a damageable item (weapon or tool. (Armor works too))
+    enableDropping: true
+    enableSpawnCommand: true
+    chance: 15
+    thrustMultiplier: 1.5
+    enableBoostSound: true
+    boostSoundVolume: 1       #keep low, or earrape
+    enableDamagingOnUse: true
+    damageOnUseAmount: 1
+    enableCraftingRecipe: true
+    Lore:
+      - Makes you leap forward when rightclicked!
+      - sneak to use
+
+    recipeShape:
+      - "RCC"
+      - " EC"
+      - "F R"
+    recipeIngredients:
+      - F:Fishing_Rod
+      - R:Firework_Rocket
+      - E:Emerald_Block
+      - C:Cobweb
+
+  Skeletor:
+    enableSpawnCommand: true
+    dropChance: 0.2
+    enableCraftingRecipe: true
+    Lore:
+      - The favorite bow of the Skeleton King
+      - -Shoots TNT-
+
+    recipeShape:
+      - "GNG"
+      - "DBD"
+      - "GNG"
+    recipeIngredients:
+      - G:Gold_Ingot
+      - N:Netherite_Ingot
+      - B:Bow
+      - D:Diamond_Block
+
+    TNTOnArrowHit:
+      enable: true
+      TNTTimer: 40 # in ticks. 1 second is equal to 20 ticks. 40 ticks = 2 seconds
+      TNTYield: 3
+      TNTDoesNoBlockDamage: true
+
+    ShootTNTFromOffHand:
+      enabled: true
+      TNTTimer: 160 # in ticks. 1 second is equal to 20 ticks. 40 ticks = 2 seconds
+      TNTYield: 5
+      TNTDoesNoBlockDamage: true
+
+  ButchersAxe:
+    dropChance: 0.2
+    ChanceToApplySlowness: 10   #in %
+    enableSpawnCommand: true
+    Lore:
+      -has a chance to bind hit entites to their current position
+
+  BaseballBat:
+    dropChance: 0.2
+    chanceToConcuss: 5  # in %, applies Blindness
+    concussionDuration: 3 #in seconds
+    enableSpawnCommand: true
+    Lore:
+      - Has a Chance to blind enemies!
+
+  SlimeBoots:
+    enableSpawnCommand: true
+    dropChance: 5   #in %
+    enableCraftingRecipe: true
+    Lore:
+
+    recipeShape:
+      - "   "
+      - "B B"
+      - "B B"
+    recipeIngredients:
+      - B:BouncySlime
+
+    damageOnUseMultiplier: 3    #the damage the slime boots take depends on how much damage the wearer would take without them. This multiplier makes the boots take more or less damage.
+    # allowed multipliers: {0,1,2,3,....}
+
+    BouncySlime: # The Resource needed to craft the slime boots. drops from boss slimes.
+      enableSpawnCommand: true
+      dropChance: 75   #per possible drop, in % (roughly this % of the maxDropped will drop on average)
+      maxDropped: 2
+      Lore:
+
+
+  Blazer:
+    enableSpawnCommand: true
+    Chestplate: Leather_Chestplate  #define the type of chestplate to be used for the item!
+    dropChance: 10 #drops from the Blaze Boss!
+    enableCraftingRecipe: true
+    chanceToCombust: 20  # in %
+    ticksOfFire: 100 # 20 ticks = 1 second, defines how long the attacker will be set on fire for
+    Lore:
+      - Has a fiery aura
+
+    recipeShape:
+      - "FNF"
+      - "BLB"
+      - "DBD"
+    recipeIngredients:
+      - B:Blaze_Rod
+      - L:Leather_Chestplate
+      - N:Netherrack
+      - F:Flint_And_Steel
+      - D:Diamond
+
+  HeatedMagmaCream:         #3 levels of this item
+    enableSpawnCommand: true
+    enableImproving: true #craft the better version of the item by combining 3 of the same level (level 1 or 2)
+    #result is a heated Magmacream of a level one higher than the ingredients
+    #to improve the level you have to fill out the top line of a crafting table with 3 heatedMagmaCream of level 1 or 2.
+
+
+    Level1:   #dropped by the magmacube boss
+      dropChance: 50
+      maxDropped: 3
+      radius: 4
+      burnTime: 3 #in seconds
+
+    Level2:
+      dropChance: 25
+      maxDropped: 2
+      radius: 6
+      burnTime: 5
+
+    Level3:
+      dropChance: 10
+      maxDropped: 1
+      radius: 8
+      burnTime: 7

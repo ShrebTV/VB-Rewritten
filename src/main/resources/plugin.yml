@@ -1,0 +1,5 @@
+name: Vanillabosses
+version: '${project.version}'
+main: me.shreb.vanillabosses.Vanillabosses
+api-version: 1.16
+description: A plugin which naturally spawns bosses to fight in your world!
