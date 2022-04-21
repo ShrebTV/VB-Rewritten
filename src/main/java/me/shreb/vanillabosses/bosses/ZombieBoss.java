@@ -21,6 +21,8 @@ import java.util.logging.Level;
 
 public class ZombieBoss extends VBBoss {
 
+    public static ZombieBoss instance = new ZombieBoss();
+
     public static final String CONFIGSECTION = "ZombieBoss";
     public static final String SCOREBOARDTAG = "BossZombie";
 
@@ -92,6 +94,7 @@ public class ZombieBoss extends VBBoss {
 
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);
+        entity.getScoreboardTags().add(VBBoss.BOSSTAG);
 
         if (!putOnEquipment((Zombie) entity)) {
             throw new BossCreationException("Could not put Armor on Zombie boss");

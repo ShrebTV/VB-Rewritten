@@ -2,14 +2,19 @@ package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
+import me.shreb.vanillabosses.items.Skeletor;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -17,15 +22,17 @@ import java.util.logging.Level;
 
 public class SkeletonBoss extends VBBoss {
 
-    public static final String CONFIGSECTION = "ZombieBoss";
-    public static final String SCOREBOARDTAG = "BossZombie";
+    public static SkeletonBoss instance = new SkeletonBoss();
+
+    public static final String CONFIGSECTION = "SkeletonBoss";
+    public static final String SCOREBOARDTAG = "BossSkeleton";
 
     @Override
     public LivingEntity makeBoss(Location location) throws BossCreationException {
 
         LivingEntity entity;
         try {
-            entity = (LivingEntity) location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
+            entity = (LivingEntity) location.getWorld().spawnEntity(location, EntityType.SKELETON);
         } catch (NullPointerException e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Nullpointer Exception at Zombie Boss. World or location was null.\n" +
                     "Location: " + location.toString()).logToFile();
@@ -56,14 +63,14 @@ public class SkeletonBoss extends VBBoss {
         }
 
         //getting the Boss Attributes from the config file
-        double health = config.getDouble("Bosses.ZombieBoss.health");
-        String nameColorString = config.getString("Bosses.ZombieBoss.displayNameColor");
+        double health = config.getDouble("Bosses." + CONFIGSECTION + ".health");
+        String nameColorString = config.getString("Bosses." + CONFIGSECTION + ".displayNameColor");
 
         ChatColor nameColor = null;
 
         //If the String is null or empty set it to a standard String
         if (nameColorString == null || nameColorString.equals("")) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Zombie boss! Defaulting to #000000").logToFile();
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Skeleton boss! Defaulting to #000000").logToFile();
         } else {
             try {
                 nameColor = ChatColor.of(nameColorString);
@@ -72,25 +79,26 @@ public class SkeletonBoss extends VBBoss {
             }
         }
 
-        String name = config.getString("Bosses.ZombieBoss.displayName");
+        String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
 
         //setting the Attributes. Logging to file if it fails at any point.
         try {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("Bosses.ZombieBoss.showDisplayNameAlways"));
+            entity.setCustomNameVisible(config.getBoolean("Bosses." + CONFIGSECTION + ".showDisplayNameAlways"));
 
         } catch (Exception e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Zombie Boss\n" +
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Skeleton Boss\n" +
                     "Reason: " + e).logToFile();
         }
 
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);
+        entity.getScoreboardTags().add(VBBoss.BOSSTAG);
 
-        if (!putOnEquipment((Zombie) entity)) {
-            throw new BossCreationException("Could not put Armor on Zombie boss");
+        if (!putOnEquipment((Skeleton) entity)) {
+            throw new BossCreationException("Could not put Armor on Skeleton boss");
         }
 
         if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.bossesGetGlowingPotionEffect")) {
@@ -99,4 +107,38 @@ public class SkeletonBoss extends VBBoss {
 
         return null;
     }
+
+    private boolean putOnEquipment(Skeleton skeleton) {
+        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+
+        ItemStack[] armor = new ItemStack[]{
+                new ItemStack(Material.IRON_HELMET),
+                new ItemStack(Material.IRON_CHESTPLATE),
+                new ItemStack(Material.IRON_LEGGINGS),
+                new ItemStack(Material.IRON_BOOTS)
+        };
+
+        for (ItemStack itemStack : armor) {
+            itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
+            itemStack.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+        }
+
+        try {
+            skeleton.getEquipment().setArmorContents(armor);
+        } catch (NullPointerException e) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not put armor on the Skeleton boss. Nullpointer exception at SkeletonBoss.putOnArmor()").logToFile();
+            return false;
+        }
+
+        skeleton.getEquipment().setHelmetDropChance(0);
+        skeleton.getEquipment().setChestplateDropChance(0);
+        skeleton.getEquipment().setLeggingsDropChance(0);
+        skeleton.getEquipment().setBootsDropChance(0);
+
+        skeleton.getEquipment().setItemInMainHand(Skeletor.instance.makeItem());
+        skeleton.getEquipment().setItemInMainHandDropChance((float) config.getDouble("Items.Skeletor.dropChance"));
+
+        return true;
+    }
+
 }

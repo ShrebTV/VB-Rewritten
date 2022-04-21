@@ -2,7 +2,6 @@ package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
-import me.shreb.vanillabosses.items.BaseballBat;
 import me.shreb.vanillabosses.items.ButchersAxe;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
@@ -12,7 +11,9 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.PigZombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -20,6 +21,8 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.logging.Level;
 
 public class Zombified_PiglinBoss extends VBBoss {
+
+    public static Zombified_PiglinBoss instance = new Zombified_PiglinBoss();
 
     public static final String CONFIGSECTION = "Zombified_PiglinBoss";
     public static final String SCOREBOARDTAG = "BossZombified_Piglin";
@@ -105,6 +108,7 @@ public class Zombified_PiglinBoss extends VBBoss {
 
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);
+        entity.getScoreboardTags().add(VBBoss.BOSSTAG);
 
         //Putting equipment on the boss, throwing Exception if failed.
         if (!putOnEquipment((PigZombie) entity)) {
