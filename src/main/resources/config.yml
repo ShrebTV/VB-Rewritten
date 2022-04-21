@@ -52,7 +52,7 @@ Bosses:
     showDisplayNameAlways: true
     health: 25
     DamageModifier: 1.0
-    spawnChance: 5        # 1 = 0.1% of Skeletons will be bosses. 1000 = 100% of Skeletons will be bosses.
+    spawnChance: 0.005        # %-Chance of a regularly spawned monster of this type to become a boss
     dropArmorChance: 0.0  # recommended to keep at 0 or at least pretty low since the armor is pretty op.
     dropOffHandChance: 1  # 0.1 = 10% chance of dropping the item. 1 = 100% chance of dropping it.
     ProtectionMin: 5      # Armor Protection Enchantment level
@@ -124,7 +124,7 @@ Bosses:
     showDisplayNameAlways: true
     DamageModifier: 1.0
     health: 50
-    spawnChance: 20
+    spawnChance: 0.005
     thrownTNT:
       throwTNTEnable: true            #creeper will throw TNT in all directions when it blows up. The creeper will not die to exploding like a normal creeper
       TNTYield: 4                     #recommended to keep low, especially if you intend to set the TNTDoesNoBlockDamage to false. You have been warned!
@@ -163,7 +163,7 @@ Bosses:
     showDisplayNameAlways: true
     DamageModifier: 1.0
     health: 30
-    spawnChance: 20
+    spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
     spawnWorlds:
@@ -206,7 +206,7 @@ Bosses:
     showDisplayNameAlways: true
     DamageModifier: 1.0
     health: 75
-    spawnChance: 50
+    spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
     spawnWorlds:
@@ -225,9 +225,9 @@ Bosses:
       dropItemOnHitBySpectralArrow: BLAZE_POWDER #replace with 'AIR' to disable this drop.
 
     blazeShootEventsChances:
-      witherSkull: 20
-      enderDragonFireBall: 5
-      largeFireBall: 20
+      witherSkull: 0.2
+      enderDragonFireBall: 0.05
+      largeFireBall: 0.2
 
     spawnNaturally: true
 
@@ -246,7 +246,7 @@ Bosses:
     showDisplayNameAlways: true
     DamageModifier: 1.0
     health: 50
-    spawnChance: 15
+    spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
     spawnWorlds:
@@ -294,7 +294,7 @@ Bosses:
     showDisplayNameAlways: true
     DamageModifier: 1.0
     health: 50
-    spawnChance: 5
+    spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
     spawnWorlds:
@@ -325,7 +325,7 @@ Bosses:
     showDisplayNameAlways: true
     DamageModifier: 1.0
     health: 50
-    spawnChance: 10
+    spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
     spawnWorlds:
@@ -355,7 +355,7 @@ Bosses:
     displayNameColor: "#440D8A"
     showDisplayNameAlways: true
     health: 45
-    spawnChance: 50
+    spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
     spawnWorlds:
@@ -391,22 +391,22 @@ Bosses:
     customThrownPotions:
       Harm: # The types of Potions cannot currently be edited, only the values of each one can. IMPORTANT: The values you type in will be used in the drops too!
         amplifier: 4
-        chance: 20    #in %, chances have to add up to 100 or be less than 100. if the sum of chances is less than 100, vanilla potions will be thrown sometimes.
-      Poison:         # if the sum of chances is over 100, chances will not be applied properly
+        chance: 0.2    #chances have to add up to 1 or be less than 1. if the sum of chances is less than 1, vanilla potions will be thrown sometimes.
+      Poison:         # if the sum of chances is over 1, chances will not be applied properly
         amplifier: 4
         duration: 20 #in seconds
-        chance: 20
+        chance: 0.2
       Blindness:
         duration: 20
-        chance: 20
+        chance: 0.2
       Wither:
         amplifier: 4
         duration: 15
-        chance: 20
+        chance: 0.2
       Hunger:
         amplifier: 2
         duration: 20
-        chance: 20
+        chance: 0.2
 
     spawnNaturally: true
 
@@ -425,7 +425,7 @@ Bosses:
     showDisplayNameAlways: true
     DamageModifier: 1.0
     health: 45
-    spawnChance: 50
+    spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
     spawnWorlds:
@@ -485,7 +485,7 @@ Bosses:
     showDisplayNameAlways: true
     DamageModifier: 1.0
     health: 90
-    spawnChance: 75
+    spawnChance: 0.01
     killedMessage: "<killedName> was slain by <killer>"
 
     spawnWorlds:
