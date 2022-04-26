@@ -1,13 +1,16 @@
 package me.shreb.vanillabosses.bosses;
 
+import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
+import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 
-import java.net.http.WebSocket;
+import java.util.logging.Level;
 
-public abstract class VBBoss implements WebSocket.Listener {
+public abstract class VBBoss implements Listener {
 
     public static final String BOSSTAG = "VB-Boss";
 
@@ -17,7 +20,7 @@ public abstract class VBBoss implements WebSocket.Listener {
      * @return the resulting boss
      * @throws BossCreationException if there is a problem creating the boss
      */
-    abstract LivingEntity makeBoss(Location location) throws BossCreationException;
+    public abstract LivingEntity makeBoss(Location location) throws BossCreationException;
 
     /**
      * Edits an existing Entity into a Boss version of said entity
@@ -25,10 +28,25 @@ public abstract class VBBoss implements WebSocket.Listener {
      * @return the resulting boss
      * @throws BossCreationException if there is a problem creating the boss
      */
-    abstract LivingEntity makeBoss(LivingEntity entity) throws BossCreationException;
+    public abstract LivingEntity makeBoss(LivingEntity entity) throws BossCreationException;
 
-    private void registerListeners(){
+    public static void registerListeners(){
 
+        PluginManager pm = Vanillabosses.getInstance().getServer().getPluginManager();
+
+        pm.registerEvents(new BlazeBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new CreeperBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new EndermanBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new MagmacubeBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new SkeletonBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new SlimeBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new SpiderBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new WitchBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new WitherBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new ZombieBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new Zombified_PiglinBoss(), Vanillabosses.getInstance());
+
+        new VBLogger("VBBoss", Level.INFO, "Registered Boss Event listeners!").logToFile();
     }
 
 }

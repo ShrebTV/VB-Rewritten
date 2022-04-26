@@ -1,19 +1,25 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Slime;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 
 public class SlimeBoss extends VBBoss {
@@ -98,6 +104,8 @@ public class SlimeBoss extends VBBoss {
         entity.getScoreboardTags().add(SCOREBOARDTAG);
         entity.getScoreboardTags().add(VBBoss.BOSSTAG);
 
+        Boss.putCommandsToPDC(entity);
+
         //Putting glowing effect on bosses if config is set to do so.
         if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.bossesGetGlowingPotionEffect")) {
             entity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1));
@@ -109,9 +117,67 @@ public class SlimeBoss extends VBBoss {
     public void onSlimeBossFallDMG(EntityDamageEvent event){
 
         if(event.getCause() != EntityDamageEvent.DamageCause.FALL) return;
-        if(event.getEntity().getScoreboardTags().contains("NoFallDMG") && event.getEntity().getScoreboardTags().contains("BossSlime")){
+        if(event.getEntity().getScoreboardTags().contains("NoFallDMG") && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)){
             event.setCancelled(true);
             event.getEntity().getScoreboardTags().removeIf(n -> n.equals("NoFallDMG"));
         }
     }
+
+
+    static boolean isJumping = false;
+
+    public void onHitAbility(EntityDamageByEntityEvent event){
+
+        if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.SLIME) {
+
+            if (!(event.getDamager() instanceof Player)) return;
+            double jumpSlamChance = Vanillabosses.getInstance().getConfig().getDouble("Bosses.SlimeBoss.onHitEvents.JumpSlam.chance");
+
+            if (new Random().nextDouble() < jumpSlamChance) {
+
+                if (event.getFinalDamage() > ((LivingEntity) event.getEntity()).getHealth()) return;
+
+                if (isJumping) return;
+                isJumping = true;
+                Slime slime = (Slime) event.getEntity();
+
+                ArrayList<Entity> list = (ArrayList<Entity>) event.getEntity().getWorld().getNearbyEntities(event.getEntity().getLocation(), 15, 10, 15, n -> (n instanceof Player));
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
+                    slime.setVelocity(new Vector(0, 2, 0));
+                }, 1);
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
+
+                    slime.setVelocity(new Vector(0, -5, 0));
+                    slime.getScoreboardTags().add("NoFallDMG");
+
+
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
+
+                        for (Entity e : list) {
+                            if (e.getWorld().getBlockAt(e.getLocation().subtract(0, 0.1, 0)).getType() != Material.AIR
+                                    && e.getWorld().getBlockAt(e.getLocation().subtract(0, 0.1, 0)).getType() != Material.LAVA
+                                    && e.getWorld().getBlockAt(e.getLocation().subtract(0, 0.1, 0)).getType() != Material.GRASS
+                                    && e.getWorld().getBlockAt(e.getLocation().subtract(0, 0.1, 0)).getType() != Material.TALL_GRASS
+                                    && e.isOnGround()
+                            ) {
+                                int x = e.getLocation().getBlockX() - slime.getLocation().getBlockX();
+                                int z = e.getLocation().getBlockZ() - slime.getLocation().getBlockZ();
+                                Vector v = new Vector(x, 2, z);
+                                e.setVelocity(v);
+                            }
+                        }
+
+                        event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+                        isJumping = false;
+
+                    }, 8);
+
+                }, 20);
+            }
+        }
+
+    }
+
 }

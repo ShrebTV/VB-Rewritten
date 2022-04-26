@@ -1,18 +1,21 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -107,6 +110,8 @@ public class BlazeBoss extends VBBoss {
         entity.getScoreboardTags().add(SCOREBOARDTAG);
         entity.getScoreboardTags().add(VBBoss.BOSSTAG);
 
+        Boss.putCommandsToPDC(entity);
+
         //Putting glowing effect on bosses if config is set to do so.
         if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.bossesGetGlowingPotionEffect")) {
             entity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1));
@@ -117,8 +122,10 @@ public class BlazeBoss extends VBBoss {
 
 
     public static HashMap<Integer, UUID> bossBlazeTargetMap = new HashMap<>();
+
     /**
      * The ability of the blaze boss to transform its projectiles into different projectiles.
+     *
      * @param event the ProjectileLaunchEvent to check for a boss blaze in
      */
     public void blazeAbility(ProjectileLaunchEvent event) {
@@ -134,7 +141,7 @@ public class BlazeBoss extends VBBoss {
         if (bossBlazeTargetMap.containsKey(((Entity) event.getEntity().getShooter()).getEntityId())) {
 
             v = Objects.requireNonNull(Vanillabosses.getInstance().getServer()
-                    .getPlayer(bossBlazeTargetMap.get(((Entity) event.getEntity().getShooter()).getEntityId())))
+                            .getPlayer(bossBlazeTargetMap.get(((Entity) event.getEntity().getShooter()).getEntityId())))
                     .getLocation().subtract(event.getLocation()).toVector();
 
             v.divide(new Vector(8, 15, 8));
@@ -147,7 +154,7 @@ public class BlazeBoss extends VBBoss {
         double chanceLarge = config.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.largeFireBall");
 
         double currentChance = chanceWither;
-        if(currentChance < random){
+        if (currentChance < random) {
 
             WitherSkull entity = (WitherSkull) w.spawnEntity(event.getEntity().getLocation(), EntityType.WITHER_SKULL);
 
@@ -155,13 +162,13 @@ public class BlazeBoss extends VBBoss {
             event.getEntity().remove();
 
             Vector finalV = v;
-            for(int i=0; i<6; i++){
+            for (int i = 0; i < 6; i++) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
                     entity.setVelocity(Objects.requireNonNullElseGet(finalV, projectile::getVelocity));
                 }, 15 * i);
             }
 
-        } else if((currentChance += chanceEnder) < random){
+        } else if ((currentChance += chanceEnder) < random) {
 
             DragonFireball entity = (DragonFireball) w.spawnEntity(event.getEntity().getLocation(), EntityType.DRAGON_FIREBALL);
 
@@ -169,13 +176,13 @@ public class BlazeBoss extends VBBoss {
             event.getEntity().remove();
 
             Vector finalV = v;
-            for(int i=0; i<6; i++){
+            for (int i = 0; i < 6; i++) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
                     entity.setVelocity(Objects.requireNonNullElseGet(finalV, projectile::getVelocity));
                 }, 15 * i);
             }
 
-        } else if((currentChance + chanceLarge) < random){
+        } else if ((currentChance + chanceLarge) < random) {
 
             Fireball entity = (Fireball) w.spawnEntity(event.getEntity().getLocation(), EntityType.FIREBALL);
 
@@ -184,7 +191,7 @@ public class BlazeBoss extends VBBoss {
 
             Vector finalV = v;
 
-            for(int i=0; i<6; i++){
+            for (int i = 0; i < 6; i++) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
                     entity.setVelocity(Objects.requireNonNullElseGet(finalV, projectile::getVelocity));
                 }, 15 * i);
@@ -194,6 +201,7 @@ public class BlazeBoss extends VBBoss {
 
     /**
      * This is how the projectiles from the blazeAbility() method get their vector. It did not work any other way sadly.
+     *
      * @param event The EntityTargetLivingEntityEvent to check for a blaze boss targeting a player in
      */
     public void blazeTargeting(EntityTargetLivingEntityEvent event) {
@@ -210,6 +218,22 @@ public class BlazeBoss extends VBBoss {
         return entity instanceof Blaze
                 && entity.getScoreboardTags().contains(BlazeBoss.SCOREBOARDTAG)
                 && entity.getScoreboardTags().contains(VBBoss.BOSSTAG);
+    }
+
+    public void onHitEvent(EntityDamageByEntityEvent event) {
+
+        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+
+        if (event.getEntity().getScoreboardTags().contains("BossBlaze") && event.getEntityType() == EntityType.BLAZE) {
+
+            if (event.getDamager().getType().equals(EntityType.SPECTRAL_ARROW)) {
+                event.setDamage(event.getDamage() * config.getDouble("Bosses.BlazeBoss.onHitEvents.spectralArrowDamageMultiplier"));
+
+                if (Material.getMaterial(Objects.requireNonNull(config.getString("Bosses.BlazeBoss.onHitEvents.dropItemOnHitBySpectralArrow"))) != null && Material.getMaterial(Objects.requireNonNull(config.getString("Bosses.BlazeBoss.onHitEvents.dropItemOnHitBySpectralArrow"))) != Material.AIR) {
+                    event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), new ItemStack(Objects.requireNonNull(Material.getMaterial(config.getString("Bosses.BlazeBoss.onHitEvents.dropItemOnHitBySpectralArrow").toUpperCase())), 1));
+                }
+            }
+        }
     }
 }
 

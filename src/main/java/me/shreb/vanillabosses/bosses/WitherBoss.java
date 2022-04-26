@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
@@ -108,6 +109,8 @@ public class WitherBoss extends VBBoss {
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);
         entity.getScoreboardTags().add(VBBoss.BOSSTAG);
+
+        Boss.putCommandsToPDC(entity);
 
         //Putting glowing effect on bosses if config is set to do so.
         if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.bossesGetGlowingPotionEffect")) {
@@ -326,6 +329,20 @@ public class WitherBoss extends VBBoss {
                     WitherBoss.passiveWitherTarget(wither);
 
                 }, 20, 15);
+            }
+        }
+    }
+
+    public void onHitAbility(EntityDamageByEntityEvent event){
+
+        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+
+        if (event.getEntity().getScoreboardTags().contains("BossWither")) {
+
+            if (!(event.getEntityType().equals(EntityType.WITHER))) return;
+
+            if (event.getDamager().getType().equals(EntityType.SPECTRAL_ARROW)) {
+                event.setDamage(event.getDamage() * config.getDouble("Bosses.WitherBoss.onHitEvents.spectralArrowDamageMultiplier"));
             }
         }
     }

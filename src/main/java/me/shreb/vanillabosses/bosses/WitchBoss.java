@@ -1,17 +1,17 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.ThrownPotion;
-import org.bukkit.entity.Witch;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -19,7 +19,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 
 public class WitchBoss extends VBBoss {
@@ -104,6 +104,8 @@ public class WitchBoss extends VBBoss {
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);
         entity.getScoreboardTags().add(VBBoss.BOSSTAG);
+
+        Boss.putCommandsToPDC(entity);
 
         //Putting glowing effect on bosses if config is set to do so.
         if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.bossesGetGlowingPotionEffect")) {
@@ -270,5 +272,100 @@ public class WitchBoss extends VBBoss {
             e.setVelocity(v);
         }
     }
+
+
+    static HashMap<UUID, Integer> cooldownMap = new HashMap<>();
+
+    public void onHitAbility(EntityDamageByEntityEvent event){
+
+        if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.WITCH && event.getDamager() instanceof Player) {
+
+            int witchAbilityCooldown;
+            UUID witchUUID = event.getEntity().getUniqueId();
+
+            //if the map contains the uuid and the value isnt null get the value from the map. if that value is greater than 0 decrement ant return,
+            //otherwise get cooldown from config and write to map.
+            if(cooldownMap.containsKey(witchUUID) && cooldownMap.get(witchUUID) != null){
+                witchAbilityCooldown = cooldownMap.get(witchUUID);
+
+                if (witchAbilityCooldown > 0) {
+                    cooldownMap.put(witchUUID, --witchAbilityCooldown);
+                    return;
+                }
+
+            } else{
+                witchAbilityCooldown = config.getInt("Bosses.WitchBoss.onHitEvents.PlayersSwitchPlaces.cooldown");
+                cooldownMap.put(witchUUID, witchAbilityCooldown);
+            }
+
+
+
+            if (config.getBoolean("Bosses.WitchBoss.onHitEvents.PlayersSwitchPlaces.enabled") && new Random().nextDouble() < config.getDouble("Bosses.WitchBoss.onHitEvents.PlayersSwitchPlaces.chance")) {
+
+                ArrayList<Entity> list1 = (ArrayList<Entity>) event.getEntity().getWorld().getNearbyEntities(event.getEntity().getLocation(), 30, 5, 30);
+
+                list1.removeIf(n -> n.getType() != EntityType.PLAYER);
+
+                ArrayList<Player> playerList = new ArrayList<>();
+                for (Entity p : list1) {
+                    playerList.add((Player) p);
+                }
+
+                Location loc1;
+                Location loc2;
+
+                if (config.getBoolean("Bosses.WitchBoss.onHitEvents.PlayersSwitchPlaces.canSwitchWithOtherEntities")) {
+
+                    ArrayList<Entity> list2 = (ArrayList<Entity>) event.getEntity().getWorld().getNearbyEntities(event.getEntity().getLocation(), 30, 5, 30);
+
+                    list2.removeIf(n -> !(n instanceof LivingEntity));
+                    list2.removeIf(n -> (n.getType().equals(EntityType.WITCH))); //removing Witches from the list
+                    list2.removeIf(n -> (n.getType().equals(EntityType.CREEPER))); //removing Witches from the list (to be nice!)
+
+                    Collections.shuffle(list2);  //shuffling the list to get more random results
+
+                    ArrayList<LivingEntity> list3 = new ArrayList<>();
+
+                    for (Entity entity : list2) {
+                        list3.add((LivingEntity) entity);
+                    }
+
+                    event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 1F, 1F);
+
+                    for (int i = 0; i < list3.size(); i += 2) {
+
+                        if (list3.size() - i == 1) return;
+
+                        loc1 = list3.get(i).getLocation();
+                        loc2 = list3.get(i + 1).getLocation();
+
+                        list3.get(i).teleport(loc2);
+                        list3.get(i + 1).teleport(loc1);
+
+                        list3.get(i).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 7 * 20, 0));
+                        list3.get(i + 1).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 7 * 20, 0));
+
+                    }
+                } else {
+
+                    for (int i = 0; i < playerList.size(); i += 2) {
+
+                        if (playerList.size() - i == 1) return;
+
+                        loc1 = playerList.get(i).getLocation();
+                        loc2 = playerList.get(i + 1).getLocation();
+
+                        playerList.get(i).teleport(loc2);
+                        playerList.get(i + 1).teleport(loc1);
+
+                        playerList.get(i).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 7 * 20, 0));
+                        playerList.get(i + 1).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 7 * 20, 0));
+
+                    }
+                }
+            }
+        }
+    }
+
 
 }

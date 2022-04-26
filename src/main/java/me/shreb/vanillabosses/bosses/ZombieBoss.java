@@ -1,8 +1,10 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.items.BaseballBat;
+import me.shreb.vanillabosses.listeners.SpawnEvent;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
@@ -16,7 +18,9 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class ZombieBoss extends VBBoss {
@@ -96,6 +100,8 @@ public class ZombieBoss extends VBBoss {
         entity.getScoreboardTags().add(SCOREBOARDTAG);
         entity.getScoreboardTags().add(VBBoss.BOSSTAG);
 
+        Boss.putCommandsToPDC(entity);
+
         if (!putOnEquipment((Zombie) entity)) {
             throw new BossCreationException("Could not put Armor on Zombie boss");
         }
@@ -145,4 +151,37 @@ public class ZombieBoss extends VBBoss {
 
         return true;
     }
+
+
+    public static void zombieHorde(int radius, int amountOfZombies, Location center) {
+
+        Vector v = new Vector(radius, 0, 0);  //set the starting vector for spawning
+
+        double degrees = 360.0 / amountOfZombies; //get the degrees every spawnpoint has to be different by to make a circle
+
+        SpawnEvent.spawn = false;
+
+        for (int i = 0; i < amountOfZombies; i++) {
+
+            center.add(v);
+
+            Zombie zombie = (Zombie) Objects.requireNonNull(center.getWorld()).spawnEntity(center.add(0, 2, 0), EntityType.ZOMBIE);
+
+            center.subtract(0, 2, 0);
+
+            zombie.getScoreboardTags().add("NotABoss");
+
+            zombie.setBaby(false);
+
+            zombie.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
+            zombie.getEquipment().setHelmetDropChance(0);
+
+            center.subtract(v);
+
+            v.rotateAroundY(degrees);
+
+        }
+        SpawnEvent.spawn = true;
+    }
+
 }

@@ -1,20 +1,23 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Enderman;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
+import java.util.Random;
 import java.util.logging.Level;
 
 public class EndermanBoss extends VBBoss {
@@ -99,6 +102,8 @@ public class EndermanBoss extends VBBoss {
         entity.getScoreboardTags().add(SCOREBOARDTAG);
         entity.getScoreboardTags().add(VBBoss.BOSSTAG);
 
+        Boss.putCommandsToPDC(entity);
+
         //Putting glowing effect on bosses if config is set to do so.
         if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.bossesGetGlowingPotionEffect")) {
             entity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1));
@@ -149,5 +154,50 @@ public class EndermanBoss extends VBBoss {
 
     }
 
+    public void onHitEvent(EntityDamageByEntityEvent event){
 
+        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+
+        if (event.getEntity().getScoreboardTags().contains("BossEnderman") && event.getEntityType() == EntityType.ENDERMAN) {
+
+            if (!(event.getDamager() instanceof Player)) return;
+
+            Enderman enderman = (Enderman) event.getEntity();
+
+            for (String s : config.getStringList("Bosses.EndermanBoss.onHitEvents.potionEffects")) {
+                String[] strings = s.split(":");
+                PotionEffectType type = PotionEffectType.getByName(strings[0].toUpperCase());
+
+                if (type != null && new Random().nextDouble() < Integer.parseInt(strings[3])) {
+                    enderman.addPotionEffect(new PotionEffect(type, Integer.parseInt(strings[2]) * 20, Integer.parseInt(strings[1])));
+                }
+            }
+
+            if (new Random().nextDouble() < config.getDouble("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.chance") && config.getBoolean("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.enabled")) {
+                int x = event.getDamager().getLocation().getBlockX() - enderman.getLocation().getBlockX();
+                int y = event.getDamager().getLocation().getBlockY() - enderman.getLocation().getBlockY();
+                int z = event.getDamager().getLocation().getBlockZ() - enderman.getLocation().getBlockZ();
+                Vector v = new Vector(x / 4, y / 3, z / 4);
+
+                Location newLoc = event.getDamager().getLocation();
+                Location originalLoc = enderman.getLocation();
+
+                EnderPearl ep = (EnderPearl) enderman.getWorld().spawnEntity(enderman.getEyeLocation(), EntityType.ENDER_PEARL);
+                ep.setVelocity(v);
+
+                enderman.teleport(newLoc);
+
+                if (config.getBoolean("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.teleportBackToOldLocation")) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
+                        enderman.teleport(originalLoc);
+                    }, 20L * config.getInt("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.teleportBackDelay"));
+
+                }
+
+                if (config.getBoolean("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.invisibility")) {
+                    enderman.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, config.getInt("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.invisibilityDuration") * 20, 3));
+                }
+            }
+        }
+    }
 }
