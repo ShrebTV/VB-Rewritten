@@ -7,7 +7,6 @@ import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
-import java.text.ParseException;
 import java.util.logging.Level;
 
 public class NormalBoss extends Boss {
