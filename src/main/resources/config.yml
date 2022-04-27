@@ -36,10 +36,9 @@ Bosses:
     - ""
     - "give <10> minecraft:diamond 5"   # in case you have essentials installed you may have to remove the 'minecraft:', aka just use the item name.
 
-
-  MaxSpawnChance: 1000 # This is the way to modify the boss spawnchance even more. with a spawnchance of 50 and this set to 1000, every 20th mob will be a boss.
-  # if you set this to 10000, but leave the spawnchance at 50, the bosses will be 10 times more rare!
-
+# Boss type, name of the world, coordinates, respawn time in seconds, commands that are to be executed when the boss dies, whether the boss should actually spawn
+  RespawningBosses:
+    - {"type":"ZOMBIE","worldName":"world","x":"0.0","y":"70.0","z":"0.0","respawnTime":"20","commands":["1","2"],"enableBoss":"false"}
 
   #Most things about the config will be explained inside the SkeletonBoss section! make sure to read carefully if you want to edit this file!
 
@@ -50,13 +49,13 @@ Bosses:
     displayName: "The Skeleton King"  # To remove the name, replace with "" and set 'showDisplayNameAlways' to 'false'
     displayNameColor: "#7B7B7B" #Hex color codes, use a website with a Hex Color code picker or similar programs to get this code from the wanted color.
     showDisplayNameAlways: true
-    health: 25
+    health: 40
     DamageModifier: 1.0
-    spawnChance: 0.005        # %-Chance of a regularly spawned monster of this type to become a boss
+    spawnChance: 0.005        # Chance of a Skeleton which was spawned into the world becoming a boss skeleton. 1 = 100%, 0.005 = 0.5% => every 200th skeleton will be a boss
     dropArmorChance: 0.0  # recommended to keep at 0 or at least pretty low since the armor is pretty op.
-    dropOffHandChance: 1  # 0.1 = 10% chance of dropping the item. 1 = 100% chance of dropping it.
-    ProtectionMin: 5      # Armor Protection Enchantment level
-    ProtectionMax: 12     # ^^
+    dropOffHandChance: 0.3  # 0.1 = 10% chance of dropping the item. 1 = 100% chance of dropping it.
+    ProtectionMin: 3      # Armor Protection Enchantment level
+    ProtectionMax: 6     # ^^
 
     killedMessage: "<killedName> was slain by <killer>" #<killedName> is replaced by the name of the killed Entity
     #<killer> is replaced by the name of the killer
@@ -68,18 +67,14 @@ Bosses:
     # disable the "spawnNaturally" setting to disable natural spawning.
 
 
-
-    # MaterialToDrop: the item you wish the entity to drop upon death
+    # materialName: the item you wish the entity to drop upon death. If you're not sure what the Item you want it to drop is called, search for the item here:
+    # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
     # minAmount: this is the minimum amount of items the boss will drop upon death.
     # maxAmount: this is the maximum amount of items the boss can drop upon death.
-    # Chance: This chance defines, how many items the boss will drop on average. this chance is applied for (maxAmount - minAmount) items.
-    # using ':' you split your entries. Do not use ':' anywhere except for the places it shows in the syntax below!
-
-    #syntax:  'MaterialToDrop:minimumAmount:maximumAmount:Chance'
 
     droppedItems:
-      - BONE:5:10:75
-      - BONE:0:10:33
+      - {"materialName":"BONE","minAmount":"5","maxAmount":"10"}
+      - {"materialName":"DIAMOND","minAmount":"0","maxAmount":"2"}
 
     droppedXP: 125    #sets the amount of experience points dropped on death of the boss
 
@@ -89,13 +84,13 @@ Bosses:
 
     onHitEvents: #Chances in % on each hit. only one of these events can be activated each hit.
       invulnerability:
-        chance: 3
+        chance: 0.03
         durationInSeconds: 7
       spawnMinions:
-        chance: 2
+        chance: 0.02
         abilityRemovesBlocks: true     #This ability will not remove following blocks under any circumstance: Obsidian, Bedrock, Beacon
       reflectDamage:
-        chance: 7
+        chance: 0.07
         damageMultiplier: 0.5
 
 
@@ -180,13 +175,13 @@ Bosses:
 
     onHitEvents:
       invisibility:
-        chance: 5           # 1 = 1%
+        chance: 0.05           #1 = 100%
         duration: 3         # in seconds
         teleportToPlayer: true
         teleportBack: true
 
       leap:
-        chance: 15           # 1 = 1%
+        chance: 0.15
         maxDelayAfterHit: 2 #in seconds
 
     spawnNaturally: true
@@ -222,7 +217,6 @@ Bosses:
 
     onHitEvents:
       spectralArrowDamageMultiplier: 2
-      dropItemOnHitBySpectralArrow: BLAZE_POWDER #replace with 'AIR' to disable this drop.
 
     blazeShootEventsChances:
       witherSkull: 0.2
@@ -261,15 +255,15 @@ Bosses:
     disableVanillaDrops: true
 
     onHitEvents:
-      potionEffects:  #syntax:  'Potiontype:amplifier:duration:chance'     duration in seconds, chance in %
-        - Increase_Damage:2:20:20
-        - Speed:1:10:10
+      potionEffects:  #syntax:  'Potiontype:amplifier:duration:chance'     duration in seconds, chance (1 = 100%)
+        - Increase_Damage:2:20:0.2
+        - Speed:1:10:0.1
 
       teleportBehindPlayer:
         enabled: true
         teleportBackToOldLocation: true
         teleportBackDelay: 4  #in seconds
-        chance: 5    #in %
+        chance: 0.05   # 1 = 100%, 0.05 = 5%
         invisibility: true
         invisibilityDuration: 3
 
@@ -301,6 +295,10 @@ Bosses:
 
     droppedItems:
       - IRON_INGOT:3:8:66
+
+    zombieHorde:
+      amount: 8
+      radius: 4
 
     droppedXP: 50
 
@@ -374,7 +372,7 @@ Bosses:
     onHitEvents:
       PlayersSwitchPlaces:
         enabled: true
-        chance: 10
+        chance: 0.1
         applyNausea: true
         cooldown: 10  # This is the minimum number of hits a boss Witch will take between activating this ability
         canSwitchWithOtherEntities: true  # leave this enabled if youre alone, or this ability will not work at all.
@@ -442,7 +440,7 @@ Bosses:
     onHitEvents:
       JumpSlam: # throws all nearby Players in the air.
         enabled: true
-        chance: 15
+        chance: 0.15
 
     spawnNaturally: true
 
@@ -471,7 +469,6 @@ Bosses:
 
     onHitEvents:
       spectralArrowDamageMultiplier: 4
-      dropItemOnHitBySpectralArrow: WITHER_ROSE #to disable drops like this, replace with "AIR"
 
     worldsLocationsTimer:
 
