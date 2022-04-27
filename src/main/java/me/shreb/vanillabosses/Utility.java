@@ -5,7 +5,10 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Utility {
+
 
     public static void spawnParticles(Particle particle, World world, Location loc, double offsetX, double offsetY, double offsetZ, int amount, int repeats) {
 
@@ -16,4 +19,12 @@ public class Utility {
         }
     }
 
+    /**
+     * A Method to see whether an action should be executed
+     * @param chance the chance to check against
+     * @return true if the thing the chance applies to should be executed
+     */
+    public static boolean roll(double chance) {
+        return ThreadLocalRandom.current().nextDouble() < chance;
+    }
 }
