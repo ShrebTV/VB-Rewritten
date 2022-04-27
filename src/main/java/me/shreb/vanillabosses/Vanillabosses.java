@@ -3,6 +3,7 @@ package me.shreb.vanillabosses;
 import me.shreb.vanillabosses.bosses.VBBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.commands.VBCommands;
+import me.shreb.vanillabosses.listeners.VBListeners;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -40,6 +41,7 @@ public final class Vanillabosses extends JavaPlugin {
         BossCommand.registerListeners();
         VBBoss.registerListeners();
         VBCommands.registerAll();
+        VBListeners.registerListeners();
 
         new VBLogger(getClass().getName(), Level.INFO, "Plugin enabled!").logToFile();
 
