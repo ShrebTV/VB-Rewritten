@@ -1,5 +1,6 @@
 package me.shreb.vanillabosses.listeners;
 
+import me.shreb.vanillabosses.Utility;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.*;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
@@ -13,35 +14,37 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.logging.Level;
 
 public class SpawnEvent implements Listener {
 
-    Random random = new Random();
     public static boolean spawn = true;
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
-        double randomNumber = random.nextDouble();
-
         EntityType type = event.getEntityType();
 
         LivingEntity entity = event.getEntity();
 
-        String section = new BossDataRetriever(event.getEntity()).CONFIGSECTION;
+        String section;
+        try {
+            section = new BossDataRetriever(event.getEntity().getType()).CONFIGSECTION;
+        } catch (IllegalArgumentException ignored) {
+            return;
+        }
+
         String chancePath = "Bosses." + section + ".spawnChance";
         double chance = config.getDouble(chancePath);
 
-        if(!spawnWorldChecker(event)) return;
+        if (!spawnWorldChecker(event)) return;
 
         switch (type) {
 
             case BLAZE:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         BlazeBoss.instance.makeBoss(entity);
@@ -54,7 +57,7 @@ public class SpawnEvent implements Listener {
 
             case CREEPER:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         CreeperBoss.instance.makeBoss(entity);
@@ -67,7 +70,7 @@ public class SpawnEvent implements Listener {
 
             case ENDERMAN:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         EndermanBoss.instance.makeBoss(entity);
@@ -80,7 +83,7 @@ public class SpawnEvent implements Listener {
 
             case MAGMA_CUBE:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         MagmacubeBoss.instance.makeBoss(entity);
@@ -93,7 +96,7 @@ public class SpawnEvent implements Listener {
 
             case SKELETON:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         SkeletonBoss.instance.makeBoss(entity);
@@ -106,7 +109,7 @@ public class SpawnEvent implements Listener {
 
             case SLIME:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         SlimeBoss.instance.makeBoss(entity);
@@ -119,7 +122,7 @@ public class SpawnEvent implements Listener {
 
             case SPIDER:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         SpiderBoss.instance.makeBoss(entity);
@@ -132,7 +135,7 @@ public class SpawnEvent implements Listener {
 
             case WITCH:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         WitchBoss.instance.makeBoss(entity);
@@ -145,7 +148,7 @@ public class SpawnEvent implements Listener {
 
             case ZOMBIE:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         ZombieBoss.instance.makeBoss(entity);
@@ -163,7 +166,7 @@ public class SpawnEvent implements Listener {
 
             case ZOMBIFIED_PIGLIN:
 
-                if (chance < randomNumber) {
+                if (Utility.roll(chance)) {
 
                     try {
                         Zombified_PiglinBoss.instance.makeBoss(entity);
@@ -178,17 +181,18 @@ public class SpawnEvent implements Listener {
 
     /**
      * a method to check whether the boss version of the spawned entity is allowed to naturally spawn inside that world.
+     *
      * @param event The event to check for the boss' spawn worlds in
      * @return true if and only if the boss version of the entity is allowed to spawn inside the world the entity spawned in. False if the boss version is not allowed to spawn or the entity passed in does not have a boss version
      */
-    private boolean spawnWorldChecker(CreatureSpawnEvent event){
+    private boolean spawnWorldChecker(CreatureSpawnEvent event) {
 
         LivingEntity entity = event.getEntity();
         String section;
 
-        try{ // Attempt to get the section from the entity passed in by the event
-            section = new BossDataRetriever(entity).CONFIGSECTION; //entity type passed in has a boss version
-        } catch(IllegalArgumentException ignored){
+        try { // Attempt to get the section from the entity passed in by the event
+            section = new BossDataRetriever(entity.getType()).CONFIGSECTION; //entity type passed in has a boss version
+        } catch (IllegalArgumentException ignored) {
             return false; //Entity type passed in does not have a boss version
         }
 
@@ -196,7 +200,7 @@ public class SpawnEvent implements Listener {
 
         ArrayList<String> worlds = new ArrayList<>(Vanillabosses.getInstance().getConfig().getStringList(configPath)); //a new List with all the values of the config String list corresponding to the entity type
 
-        if(worlds.isEmpty()) return true; //no worlds specified, returns true
+        if (worlds.isEmpty()) return true; //no worlds specified, returns true
 
         return worlds.contains(event.getLocation().getWorld().getName());
         //the world the entity spawned in was specified inside the config, returns true;
