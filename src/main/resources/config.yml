@@ -132,8 +132,8 @@ Bosses:
     spawnWorlds:
 
     droppedItems:
-      - TNT:2:4:75
-      - DIAMOND:0:1:25
+      - "{\"materialName\":\"TNT\",\"minAmount\":\"2\",\"maxAmount\":\"4\"}"
+      - "{\"materialName\":\"DIAMOND\",\"minAmount\":\"0\",\"maxAmount\":\"1\"}"
 
     droppedXP: 50
 
@@ -164,8 +164,9 @@ Bosses:
     spawnWorlds:
 
     droppedItems:
-      - OBSIDIAN:2:4:50
-      - FERMENTED_SPIDER_EYE:2:8:25
+      - "{\"materialName\":\"OBSIDIAN\",\"minAmount\":\"2\",\"maxAmount\":\"4\"}"
+      - "{\"materialName\":\"FERMENTED_SPIDER_EYE\",\"minAmount\":\"2\",\"maxAmount\":\"8\"}"
+
 
     droppedXP: 90
 
@@ -207,7 +208,7 @@ Bosses:
     spawnWorlds:
 
     droppedItems:
-      - BLAZE_ROD:2:4:50
+      - "{\"materialName\":\"BLAZE_ROD\",\"minAmount\":\"2\",\"maxAmount\":\"4\"}"
 
     droppedXP: 50
 
@@ -246,7 +247,7 @@ Bosses:
     spawnWorlds:
 
     droppedItems:
-      - ENDER_PEARL:3:8:66
+      - "{\"materialName\":\"ENDER_PEARL\",\"minAmount\":\"3\",\"maxAmount\":\"8\"}"
 
     droppedXP: 50
 
@@ -294,7 +295,7 @@ Bosses:
     spawnWorlds:
 
     droppedItems:
-      - IRON_INGOT:3:8:66
+      - "{\"materialName\":\"IRON_INGOT\",\"minAmount\":\"3\",\"maxAmount\":\"8\"}"
 
     zombieHorde:
       amount: 8
@@ -329,7 +330,7 @@ Bosses:
     spawnWorlds:
 
     droppedItems:
-      - GOLD_INGOT:5:10:66
+      - "{\"materialName\":\"GOLD_INGOT\",\"minAmount\":\"2\",\"maxAmount\":\"4\"}"
 
     droppedXP: 50
 
@@ -359,9 +360,9 @@ Bosses:
     spawnWorlds:
 
     droppedItems:
-      - NETHER_WART:0:1:20
-      - GLOWSTONE_DUST:2:5:66
-      - BLAZE_POWDER:0:3:20
+      - "{\"materialName\":\"NETHER_WART\",\"minAmount\":\"0\",\"maxAmount\":\"1\"}"
+      - "{\"materialName\":\"GLOWSTONE_DUST\",\"minAmount\":\"2\",\"maxAmount\":\"5\"}"
+      - "{\"materialName\":\"BLAZE_POWDER\",\"minAmount\":\"0\",\"maxAmount\":\"3\"}"
 
     droppedXP: 50
 
@@ -429,7 +430,8 @@ Bosses:
     spawnWorlds:
 
     droppedItems:
-      - Slime_Ball:2:6:66
+      - "{\"materialName\":\"SLIME_BALL\",\"minAmount\":\"2\",\"maxAmount\":\"6\"}"
+
 
     droppedXP: 50
 
@@ -462,6 +464,8 @@ Bosses:
     killedMessage: "<killedName> was slain by <killer>"
 
     droppedItems:
+      - "{\"materialName\":\"NETHERITE_INGOT\",\"minAmount\":\"0\",\"maxAmount\":\"6\"}"
+      - "{\"materialName\":\"NETHER_STAR\",\"minAmount\":\"1\",\"maxAmount\":\"2\"}"
 
     droppedXP: 250
 
@@ -488,6 +492,7 @@ Bosses:
     spawnWorlds:
 
     droppedItems:
+      - "{\"materialName\":\"MAGMA_CREAM\",\"minAmount\":\"2\",\"maxAmount\":\"12\"}"
       - MAGMA_CREAM:2:12:66
 
     droppedXP: 50
