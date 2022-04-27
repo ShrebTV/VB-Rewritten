@@ -29,18 +29,6 @@ public class VBLogger {
         this.logLevel = logLevel;
     }
 
-    public String getClassName() {
-        return className;
-    }
-
-    public String getStringToLog() {
-        return stringToLog;
-    }
-
-    public Level getLogLevel() {
-        return logLevel;
-    }
-
     public void logToFile(){
         Logger logger = Logger.getLogger(className);
         logger.setUseParentHandlers(false);
