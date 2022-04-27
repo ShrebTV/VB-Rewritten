@@ -108,6 +108,7 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
     void registerCommand() {
         try {
             Vanillabosses.getInstance().getCommand("vbAdmin").setExecutor(instance);
+            new VBLogger("AdminCommands", Level.INFO, "Successfully registered command \"vbAdmin\"").logToFile();
         } catch(NullPointerException e){
             new VBLogger("AdminCommands", Level.SEVERE, "Could not register command \"vbAdmin\"").logToFile();
         }
