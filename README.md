@@ -38,4 +38,3 @@ The plugin is downloadable via Spigot. Get it [here](https://www.spigotmc.org/re
  - Skeletor (when arrows hit an entity TNT spawns at the location of the hit. When TNT is carried in the off hand while shooting the arrow is replaced by a flying block of lit TNT. Dropped by the skeleton boss)
  - Slime Boots (Reduces Fall Damage significantly. Dropped by the Slime boss)
  - Slingshot (Launches the player in the direction they are looking. right click while crouching to activate. Dropped by the Spider boss)
-
