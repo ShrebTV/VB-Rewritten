@@ -2,8 +2,7 @@ package me.shreb.vanillabosses.listeners;
 
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.bosses.utility.BossDrops;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -13,10 +12,15 @@ public class BossDeathEvent implements Listener {
     @EventHandler
     public void onBossDeath(EntityDeathEvent event) {
 
-        Entity entity = event.getEntity();
-        EntityType type = entity.getType();
+        LivingEntity entity = event.getEntity();
 
-        BossDataRetriever bossData = new BossDataRetriever(type);
+        BossDataRetriever bossData;
+
+        try {
+            bossData = new BossDataRetriever(entity);
+        } catch(IllegalArgumentException ignored){
+            return;
+        }
 
         BossDrops drops = new BossDrops(bossData);
 
