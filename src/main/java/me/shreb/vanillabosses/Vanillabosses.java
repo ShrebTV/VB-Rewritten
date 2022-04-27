@@ -1,18 +1,18 @@
 package me.shreb.vanillabosses;
 
+import me.shreb.vanillabosses.bosses.VBBoss;
+import me.shreb.vanillabosses.bosses.utility.BossCommand;
+import me.shreb.vanillabosses.commands.VBCommands;
 import me.shreb.vanillabosses.logging.VBLogger;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Sheep;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class Vanillabosses extends JavaPlugin {
 
@@ -34,7 +34,12 @@ public final class Vanillabosses extends JavaPlugin {
 
         loadConfig();
 
-        System.out.println("enabled");
+        Logger.getLogger("Vanilla Bosses").log(Level.INFO, "Vanilla Bosses plugin enabled! Check log file for warnings if you notice bugs or errors");
+
+        //registering listeners and commands
+        BossCommand.registerListeners();
+        VBBoss.registerListeners();
+        VBCommands.registerAll();
 
         new VBLogger(getClass().getName(), Level.INFO, "Plugin enabled!").logToFile();
 
