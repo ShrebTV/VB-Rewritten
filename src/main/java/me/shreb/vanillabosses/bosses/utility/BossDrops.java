@@ -30,7 +30,7 @@ public class BossDrops {
         //a String containing the full config path to get the StringList from
         String fullSection = "Bosses." + retriever.CONFIGSECTION + ".droppedItems";
         //Making a new list of Strings with the values of the StringList in the config
-        ArrayList<String> dropStrings = new ArrayList<>(config.getStringList(fullSection));
+        ArrayList<String> dropStrings = (ArrayList<String>) config.getStringList(fullSection);
 
         //new empty list of drops
         this.drops = new ArrayList<>();
@@ -47,7 +47,7 @@ public class BossDrops {
                 this.drops.add(SingleDrop.deserialize(string));
             } catch (JsonSyntaxException e) {
                 //if the parsing of the json fails, log that to the file so the user can find out what went wrong.
-                new VBLogger(getClass().getName(), Level.WARNING, "Could not add Drop to BossDrops. Error at: " + string);
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not add Drop to BossDrops. Error at: " + string).logToFile();
             }
         }
     }
@@ -75,7 +75,7 @@ public class BossDrops {
     public static void dropItemStacks(ArrayList<ItemStack> stacks, Location location){
 
         for(ItemStack stack : stacks){
-            if(location.getWorld() == null) continue;
+            if(location.getWorld() == null) break;
             location.getWorld().dropItemNaturally(location, stack);
         }
     }
