@@ -38,7 +38,7 @@ Bosses:
 
 # Boss type, name of the world, coordinates, respawn time in seconds, commands that are to be executed when the boss dies, whether the boss should actually spawn
   RespawningBosses:
-    - {"type":"ZOMBIE","worldName":"world","x":"0.0","y":"70.0","z":"0.0","respawnTime":"20","commands":["1","2"],"enableBoss":"false"}
+    - "{\"type\":\"ZOMBIE\",\"worldName\":\"world\",\"x\":\"0.0\",\"y\":\"70.0\",\"z\":\"0.0\",\"respawnTime\":\"20\",\"commands\":[\"1\",\"2\"],\"enableBoss\":\"false\"}"
 
   #Most things about the config will be explained inside the SkeletonBoss section! make sure to read carefully if you want to edit this file!
 
@@ -73,8 +73,8 @@ Bosses:
     # maxAmount: this is the maximum amount of items the boss can drop upon death.
 
     droppedItems:
-      - {"materialName":"BONE","minAmount":"5","maxAmount":"10"}
-      - {"materialName":"DIAMOND","minAmount":"0","maxAmount":"2"}
+      - "{\"materialName\":\"BONE\",\"minAmount\":\"5\",\"maxAmount\":\"10\"}"
+      - "{\"materialName\":\"DIAMOND\",\"minAmount\":\"0\",\"maxAmount\":\"2\"}"
 
     droppedXP: 125    #sets the amount of experience points dropped on death of the boss
 
