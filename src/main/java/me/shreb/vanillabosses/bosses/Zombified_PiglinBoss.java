@@ -138,10 +138,10 @@ public class Zombified_PiglinBoss extends VBBoss {
 
         //Creating a new ItemStack array and filling it with the needed armor.
         ItemStack[] armor = new ItemStack[]{
-                new ItemStack(Material.GOLDEN_HELMET),
-                new ItemStack(Material.GOLDEN_CHESTPLATE),
+                new ItemStack(Material.GOLDEN_BOOTS),
                 new ItemStack(Material.GOLDEN_LEGGINGS),
-                new ItemStack(Material.GOLDEN_BOOTS)
+                new ItemStack(Material.GOLDEN_CHESTPLATE),
+                new ItemStack(Material.GOLDEN_HELMET)
         };
 
         //Enchanting armor

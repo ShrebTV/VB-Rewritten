@@ -116,10 +116,10 @@ public class SkeletonBoss extends VBBoss{
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
         ItemStack[] armor = new ItemStack[]{
-                new ItemStack(Material.IRON_HELMET),
-                new ItemStack(Material.IRON_CHESTPLATE),
+                new ItemStack(Material.IRON_BOOTS),
                 new ItemStack(Material.IRON_LEGGINGS),
-                new ItemStack(Material.IRON_BOOTS)
+                new ItemStack(Material.IRON_CHESTPLATE),
+                new ItemStack(Material.IRON_HELMET)
         };
 
         for (ItemStack itemStack : armor) {
