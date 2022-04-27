@@ -241,7 +241,7 @@ public class BossCommand implements Listener {
             Bukkit.getScheduler().scheduleSyncRepeatingTask(Vanillabosses.getInstance(), ()-> {
 
                 try {
-                    damagerHashMap.entrySet().stream().filter(n -> Bukkit.getEntity(n.getKey()).isDead()).forEach(n -> damagerHashMap.remove(n.getKey()));
+                    damagerHashMap.entrySet().stream().filter(n -> Bukkit.getEntity(n.getKey()) != null &&Bukkit.getEntity(n.getKey()).isDead()).forEach(n -> damagerHashMap.remove(n.getKey()));
                     new VBLogger("DamagerPHReplacer", Level.INFO, "Cleaned up Boss damager map").logToFile();
                 } catch(NullPointerException e){
                     new VBLogger("DamagerReplacer", Level.WARNING, "An Error occurred while cleaning up the Boss Damager map. Please report this to the Author! \n Error: " + e).logToFile();
