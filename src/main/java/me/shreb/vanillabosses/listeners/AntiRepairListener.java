@@ -1,4 +1,6 @@
 package me.shreb.vanillabosses.listeners;
 
-public class AntiRepairListener {
+import org.bukkit.event.Listener;
+
+public class AntiRepairListener implements Listener {
 }
