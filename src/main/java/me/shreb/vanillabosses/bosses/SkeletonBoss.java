@@ -2,6 +2,7 @@ package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
+import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.items.Skeletor;
 import me.shreb.vanillabosses.logging.VBLogger;
@@ -98,7 +99,7 @@ public class SkeletonBoss extends VBBoss{
         entity.getScoreboardTags().add(SCOREBOARDTAG);
         entity.getScoreboardTags().add(VBBoss.BOSSTAG);
 
-        Boss.putCommandsToPDC(entity);
+        new NormalBoss(entity.getType()).putCommandsToPDC(entity);
 
         if (!putOnEquipment((Skeleton) entity)) {
             throw new BossCreationException("Could not put Armor on Skeleton boss");

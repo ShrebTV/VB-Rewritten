@@ -2,6 +2,7 @@ package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
+import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.items.ButchersAxe;
 import me.shreb.vanillabosses.logging.VBLogger;
@@ -111,7 +112,7 @@ public class Zombified_PiglinBoss extends VBBoss {
         entity.getScoreboardTags().add(SCOREBOARDTAG);
         entity.getScoreboardTags().add(VBBoss.BOSSTAG);
 
-        Boss.putCommandsToPDC(entity);
+        new NormalBoss(entity.getType()).putCommandsToPDC(entity);
 
         //Putting equipment on the boss, throwing Exception if failed.
         if (!putOnEquipment((PigZombie) entity)) {
