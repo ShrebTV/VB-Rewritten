@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses.items;
 
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 public class BaseballBat extends VBItem {
@@ -18,7 +19,8 @@ public class BaseballBat extends VBItem {
     }
 
     @Override
-    void itemAbility() {
+    <T extends Event> void itemAbility(T e) {
 
     }
+
 }
