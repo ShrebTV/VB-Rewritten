@@ -1,6 +1,6 @@
 package me.shreb.vanillabosses.listeners;
 
-import me.shreb.vanillabosses.Utility;
+import me.shreb.vanillabosses.utility.Utility;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.*;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
