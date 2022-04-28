@@ -119,8 +119,6 @@ public class BossCommand implements Listener {
      */
     private void replacePlaceholders(EntityDeathEvent event) {
 
-        UUID uuid = event.getEntity().getUniqueId();
-
         if (!this.command.contains("<") || !this.command.contains(">")) {
             return;
         }
@@ -319,9 +317,8 @@ public class BossCommand implements Listener {
             }
 
             UUID bossUUID = event.getEntity().getUniqueId();
-            BossDataRetriever retriever;
             try {
-                retriever = new BossDataRetriever((LivingEntity) event.getEntity());
+                new BossDataRetriever((LivingEntity) event.getEntity());
             } catch (IllegalArgumentException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "An error occurred while registering damage dealt to boss. Error: " + e).logToFile();
             }
