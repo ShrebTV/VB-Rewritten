@@ -18,31 +18,42 @@ public class BossDeathEvent implements Listener {
 
         LivingEntity entity = event.getEntity();
 
+        //boss data object
         BossDataRetriever bossData;
 
         try {
+            //put in the boss data
             bossData = new BossDataRetriever(entity);
         } catch (IllegalArgumentException ignored) {
+            //If it fails, the entity was not a boss, ignore the error
             return;
         }
 
+        //Get the boss drops corresponding to the boss data object
         BossDrops drops = new BossDrops(bossData);
-
+        //Drop the items from the BossDrops object after converting them toItemStacks()
         BossDrops.dropItemStacks(drops.toItemStacks(), event.getEntity().getLocation());
 
+        //iterate over the bossData.commandIndexes gotten from config. This contains the indexes of the commands which are supposed to be executed
         for (int i : bossData.commandIndexes) {
+            //Separate command from Delay integer
             String[] strings = BossCommand.getCommandMap().get(i).split("DELAY:");
 
+            //make sure the strings array has 2 objects. If it doesn't the Command string was faulty
             if (strings.length != 2) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Bad Command, 'DELAY:' was found more than one time or not at all. \n" +
                         "If you do not want to have a delay to the command, please use 'DELAY: 0'\n" +
                         "Command: " + BossCommand.getCommandMap().get(i)).logToFile();
+                //go to next command, which may not be faulty, thus not break;
                 continue;
             }
 
+            //Parse the second object inside the String array to get the intended delay
             int delay = Integer.parseInt(strings[1]);
 
+            //Make a new BossCommand object using the index of the command, the delay intended and the command String which is supposed to be executed
             BossCommand command = new BossCommand(i, delay, strings[0]);
+            //replace and read all placeholders, add necessary players to a list to execute the commands for, then execute the command for the players in that list
             command.executeBossCommand(event);
         }
     }
