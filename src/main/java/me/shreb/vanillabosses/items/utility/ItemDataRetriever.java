@@ -3,6 +3,7 @@ package me.shreb.vanillabosses.items.utility;
 import me.shreb.vanillabosses.items.*;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.DataRetriever;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -76,7 +77,8 @@ public class ItemDataRetriever extends DataRetriever {
 
     @Override
     public String toString() {
-        //TODO implement toString()
-        return null;
+        return "Config Section: " + ChatColor.AQUA + this.CONFIGSECTION + "\n" +
+                "NamespacedKey String: " + ChatColor.AQUA + this.instance.PDCKEY.getKey() + "\n" +
+                "Lore: " + ChatColor.AQUA + this.instance.lore + "\n";
     }
 }
