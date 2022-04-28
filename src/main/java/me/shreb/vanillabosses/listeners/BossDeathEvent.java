@@ -56,6 +56,10 @@ public class BossDeathEvent implements Listener {
                 new VBLogger(getClass().getName(), Level.WARNING, "Could not read delay from command string. Defaulting to 0: " + BossCommand.getCommandMap().get(i)).logToFile();
                 delay = 0;
             }
+
+            //additional check for negative values
+            if(delay < 0) delay = 0;
+
             //Make a new BossCommand object using the index of the command, the delay intended and the command String which is supposed to be executed
             BossCommand command = new BossCommand(i, delay, strings[0]);
             //replace and read all placeholders, add necessary players to a list to execute the commands for, then execute the command for the players in that list
