@@ -1,5 +1,6 @@
-package me.shreb.vanillabosses;
+package me.shreb.vanillabosses.utility;
 
+import me.shreb.vanillabosses.Vanillabosses;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
