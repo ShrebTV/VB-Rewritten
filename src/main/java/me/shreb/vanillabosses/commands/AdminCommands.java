@@ -20,7 +20,11 @@ import java.util.logging.Level;
  */
 public class AdminCommands extends VBCommands implements CommandExecutor {
 
-    public static AdminCommands instance = new AdminCommands();
+    private static final AdminCommands INSTANCE = new AdminCommands();
+
+    public static AdminCommands getInstance(){
+        return INSTANCE;
+    }
 
     /**
      * A command for admins to see what they have to put in the config file to make a working respawning Boss requiring them to enter as little information as possible
@@ -107,7 +111,7 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
     @Override
     void registerCommand() {
         try {
-            Vanillabosses.getInstance().getCommand("vbAdmin").setExecutor(instance);
+            Vanillabosses.getInstance().getCommand("vbAdmin").setExecutor(getInstance());
             new VBLogger("AdminCommands", Level.INFO, "Successfully registered command \"vbAdmin\"").logToFile();
         } catch(NullPointerException e){
             new VBLogger("AdminCommands", Level.SEVERE, "Could not register command \"vbAdmin\"").logToFile();
