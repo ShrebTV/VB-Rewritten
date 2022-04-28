@@ -23,6 +23,7 @@ public class BossDrops {
 
     /**
      * Constructor to make the BossDrops object corresponding to the passed in dataRetriever object
+     *
      * @param retriever A DataRetriever in order to make sure the things specified have a config section and so the Config section is readily available and correct
      */
     public BossDrops(BossDataRetriever retriever) {
@@ -69,16 +70,21 @@ public class BossDrops {
 
     /**
      * Drops the items specified in the specified location
-     * @param stacks The list of ItemStacks to drop
+     *
+     * @param stacks   The list of ItemStacks to drop
      * @param location The Location to drop the ItemStacks at
      */
-    public static void dropItemStacks(ArrayList<ItemStack> stacks, Location location){
+    public static void dropItemStacks(ArrayList<ItemStack> stacks, Location location) {
 
-        for(ItemStack stack : stacks){
-            if(location.getWorld() == null) break;
+        for (ItemStack stack : stacks) {
+            if (location.getWorld() == null) break;
+            if (stack.getAmount() < 1) {
+                continue;
+            }
             location.getWorld().dropItemNaturally(location, stack);
         }
     }
+
 
     /**
      * A Single drop specified inside the config in one line
@@ -86,7 +92,7 @@ public class BossDrops {
     public static class SingleDrop {
         public final String materialName;
         public final int minAmount;
-        public final int maxAmount;
+        public int maxAmount;
 
         public SingleDrop(String materialName, int minAmount, int maxAmount) {
             this.materialName = materialName;
@@ -114,7 +120,6 @@ public class BossDrops {
                 new VBLogger("SingleDrop", Level.WARNING, "A bad number error occurred while reading the drop String: " + json).logToFile();
                 throw new IllegalArgumentException("Max amount cannot be less than 1, min amount cannot be less than 0, max amount cannot be less than min amount. No amount can be larger than 64");
             }
-
             return drop;
         }
 
@@ -124,7 +129,7 @@ public class BossDrops {
          * @return an ItemStack within the bounds of the object this method is called on
          */
         public ItemStack toItemStack() {
-            int difference = this.maxAmount - this.minAmount;
+            int difference = this.maxAmount - this.minAmount + 1;
             int amount = new Random().nextInt(difference);
             amount += this.minAmount;
 
