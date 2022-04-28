@@ -106,7 +106,7 @@ public class BossCommand implements Listener {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () ->{
                     Bukkit.getServer().dispatchCommand(Vanillabosses.getInstance().getServer().getConsoleSender(), this.command);
 
-                }, (long) delay * 20);
+                }, (long) delay * 20 + 1);
             } catch (CommandException e) {
                 new VBLogger("BossCommand", Level.WARNING, "Attempted to execute a command. Execution failed. Command: " + command).logToFile();
             }
