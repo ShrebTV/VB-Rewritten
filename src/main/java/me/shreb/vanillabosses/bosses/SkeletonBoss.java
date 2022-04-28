@@ -5,6 +5,7 @@ import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.items.Skeletor;
+import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
@@ -139,7 +140,12 @@ public class SkeletonBoss extends VBBoss{
         skeleton.getEquipment().setLeggingsDropChance(0);
         skeleton.getEquipment().setBootsDropChance(0);
 
-        skeleton.getEquipment().setItemInMainHand(Skeletor.instance.makeItem());
+        try {
+            skeleton.getEquipment().setItemInMainHand(Skeletor.instance.makeItem());
+        } catch (ItemCreationException e) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not create Weapon for Skeleton boss. Exception: " + e).logToFile();
+
+        }
         skeleton.getEquipment().setItemInMainHandDropChance((float) config.getDouble("Items.Skeletor.dropChance"));
 
         return true;
