@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,7 +17,7 @@ import java.util.logging.Level;
 
 public class RespawningBoss extends Boss {
 
-    static HashMap<Integer, String> commandMap = new HashMap<>();
+    static HashMap<Integer, String> commandMap = BossCommand.getCommandMap();
     static List<RespawningBoss> bossList = new ArrayList<>();
 
     EntityType type;
