@@ -49,8 +49,13 @@ public class BossDeathEvent implements Listener {
             }
 
             //Parse the second object inside the String array to get the intended delay
-            int delay = Integer.parseInt(strings[1]);
-
+            int delay;
+            try {
+                delay = Integer.parseInt(strings[1]);
+            } catch(NumberFormatException e){
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not read delay from command string. Defaulting to 0: " + BossCommand.getCommandMap().get(i)).logToFile();
+                delay = 0;
+            }
             //Make a new BossCommand object using the index of the command, the delay intended and the command String which is supposed to be executed
             BossCommand command = new BossCommand(i, delay, strings[0]);
             //replace and read all placeholders, add necessary players to a list to execute the commands for, then execute the command for the players in that list
