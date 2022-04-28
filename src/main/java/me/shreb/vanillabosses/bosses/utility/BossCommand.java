@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.*;
@@ -45,7 +46,6 @@ public class BossCommand implements Listener {
     public static void registerListeners(){
         PluginManager pm = Vanillabosses.getInstance().getServer().getPluginManager();
         Vanillabosses instance = Vanillabosses.getInstance();
-
         pm.registerEvents(new BossCommand(), instance);
         pm.registerEvents(new BossCommand.DamagerPHReplacer(), instance);
         pm.registerEvents(new BossCommand.MostDamagePHReplacer(), instance);
