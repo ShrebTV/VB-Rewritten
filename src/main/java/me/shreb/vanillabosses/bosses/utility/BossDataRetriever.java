@@ -3,6 +3,7 @@ package me.shreb.vanillabosses.bosses.utility;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.*;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.DataRetriever;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
@@ -17,9 +18,8 @@ import java.util.stream.Collectors;
 /**
  * A class to quickly and easily retrieve the data from any boss type.
  */
-public class BossDataRetriever {
+public class BossDataRetriever extends DataRetriever {
 
-    public String CONFIGSECTION;
     public String SCOREBOARDTAG;
     public VBBoss instance;
     public double health;
@@ -256,7 +256,6 @@ public class BossDataRetriever {
                 new VBLogger("BossDataRetriever", Level.WARNING, "Could not retrieve command indexes from the following String: " + indexString).logToFile();
             }
         }
-
     }
 
     /**
