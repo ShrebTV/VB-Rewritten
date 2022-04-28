@@ -9,6 +9,7 @@ public abstract class VBCommands {
 
 
     public static void registerAll(){
-       AdminCommands.instance.registerCommand();
+       AdminCommands.getInstance().registerCommand();
+       ItemCommands.getInstance().registerCommand();
     }
 }
