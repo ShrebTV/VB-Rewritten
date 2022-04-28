@@ -53,12 +53,15 @@ public class BossDeathEvent implements Listener {
             try {
                 delay = Integer.parseInt(strings[1]);
             } catch(NumberFormatException e){
-                new VBLogger(getClass().getName(), Level.WARNING, "Could not read delay from command string. Defaulting to 0: " + BossCommand.getCommandMap().get(i)).logToFile();
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not read delay from command string. Defaulting to 0. Command: " + BossCommand.getCommandMap().get(i)).logToFile();
                 delay = 0;
             }
 
             //additional check for negative values
-            if(delay < 0) delay = 0;
+            if(delay < 0) {
+                delay = 0;
+                new VBLogger(getClass().getName(), Level.WARNING, "Read a negative value for Delay of the command. Defaulting to 0. Command: " + BossCommand.getCommandMap().get(i)).logToFile();
+            }
 
             //Make a new BossCommand object using the index of the command, the delay intended and the command String which is supposed to be executed
             BossCommand command = new BossCommand(i, delay, strings[0]);
