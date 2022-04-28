@@ -117,7 +117,7 @@ public class BossCommand implements Listener {
      * replaces all placeholders which are in the command String.
      * Has to call replaceRadiusPlaceHolder() as last call
      */
-    public void replacePlaceholders(EntityDeathEvent event) {
+    private void replacePlaceholders(EntityDeathEvent event) {
 
         UUID uuid = event.getEntity().getUniqueId();
 
