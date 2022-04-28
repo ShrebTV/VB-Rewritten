@@ -1,12 +1,12 @@
-#Vanilla Bosses Plugin
+# Vanilla Bosses Plugin
 Spawns bosses naturally
 
-###Description:
+### Description:
 This plugin adds many types of bosses to the game. The bosses are edited Vanilla mobs.\
 These bosses have special abilities and some wear armor and/or carry weapons\
 This plugin also adds a bunch of new Items which have special abilities of their own!
 
-###Important information:
+### Important information:
 My code is protected by German copyright.\
 Do not republish my code without permission.\
 This plugin is free to use, so I am not obligated to provide support or bugfixes.\
@@ -15,7 +15,7 @@ I still do this, but reserve my right to stop doing so at any point. (In the nea
 I provide support on my discord server. Join [here](https://discord.gg/stAd5ccDZT) \
 The plugin is downloadable via Spigot. Get it [here](https://www.spigotmc.org/resources/vanilla-bosses.95205/)
 
-###Available Bosses:
+### Available Bosses:
  - Blaze (Shoots projectiles different from a normal blaze)
  - Creeper (does not die when it explodes, shoots tnt in every direction when doing so)
  - Enderman (Spawns endermites when teleporting, can get random potion effects as specified by the config)
@@ -28,7 +28,7 @@ The plugin is downloadable via Spigot. Get it [here](https://www.spigotmc.org/re
  - Zombie (A Zombie with armor on and a Baseball bat in its hand. see below for Baseball bat)
  - Zombified Piglin (A Zombie pigman with armor on and a Butchers axe in its hand. see below for Butchers axe)
 
-###Available Items:
+### Available Items:
  - Baseball bat (Has a chance to "concuss" (blind) hit enemies. Dropped by the Zombie boss)
  - Blazer (When the wearer is hit the attacker has a chance to be set on fire. Dropped by the Blaze boss)
  - Boss eggs (spawns the boss specified by the egg. Not currently dropped)
