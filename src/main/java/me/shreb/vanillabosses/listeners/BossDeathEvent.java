@@ -53,6 +53,7 @@ public class BossDeathEvent implements Listener {
             try {
                 delay = Integer.parseInt(strings[1]);
             } catch(NumberFormatException e){
+                //log to the file and default to the value '0' in case the delay cannot be read
                 new VBLogger(getClass().getName(), Level.WARNING, "Could not read delay from command string. Defaulting to 0. Command: " + BossCommand.getCommandMap().get(i)).logToFile();
                 delay = 0;
             }
