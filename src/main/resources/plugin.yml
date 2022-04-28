@@ -8,3 +8,6 @@ commands:
   vbAdmin:
     description: Commands for admins of servers to check on the plugin and get important information in order to configure it
     usage: /<command> <respawningBoss>|<bossInfo>
+  vbItem:
+    description: Commands for the handling of items. This includes a give command, a info command and a refresh command for old items
+    usage: /<command> <give <ItemName>>|<info <ItemName>>|<refresh>
