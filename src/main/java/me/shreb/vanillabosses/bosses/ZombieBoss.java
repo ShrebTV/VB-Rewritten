@@ -5,6 +5,7 @@ import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.items.BaseballBat;
+import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.listeners.SpawnEvent;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
@@ -147,7 +148,12 @@ public class ZombieBoss extends VBBoss {
         zombie.getEquipment().setLeggingsDropChance(0);
         zombie.getEquipment().setBootsDropChance(0);
 
-        zombie.getEquipment().setItemInMainHand(BaseballBat.instance.makeItem());
+        try {
+            zombie.getEquipment().setItemInMainHand(BaseballBat.instance.makeItem());
+        } catch (ItemCreationException e) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not create Weapon for Zombie boss. Exception: " + e).logToFile();
+
+        }
         zombie.getEquipment().setItemInMainHandDropChance((float) config.getDouble("Items.BaseballBat.dropChance"));
 
         return true;
