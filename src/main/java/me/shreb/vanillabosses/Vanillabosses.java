@@ -5,6 +5,7 @@ import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.commands.VBCommands;
 import me.shreb.vanillabosses.listeners.VBListeners;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.Languages;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -22,6 +23,7 @@ public final class Vanillabosses extends JavaPlugin {
     private File configF;
     private File logFile;
     private FileConfiguration config;
+    private static Languages currentLanguage;
 
 
     @Override
@@ -36,6 +38,14 @@ public final class Vanillabosses extends JavaPlugin {
         loadConfig();
 
         Logger.getLogger("Vanilla Bosses").log(Level.INFO, "Vanilla Bosses plugin enabled! Check log file for warnings if you notice bugs or errors");
+
+        try {
+            currentLanguage = Languages.valueOf(config.getString("Bosses.PluginLanguage"));
+            getInstance().getServer().getLogger().log(Level.INFO, "[VanillaBosses] Language Setting " + config.getString("Bosses.PluginLanguage") + " successfully enabled!");
+        } catch(IllegalArgumentException | NullPointerException e){
+            getInstance().getServer().getLogger().log(Level.WARNING,"[VanillaBosses] Language specified in the config could not be found! Defaulting to English.");
+            currentLanguage = Languages.EN;
+        }
 
         //registering listeners and commands
         BossCommand.registerListeners();
@@ -94,6 +104,9 @@ public final class Vanillabosses extends JavaPlugin {
 
     public static Vanillabosses getInstance() {
         return instance;
+    }
+    public static Languages getCurrentLanguage(){
+        return currentLanguage;
     }
 
 }
