@@ -22,6 +22,9 @@ public class SpawnEvent implements Listener {
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
+
+        if(!spawn) return;
+
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
         EntityType type = event.getEntityType();
