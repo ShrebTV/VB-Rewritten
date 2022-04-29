@@ -67,17 +67,47 @@ public class BossCommand implements Listener {
     private BossCommand() {
     }
 
-    public BossCommand(int index, int delay, String command) {
+    public BossCommand(int index) {
         this.index = index;
+        setDelay();
+    }
+
+    //Gets the intended delay for this command from this.command and sets it. sets this.command to only have the things before 'DELAY:'
+    private void setDelay(){
+        String[] strings = this.command.split("DELAY:");
+
+        //make sure the strings array has 2 objects. If it doesn't the Command string was faulty
+        if (strings.length != 2) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Bad Command, 'DELAY:' was found more than one time or not at all. \n" +
+                    "If you do not want to have a delay to the command, please use 'DELAY: 0'\n" +
+                    "Command: " + this.command).logToFile();
+            //go to next command, which may not be faulty, thus not break;
+            return;
+        }
+
+        //Parse the second object inside the String array to get the intended delay
+        int delay;
+        try {
+            delay = Integer.parseInt(strings[1]);
+        } catch(NumberFormatException e){
+            //log to the file and default to the value '0' in case the delay cannot be read
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not read delay from command string. Defaulting to 0. Command: " + command).logToFile();
+            delay = 0;
+        }
+
+        //additional check for negative values
+        if(delay < 0) {
+            delay = 0;
+            new VBLogger(getClass().getName(), Level.WARNING, "Read a negative value for Delay of the command. Defaulting to 0. Command: " + command).logToFile();
+        }
         this.delay = delay;
-        this.command = command;
+        this.command = strings[0];
     }
 
     /**
      * has to call replacePlaceholders before actually executing
      */
     public void executeBossCommand(EntityDeathEvent event) {
-
         replacePlaceholders(event);
 
         this.playersToExecuteFor.addAll(this.damagers);
