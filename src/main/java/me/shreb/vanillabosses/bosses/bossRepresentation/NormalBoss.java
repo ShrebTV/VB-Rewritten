@@ -51,7 +51,6 @@ public class NormalBoss extends Boss {
         }
     }
 
-    @Override
     public void spawnBoss(Location location) {
         try {
             this.retriever.instance.makeBoss(location);
@@ -95,5 +94,4 @@ public class NormalBoss extends Boss {
 
         return new NormalBoss(type);
     }
-
 }
