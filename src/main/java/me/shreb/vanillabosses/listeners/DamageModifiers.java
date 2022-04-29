@@ -16,6 +16,7 @@ import java.util.logging.Level;
  */
 public class DamageModifiers implements Listener {
 
+    //A HashMap in order to keep retriever objects cached. This is a performance saving feature as otherwise every time a boss is damaged a new Retriever object would be created
     private static final HashMap<EntityType, RetrieverCacheObject> retrieverCache = new HashMap<>();
 
     /**
@@ -34,10 +35,12 @@ public class DamageModifiers implements Listener {
                 && ((Projectile) event.getDamager()).getShooter() != null
                 && ((Projectile) event.getDamager()).getShooter() instanceof LivingEntity) {
 
+            //set the entity to the shooter of the projectile
             try {
                 entity = (Entity) ((Arrow) event.getDamager()).getShooter();
-                if(entity == null) return;
+                if (entity == null) return;
             } catch (ClassCastException ignored) {
+                //If a classcast exception is thrown the shooter is not an entity, return
                 return;
             }
         }
@@ -57,18 +60,24 @@ public class DamageModifiers implements Listener {
 
         if (retrieverCache.containsKey(type)) {
             retriever = retrieverCache.get(type).getRetriever();
+
         } else {
             try {
                 //get the data for the boss
                 retriever = new BossDataRetriever(type);
+                //cache it
+                retrieverCache.put(type, new RetrieverCacheObject(retriever, retriever.SCOREBOARDTAG));
             } catch (IllegalArgumentException e) {
                 new VBLogger(getClass().getName(), Level.SEVERE, "An Error occurred while retrieving the data for a boss. Type of the entity: " + type).logToFile();
                 return;
             }
         }
 
-        double modifier = retriever.damageModifier;
+        if(!entity.getScoreboardTags().contains(retrieverCache.get(type).getSpecificTag())) return;
 
+        //get damage modifier from the retriever
+        double modifier = retriever.damageModifier;
+        //Apply it
         event.setDamage(event.getFinalDamage() * modifier);
 
     }
@@ -81,9 +90,11 @@ public class DamageModifiers implements Listener {
 
         private final BossDataRetriever retriever;
         private final long millis;
+        private final String specificTag;
 
-        public RetrieverCacheObject(BossDataRetriever retriever) {
+        public RetrieverCacheObject(BossDataRetriever retriever, String specificTag) {
             this.retriever = retriever;
+            this.specificTag = specificTag;
             this.millis = System.currentTimeMillis();
         }
 
@@ -91,10 +102,14 @@ public class DamageModifiers implements Listener {
             return retriever;
         }
 
+        public String getSpecificTag(){
+            return specificTag;
+        }
+
         /**
          * Checks whether the Cache object should be removed or not. timeout = 30 seconds
          *
-         * @return true if the object should be removed or updated.
+         * @return true if the object should be removed or updated, false otherwise
          */
         public boolean checkTimeOut() {
             return (System.currentTimeMillis() - this.millis) > 30000;
