@@ -52,7 +52,7 @@ public class ItemDataRetriever extends DataRetriever {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not create ItemDataRetriever! Material: " + material).logToFile();
         }
 
-        this.CONFIGSECTION = this.instance.CONFIGSECTION;
+        this.CONFIGSECTION = this.instance.configSection;
 
     }
 
@@ -78,7 +78,7 @@ public class ItemDataRetriever extends DataRetriever {
     @Override
     public String toString() {
         return "Config Section: " + ChatColor.AQUA + this.CONFIGSECTION + "\n" +
-                "NamespacedKey String: " + ChatColor.AQUA + this.instance.PDCKEY.getKey() + "\n" +
+                "NamespacedKey String: " + ChatColor.AQUA + this.instance.pdcKey.getKey() + "\n" +
                 "Lore: " + ChatColor.AQUA + this.instance.lore + "\n";
     }
 }
