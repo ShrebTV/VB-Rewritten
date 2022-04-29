@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class BossEggs extends VBItem {
@@ -27,14 +28,22 @@ public class BossEggs extends VBItem {
     public EntityType type;
 
     private BossEggs() {
-        this.PDCKEY = new NamespacedKey(Vanillabosses.getInstance(), "BossEgg");
-        this.CONFIGSECTION = "BossEggs";
+        this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "BossEgg");
+        this.configSection = "BossEggs";
+        this.itemMaterial = null;
+        this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
     }
 
     public BossEggs(EntityType type){
+        this();
         this.type = type;
     }
 
+    /**
+     * Has to be called on a custom BossEggs object made with an EntityType
+     * @return the ItemStack requested containing one boss egg
+     * @throws ItemCreationException if the item could not be created
+     */
     @Override
     public ItemStack makeItem() throws ItemCreationException {
         ItemStack stack;
@@ -175,9 +184,9 @@ public class BossEggs extends VBItem {
 
         if (itemStack == null || !itemStack.hasItemMeta()) return;
 
-        if (itemStack.getItemMeta().getPersistentDataContainer().has(PDCKEY, PersistentDataType.STRING)) {
+        if (itemStack.getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.STRING)) {
 
-            EntityType type = EntityType.valueOf(itemStack.getItemMeta().getPersistentDataContainer().get(PDCKEY, PersistentDataType.STRING));
+            EntityType type = EntityType.valueOf(itemStack.getItemMeta().getPersistentDataContainer().get(pdcKey, PersistentDataType.STRING));
             BossDataRetriever bossData;
 
             try {

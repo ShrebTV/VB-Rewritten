@@ -18,8 +18,8 @@ public abstract class VBItem implements Listener {
     public static NamespacedKey VBItemKey = new NamespacedKey(Vanillabosses.getInstance(), "VB-Item");
     public static FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
-    public NamespacedKey PDCKEY; //The PDCKey which identifies this item as the specific special item it is
-    public String CONFIGSECTION;
+    public NamespacedKey pdcKey; //The PDCKey which identifies this item as the specific special item it is
+    public String configSection;
     public Material itemMaterial;
 
     public ArrayList<String> lore;
