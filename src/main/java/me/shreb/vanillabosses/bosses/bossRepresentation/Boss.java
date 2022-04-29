@@ -15,12 +15,6 @@ public abstract class Boss {
     public EntityType type;
 
     /**
-     * A way to spawn the boss represented by this object.
-     * @param location the location to spawn the boss at
-     */
-    abstract void spawnBoss(Location location);
-
-    /**
      * A Method to put the command PDC entry into the PDC of the entity specified
      * @param entity the LivingEntity object to put the PDC entry on
      */
