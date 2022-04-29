@@ -530,6 +530,7 @@ Items:
 
   cloakOfInvisibility:
     enableDropping: true
+    itemMaterial: Chainmail_Chestplate
     chance: 5
     enableSpawnCommand: true
     #keep this next one at or above 3 seconds!
@@ -611,6 +612,7 @@ Items:
       TNTDoesNoBlockDamage: true
 
   ButchersAxe:
+    itemMaterial: Iron_Axe
     dropChance: 0.2
     ChanceToApplySlowness: 10   #in %
     enableSpawnCommand: true
@@ -627,6 +629,7 @@ Items:
 
   SlimeBoots:
     enableSpawnCommand: true
+    itemMaterial: Leather_Boots
     dropChance: 5   #in %
     enableCraftingRecipe: true
     Lore:
@@ -641,11 +644,12 @@ Items:
     damageOnUseMultiplier: 3    #the damage the slime boots take depends on how much damage the wearer would take without them. This multiplier makes the boots take more or less damage.
     # allowed multipliers: {0,1,2,3,....}
 
-    BouncySlime: # The Resource needed to craft the slime boots. drops from boss slimes.
-      enableSpawnCommand: true
-      dropChance: 75   #per possible drop, in % (roughly this % of the maxDropped will drop on average)
-      maxDropped: 2
-      Lore:
+  BouncySlime: # The Resource needed to craft the slime boots. drops from boss slimes.
+    enableSpawnCommand: true
+    dropChance: 75   #per possible drop, in % (roughly this % of the maxDropped will drop on average)
+    maxDropped: 2
+    Lore:
+      - "Bouncy :P"
 
 
   Blazer:
@@ -674,7 +678,8 @@ Items:
     enableImproving: true #craft the better version of the item by combining 3 of the same level (level 1 or 2)
     #result is a heated Magmacream of a level one higher than the ingredients
     #to improve the level you have to fill out the top line of a crafting table with 3 heatedMagmaCream of level 1 or 2.
-
+    lore:
+      - Right-click to use
 
     Level1:   #dropped by the magmacube boss
       dropChance: 50
@@ -695,4 +700,6 @@ Items:
       burnTime: 7
 
   BossEggs:
+    lore:
+      - "Spawns a boss"
 
