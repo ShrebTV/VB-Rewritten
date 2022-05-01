@@ -1,22 +1,20 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
-import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -109,7 +107,8 @@ public class BlazeBoss extends VBBoss {
 
         // Setting scoreboard tags so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);
-        entity.getScoreboardTags().add(VBBoss.BOSSTAG);
+        entity.getScoreboardTags().add(BOSSTAG);
+        entity.getScoreboardTags().add(REMOVE_ON_DISABLE_TAG);
 
         new NormalBoss(entity.getType()).putCommandsToPDC(entity);
 
@@ -129,6 +128,7 @@ public class BlazeBoss extends VBBoss {
      *
      * @param event the ProjectileLaunchEvent to check for a boss blaze in
      */
+    @EventHandler
     public void blazeAbility(ProjectileLaunchEvent event) {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
@@ -205,6 +205,7 @@ public class BlazeBoss extends VBBoss {
      *
      * @param event The EntityTargetLivingEntityEvent to check for a blaze boss targeting a player in
      */
+    @EventHandler
     public void blazeTargeting(EntityTargetLivingEntityEvent event) {
 
         if (event.getEntityType() != EntityType.BLAZE || !(event.getEntity().getScoreboardTags().contains(BlazeBoss.SCOREBOARDTAG)))
@@ -221,19 +222,17 @@ public class BlazeBoss extends VBBoss {
                 && entity.getScoreboardTags().contains(VBBoss.BOSSTAG);
     }
 
+    @EventHandler
     public void onHitEvent(EntityDamageByEntityEvent event) {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
-        if (event.getEntity().getScoreboardTags().contains("BossBlaze") && event.getEntityType() == EntityType.BLAZE) {
+        boolean useDamageModifier = event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)
+                && event.getEntityType() == EntityType.BLAZE
+                && event.getDamager().getType().equals(EntityType.SPECTRAL_ARROW);
 
-            if (event.getDamager().getType().equals(EntityType.SPECTRAL_ARROW)) {
-                event.setDamage(event.getDamage() * config.getDouble("Bosses.BlazeBoss.onHitEvents.spectralArrowDamageMultiplier"));
-
-                if (Material.getMaterial(Objects.requireNonNull(config.getString("Bosses.BlazeBoss.onHitEvents.dropItemOnHitBySpectralArrow"))) != null && Material.getMaterial(Objects.requireNonNull(config.getString("Bosses.BlazeBoss.onHitEvents.dropItemOnHitBySpectralArrow"))) != Material.AIR) {
-                    event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), new ItemStack(Objects.requireNonNull(Material.getMaterial(config.getString("Bosses.BlazeBoss.onHitEvents.dropItemOnHitBySpectralArrow").toUpperCase())), 1));
-                }
-            }
+        if (useDamageModifier) {
+            event.setDamage(event.getDamage() * config.getDouble("Bosses.BlazeBoss.onHitEvents.spectralArrowDamageMultiplier"));
         }
     }
 }

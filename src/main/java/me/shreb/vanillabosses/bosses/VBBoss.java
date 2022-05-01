@@ -13,6 +13,7 @@ import java.util.logging.Level;
 public abstract class VBBoss implements Listener {
 
     public static final String BOSSTAG = "VB-Boss";
+    public static final String REMOVE_ON_DISABLE_TAG = "Vanilla Bosses - Remove on Disable";
 
     /**
      * creates a completely new Entity and makes it into a boss

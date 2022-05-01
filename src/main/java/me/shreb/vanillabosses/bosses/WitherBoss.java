@@ -1,7 +1,6 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
-import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
@@ -109,7 +108,8 @@ public class WitherBoss extends VBBoss {
 
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);
-        entity.getScoreboardTags().add(VBBoss.BOSSTAG);
+        entity.getScoreboardTags().add(BOSSTAG);
+        entity.getScoreboardTags().add(REMOVE_ON_DISABLE_TAG);
 
         new NormalBoss(entity.getType()).putCommandsToPDC(entity);
 
