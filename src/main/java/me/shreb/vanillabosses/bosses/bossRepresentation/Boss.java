@@ -1,7 +1,6 @@
 package me.shreb.vanillabosses.bosses.bossRepresentation;
 
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
-import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataType;
