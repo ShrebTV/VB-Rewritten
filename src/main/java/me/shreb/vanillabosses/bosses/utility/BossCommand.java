@@ -73,7 +73,7 @@ public class BossCommand implements Listener {
     }
 
     //Gets the intended delay for this command from this.command and sets it. sets this.command to only have the things before 'DELAY:'
-    private void setDelay(){
+    private void setDelay() {
         String[] strings = this.command.split("DELAY:");
 
         //make sure the strings array has 2 objects. If it doesn't the Command string was faulty
@@ -89,14 +89,14 @@ public class BossCommand implements Listener {
         int delay;
         try {
             delay = Integer.parseInt(strings[1]);
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             //log to the file and default to the value '0' in case the delay cannot be read
             new VBLogger(getClass().getName(), Level.WARNING, "Could not read delay from command string. Defaulting to 0. Command: " + command).logToFile();
             delay = 0;
         }
 
         //additional check for negative values
-        if(delay < 0) {
+        if (delay < 0) {
             delay = 0;
             new VBLogger(getClass().getName(), Level.WARNING, "Read a negative value for Delay of the command. Defaulting to 0. Command: " + command).logToFile();
         }
@@ -133,7 +133,7 @@ public class BossCommand implements Listener {
             }
 
             try {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () ->{
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
                     Bukkit.getServer().dispatchCommand(Vanillabosses.getInstance().getServer().getConsoleSender(), this.command);
 
                 }, (long) delay * 20 + 1);
@@ -225,6 +225,30 @@ public class BossCommand implements Listener {
 
         this.radius = radius;
     }
+
+
+    /**
+     * A Method in order to replace a UUID from the damager map and the mostDamage map with a new one without losing any data
+     *
+     * @param oldID the UUID the data will be retrieved from
+     * @param newID the UUID the data will be set to on both maps
+     */
+    public static void replaceMappedUUIDs(UUID oldID, UUID newID) {
+
+        ArrayList<UUID> damagerList = DamagerPHReplacer.damagerHashMap.get(oldID);
+        MostDamagePHReplacer replacer = MostDamagePHReplacer.damagePHReplacerHashMap.get(oldID);
+
+        if (damagerList != null) {
+            DamagerPHReplacer.damagerHashMap.put(newID, damagerList);
+            DamagerPHReplacer.damagerHashMap.remove(oldID);
+        }
+
+        if (replacer != null) {
+            MostDamagePHReplacer.damagePHReplacerHashMap.put(newID, replacer);
+            MostDamagePHReplacer.damagePHReplacerHashMap.remove(oldID);
+        }
+    }
+
 
     /**
      * A Way to replace the <killer> placeholder
