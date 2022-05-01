@@ -6,6 +6,7 @@ import me.shreb.vanillabosses.utility.DataRetriever;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -55,6 +56,34 @@ public class ItemDataRetriever extends DataRetriever {
         this.CONFIGSECTION = this.instance.configSection;
 
     }
+
+    public ItemDataRetriever(ItemStack itemStack) throws ItemCreationException {
+
+        if(itemStack == null) throw new ItemCreationException("Item passed to Data Retriever was null");
+
+        //TODO Test this
+        ItemDataRetriever retriever;
+
+        if (itemStack.hasItemMeta() &&
+                !itemStack.getItemMeta().getPersistentDataContainer().has(VBItem.VBItemKey, PersistentDataType.INTEGER)) {
+            return;
+        } else {
+
+            Material mat = itemStack.getType();
+
+            try {
+                retriever = new ItemDataRetriever(mat);
+            } catch (ItemCreationException e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Bad Item input had a VB tag. Please let the author know about this and whether there are Vanilla Bosses extension plugins installed.").logToFile();
+                return;
+            }
+        }
+
+        this.instance = retriever.instance;
+        this.CONFIGSECTION = retriever.CONFIGSECTION;
+
+    }
+
 
     /**
      * Makes a new ItemStack with the Item specified by the DataRetriever
