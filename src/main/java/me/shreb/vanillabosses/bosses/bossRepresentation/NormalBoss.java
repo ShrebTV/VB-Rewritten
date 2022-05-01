@@ -6,6 +6,7 @@ import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 
 import java.util.logging.Level;
 
@@ -51,28 +52,30 @@ public class NormalBoss extends Boss {
         }
     }
 
-    public void spawnBoss(Location location) {
+    public LivingEntity spawnBoss(Location location) throws BossCreationException {
         try {
-            this.retriever.instance.makeBoss(location);
+            return this.retriever.instance.makeBoss(location);
         } catch (BossCreationException e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not spawn Boss. " + retriever.instance.getClass().getName() + " could not be spawned.\nError: " + e).logToFile();
+            throw new BossCreationException("Could not make normal boss");
         }
     }
 
     /**
      * A Method to make a NormalBoss object from a String. Null if String could not be matched with a boss type
+     *
      * @param string The String to parse for a Boss type for
      * @return A new NormalBoss object matching the type specified in the String. \n Null if the String could not be parsed for a Boss type.
      * @throws IllegalArgumentException If the String parameter is null
-     * @throws NullPointerException If the String did not contain any Entity type at all
+     * @throws NullPointerException     If the String did not contain any Entity type at all
      */
     public static NormalBoss of(String string) throws IllegalArgumentException, NullPointerException {
 
         EntityType type = EntityType.valueOf(string.toUpperCase());
 
-        try{
+        try {
             new BossDataRetriever(type);
-        } catch(IllegalArgumentException ignored){
+        } catch (IllegalArgumentException ignored) {
             return null;
         }
 
@@ -81,14 +84,15 @@ public class NormalBoss extends Boss {
 
     /**
      * A Method to make a NormalBoss object from an EntityType
+     *
      * @param type the type to make the NormalBoss Object from
      * @return A new NormalBoss object matching the type specified. \n Null if the type passed in did not match any Boss types.
      */
     public static NormalBoss of(EntityType type) {
 
-        try{
+        try {
             new BossDataRetriever(type);
-        } catch(IllegalArgumentException ignored){
+        } catch (IllegalArgumentException ignored) {
             return null;
         }
 
