@@ -1,23 +1,31 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
-import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
+import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
+import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.Utility;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class CreeperBoss extends VBBoss {
 
@@ -27,6 +35,8 @@ public class CreeperBoss extends VBBoss {
     public static final String SCOREBOARDTAG = "BossCreeper";
 
     public static final String EXPLODINGTAG = "ExplodingATM";
+    public static final String CANCEL_EXPLOSION = "CancelOnExplode";
+    public static final String CANCEL_BLOWUP_ITEMS = "dontBlowUpItems";
 
     @Override
     public LivingEntity makeBoss(Location location) throws BossCreationException {
@@ -58,7 +68,7 @@ public class CreeperBoss extends VBBoss {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
-        // checking wether the entity passed in is a Creeper. Logging as a warning and throwing an exception if not.
+        // checking whether the entity passed in is a Creeper. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Creeper)) {
             new VBLogger(getClass().getName(), Level.WARNING, "Attempted to make a Creeper boss out of an Entity.\n" +
                     "Entity passed in: " + entity.getType() + "\n" +
@@ -101,7 +111,8 @@ public class CreeperBoss extends VBBoss {
 
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);
-        entity.getScoreboardTags().add(VBBoss.BOSSTAG);
+        entity.getScoreboardTags().add(BOSSTAG);
+        entity.getScoreboardTags().add(REMOVE_ON_DISABLE_TAG);
 
         new NormalBoss(entity.getType()).putCommandsToPDC(entity);
 
@@ -115,11 +126,13 @@ public class CreeperBoss extends VBBoss {
     /**
      * This is what will happen once the Creeper boss is lit on fire.
      * it is supposed to explode after being lit on fire and not take damage from the fire itself.
+     *
      * @param event the EntityCombustEvent to check for the boss creeper in.
      */
-    public void bossLitOnFire(EntityCombustEvent event){
+    @EventHandler
+    public void bossLitOnFire(EntityCombustEvent event) {
 
-        if(event.getEntityType().equals(EntityType.CREEPER) && event.getEntity().getScoreboardTags().contains(CreeperBoss.SCOREBOARDTAG)){
+        if (event.getEntityType().equals(EntityType.CREEPER) && event.getEntity().getScoreboardTags().contains(CreeperBoss.SCOREBOARDTAG)) {
 
             int fuseTime = Vanillabosses.getInstance().getConfig().getInt("Bosses.CreeperBoss.thrownTNT.TNTFuse");
 
@@ -127,15 +140,153 @@ public class CreeperBoss extends VBBoss {
 
             Creeper creeper = (Creeper) event.getEntity();
 
-            if(!(creeper.getScoreboardTags().contains(EXPLODINGTAG))) {
+            if (!(creeper.getScoreboardTags().contains(EXPLODINGTAG))) {
                 creeper.ignite();
                 creeper.addScoreboardTag(EXPLODINGTAG);
             }
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () ->{
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
 
                 creeper.removeScoreboardTag(EXPLODINGTAG);
 
-            },20L * fuseTime +5 );
+            }, 20L * fuseTime + 5);
+        }
+    }
+
+    @EventHandler
+    public void onEntityExplode(org.bukkit.event.entity.EntityExplodeEvent event) {
+
+        //TODO Test this
+//BossCreeper
+
+        if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.CREEPER) {
+
+            Configuration config = Vanillabosses.getInstance().getConfig();
+
+            //get the entity from the event after verifying that it is a boss creeper above
+            Creeper creeper = (Creeper) event.getEntity();
+
+            //Cancel the event so nothing actually explodes. have to replace the sound
+            event.setCancelled(true);
+            event.getEntity().getWorld().playSound(event.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1F, 1F);
+
+            //If the creeper is almost or pretty much dead, let it die
+            if(creeper.getHealth() < 0.0001){
+                return;
+            }
+
+            //new boolean to check whether the respawning boss map contains this specific boss and the boss has the respawning boss scoreboard tag
+            boolean isRespawningBoss = RespawningBoss.livingRespawningBossesMap.entrySet()
+                    .stream()
+                    .anyMatch(n -> n.getValue() == creeper.getUniqueId()
+                            &&
+                            creeper.getScoreboardTags().contains(RespawningBoss.RESPAWNING_BOSS_TAG));
+
+            if (isRespawningBoss) {
+
+                //make a new Array list in order to save all bosses which were returned by the stream
+                ArrayList<RespawningBoss> respawningBosses = (ArrayList<RespawningBoss>) RespawningBoss.livingRespawningBossesMap.entrySet()
+                        .stream()
+                        .filter(n -> n.getValue() == creeper.getUniqueId())
+                        .map(Map.Entry::getKey).collect(Collectors.toList());
+
+                //check whether there was only one value in there. log if there was 0 or more than one, return.
+                if (respawningBosses.size() != 1) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "More than one Respawning Boss mapped with the same entity or irregularly none matched. List: " + respawningBosses).logToFile();
+                    return;
+                }
+
+                //get the respawning boss corresponding to the UUID of the creeper from the event
+                RespawningBoss respawningBoss = RespawningBoss.livingRespawningBossesMap.entrySet()
+                        .stream()
+                        .filter(n -> n.getValue() == creeper.getUniqueId())
+                        .map(Map.Entry::getKey)
+                        .collect(Collectors.toList()).get(0);
+
+                LivingEntity newCreeper;
+
+                //remake the creeper boss which just blew up
+                try {
+                    newCreeper = respawningBoss.spawnBoss();
+                } catch (BossCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Could not respawn Creeper boss. If you cannot fix this using the config, please let the author know.").logToFile();
+                    return;
+                }
+
+                //check whether the new entity is actually a creeper, supposed to catch some coding and logic errors on my end
+                if (!(newCreeper instanceof Creeper)) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Unexpected Respawning boss type inside Respawning Boss list. Expected: Creeper. Found: " + respawningBoss.getType()).logToFile();
+                    return;
+                }
+
+                newCreeper.setHealth(creeper.getHealth());
+
+                return;
+            }
+
+            //else, the boss is not a respawning boss. gotta have some stuff for that here
+
+            Creeper creeperNew;
+
+            //Attempt to spawn a new Creeper to replace the old one.
+            try {
+                creeperNew = (Creeper) new NormalBoss(EntityType.CREEPER).spawnBoss(creeper.getLocation());
+            } catch (BossCreationException e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Unable to respawn Creeper for some reason. Exception: " + e).logToFile();
+                return;
+            }
+
+            Utility.spawnParticles(Particle.FLAME, event.getEntity().getWorld(), event.getLocation(), 4, 2, 4, 30, 3);
+
+            creeperNew.setHealth(creeper.getHealth());
+
+            creeperNew.addScoreboardTag("ExplodingATM");
+            Creeper finalCreeper1 = creeperNew;
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
+                finalCreeper1.removeScoreboardTag("ExplodingATM");
+            }, 20L * config.getInt("Bosses.CreeperBoss.thrownTNT.TNTFuse"));
+
+            //always have the same explosion radius
+            creeperNew.setExplosionRadius(creeper.getExplosionRadius());
+
+            BossCommand.replaceMappedUUIDs(creeper.getUniqueId(), creeperNew.getUniqueId());
+
+            if (config.getBoolean("Bosses.CreeperBoss.thrownTNT.throwTNTEnable")) {
+
+                Entity[] TNTArry = {
+                        creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
+                        creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
+                        creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
+                        creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
+                        creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
+                        creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
+                        creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
+                        creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
+                };
+
+                for (Entity e : TNTArry
+                ) {
+                    ((TNTPrimed) e).setYield(config.getInt("Bosses.CreeperBoss.thrownTNT.TNTYield"));
+                    ((TNTPrimed) e).setFuseTicks(20 * config.getInt("Bosses.CreeperBoss.thrownTNT.TNTFuse"));
+                }
+
+                double multiplier = config.getDouble("Bosses.CreeperBoss.thrownTNT.TNTSpreadMultiplier");
+
+                TNTArry[0].setVelocity(new Vector(0.25 * multiplier, 0.5, 0));
+                TNTArry[1].setVelocity(new Vector(-0.25 * multiplier, 0.5, 0));
+                TNTArry[2].setVelocity(new Vector(0, 0.5, 0.25 * multiplier));
+                TNTArry[3].setVelocity(new Vector(0, 0.5, -0.25 * multiplier));
+                TNTArry[4].setVelocity(new Vector(0.25 * multiplier, 0.5, 0.25 * multiplier));
+                TNTArry[5].setVelocity(new Vector(-0.25 * multiplier, 0.5, 0.25 * multiplier));
+                TNTArry[6].setVelocity(new Vector(0.25 * multiplier, 0.5, -0.25 * multiplier));
+                TNTArry[7].setVelocity(new Vector(-0.25 * multiplier, 0.5, -0.25 * multiplier));
+
+                if (config.getBoolean("Bosses.CreeperBoss.thrownTNT.TNTDoesNoBlockDamage")) {
+                    for (Entity e : TNTArry) {
+                        e.addScoreboardTag(CANCEL_EXPLOSION);
+                        e.getScoreboardTags().add(CANCEL_BLOWUP_ITEMS);
+                    }
+                }
+            }
         }
     }
 }
