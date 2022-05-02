@@ -3,12 +3,14 @@ package me.shreb.vanillabosses.items;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.Utility;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -16,6 +18,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 public class Blazer extends VBItem {
@@ -87,10 +90,31 @@ public class Blazer extends VBItem {
     @Override
     public void itemAbility(LivingEntity entity) {
 
+        entity.setFireTicks(config.getInt("Items.Blazer.ticksOfFire"));
+
     }
 
     @Override
     <T extends Event> void itemAbility(T e) {
 
+        if(!(e instanceof EntityDamageByEntityEvent)) return;
+
+        EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) e;
+
+        boolean executeAbility =
+                //check whether the entity is a living entity
+                event.getEntity() instanceof LivingEntity
+                //checking whether the attacked entity is wearing a blazer. could theoretically be set to be any armor
+                && Arrays.stream(((LivingEntity) event.getEntity()).getEquipment().getArmorContents())
+                .filter(n -> n.getType() != Material.AIR && n.hasItemMeta())
+                .anyMatch(n -> n.getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER))
+                //check whether the chance applies
+                && Utility.roll(config.getDouble("Items.Blazer.chanceToCombust"));
+
+        if(executeAbility){
+
+            itemAbility((LivingEntity) event.getEntity());
+
+        }
     }
 }
