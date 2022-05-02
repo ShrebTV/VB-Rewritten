@@ -16,10 +16,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class RespawningBoss extends Boss {
@@ -36,7 +33,6 @@ public class RespawningBoss extends Boss {
     //A map which contains all Respawning bosses from the bossList as keys and the UUID of the currently alive boss.
     public static final HashMap<RespawningBoss, UUID> livingRespawningBossesMap = new HashMap<>();
 
-    EntityType type;
     @SerializedName("worldName")
     String world;
     double x;
@@ -90,6 +86,18 @@ public class RespawningBoss extends Boss {
      */
     public static void spawnRespawningBosses() {
 //TODO implement spawnRespawningBosses() method
+
+        if(bossList.isEmpty()){
+            new VBLogger("RespawningBoss", Level.INFO, "Respawning boss list was empty. Not spawning any respawning bosses").logToFile();
+        }
+
+        for(RespawningBoss boss : bossList){
+            try {
+                boss.spawnBoss();
+            } catch (BossCreationException e) {
+                new VBLogger("RespawningBoss", Level.WARNING, "Could not initially spawn respawning boss. Boss: " + boss).logToFile();
+            }
+        }
     }
 
     /**
@@ -182,7 +190,7 @@ public class RespawningBoss extends Boss {
         return entity;
     }
 
-
+    //Tag constants for PDC of respawning bosses
     public static final NamespacedKey SPAWN_WORLD   = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnWorld");
     public static final NamespacedKey COMMANDS      = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesCommandsOnDeath");
     public static final NamespacedKey RESPAWN_TIMER = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesRespawnTime");
@@ -191,7 +199,10 @@ public class RespawningBoss extends Boss {
     public static final NamespacedKey Z_COORDS      = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnLocationZ");
 
 
-
+    /**
+     * Adds the PDC tags of the respawning boss to the entity passed in
+     * @param entity the entity to add the tags to
+     */
     private void addPDCTags(LivingEntity entity) {
 
         PersistentDataContainer container = entity.getPersistentDataContainer();
@@ -210,6 +221,17 @@ public class RespawningBoss extends Boss {
 
     }
 
+    @Override
+    public String toString(){
+        return "Type: '" + this.type + "'" +
+                "World: '" + this.world + "'" +
+                "Respawn Timer: '" + this.respawnTime + "'" +
+                "Commands: '" + Arrays.toString(this.commandIndexes) + "'" +
+                "Enabled: '" + this.enableBoss + "'" +
+                "X-Coordinates: '" + this.x + "'" +
+                "Y-Coordinates: '" + this.y + "'" +
+                "Y-Coordinates: '" + this.z + "'";
+    }
 
     public EntityType getType() {
         return type;
