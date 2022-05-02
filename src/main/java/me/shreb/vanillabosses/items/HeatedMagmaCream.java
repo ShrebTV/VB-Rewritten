@@ -3,12 +3,15 @@ package me.shreb.vanillabosses.items;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import me.shreb.vanillabosses.utility.Utility;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -107,5 +110,66 @@ public class HeatedMagmaCream extends VBItem {
     @Override
     <T extends Event> void itemAbility(T e) {
 
+        boolean ret = !(e instanceof PlayerInteractEvent)
+                || ((PlayerInteractEvent) e).getItem() == null
+                || ((PlayerInteractEvent) e).getHand() == null
+                || (((PlayerInteractEvent) e).getAction() != Action.RIGHT_CLICK_AIR && ((PlayerInteractEvent) e).getAction() != Action.RIGHT_CLICK_BLOCK);
+
+        if (ret) return;
+
+        PlayerInteractEvent event = (PlayerInteractEvent) e;
+
+        if (event.getItem().getType() == Material.MAGMA_CREAM
+                && (event.getItem().getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER))) {
+
+            ItemStack cream = event.getItem();
+            Player player = event.getPlayer();
+            Location loc = event.getPlayer().getLocation();
+            int radius;
+            int time;
+            int level;
+
+
+            if (cream.getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.INTEGER)) {
+                level = cream.getItemMeta().getPersistentDataContainer().get(pdcKey, PersistentDataType.INTEGER);
+            } else {
+                return;
+            }
+
+            switch (level) {
+
+                case 1:
+                    radius = config.getInt("Items.HeatedMagmaCream.Level1.radius");
+                    time = config.getInt("Items.HeatedMagmaCream.Level1.burnTime");
+                    break;
+
+                case 2:
+                    radius = config.getInt("Items.HeatedMagmaCream.Level2.radius");
+                    time = config.getInt("Items.HeatedMagmaCream.Level2.burnTime");
+                    break;
+
+                case 3:
+                    radius = config.getInt("Items.HeatedMagmaCream.Level3.radius");
+                    time = config.getInt("Items.HeatedMagmaCream.Level3.burnTime");
+                    break;
+
+                default:
+                    new VBLogger(getClass().getName(), Level.WARNING, "Noticed weird level of Heated magma cream. Level: " + level + "\n" +
+                            "Cream: " + cream).logToFile();
+                    return;
+            }
+
+            Utility.spawnParticles(Particle.FLAME, player.getWorld(), loc, radius, radius, radius, 150, 3);
+
+            player.getWorld().playSound(loc, Sound.ENTITY_SLIME_SQUISH, 1.0f, 1.0f);
+
+            for (Entity entity : player.getWorld().getNearbyEntities(loc, radius, radius, radius, n -> n instanceof LivingEntity && n != player)) {
+                entity.setFireTicks(20 * time);
+            }
+
+            if (player.getGameMode() == GameMode.SURVIVAL) {
+                event.getItem().setAmount(event.getItem().getAmount() - 1);
+            }
+        }
     }
 }
