@@ -52,6 +52,12 @@ public class NormalBoss extends Boss {
         }
     }
 
+    /**
+     * Spawns the boss represented by this boss object at the specified location
+     * @param location the location to spawn the boss at
+     * @return the spawned boss
+     * @throws BossCreationException if the boss could not be created
+     */
     public LivingEntity spawnBoss(Location location) throws BossCreationException {
         try {
             return this.retriever.instance.makeBoss(location);
