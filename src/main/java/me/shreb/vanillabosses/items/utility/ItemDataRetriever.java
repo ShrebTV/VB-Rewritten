@@ -15,7 +15,7 @@ public class ItemDataRetriever extends DataRetriever {
 
     static HashMap<Material, VBItem> materialInstanceMap = new HashMap<>();
 
-    VBItem instance; //The Instance of the item class referenced by the ItemDataRetriever object
+    public VBItem instance; //The Instance of the item class referenced by the ItemDataRetriever object
 
     static {
 
