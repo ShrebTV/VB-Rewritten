@@ -85,9 +85,9 @@ public class ButchersAxe extends VBItem {
 
     /**
      *
-     * Effect of this item: Blindness, "Concuss"
+     * Effect of this item: Slowness, "Bind II"
      *
-     * @param entity The entity to apply the effect of the Baseball bat to
+     * @param entity The entity to apply the effect of the Butchers axe to
      */
     @Override
     public void itemAbility(LivingEntity entity) {
