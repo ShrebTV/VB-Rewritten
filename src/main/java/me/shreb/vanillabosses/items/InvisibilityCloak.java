@@ -12,6 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -20,7 +22,7 @@ public class InvisibilityCloak extends VBItem {
 
     public static InvisibilityCloak instance = new InvisibilityCloak();
 
-    public InvisibilityCloak(){
+    public InvisibilityCloak() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "cloakOfInvisibility");
         this.configSection = "cloakOfInvisibility";
         try {
@@ -64,6 +66,14 @@ public class InvisibilityCloak extends VBItem {
 
     @Override
     public void itemAbility(LivingEntity entity) {
+        int time = config.getInt("Items.cloakOfInvisibility.delayBetweenChecks");
+
+        if (time < 2) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Invisibility time is too short. Please set it to 2 or more seconds").logToFile();
+            return;
+        }
+
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, time * 20 + 1, 1));
 
     }
 
