@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -20,7 +21,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class InvisibilityCloak extends VBItem {
 
@@ -102,11 +105,34 @@ public class InvisibilityCloak extends VBItem {
         checkTask = Bukkit.getScheduler().runTaskTimer(Vanillabosses.getInstance(), () -> {
             for (Player player : Vanillabosses.getInstance().getServer().getOnlinePlayers()) {
 
+                //check whether the player has at least one Invisibility cloak item on
                 if (player.getEquipment() != null
                         && Arrays.stream(player.getEquipment().getArmorContents())
                         .filter(n -> n.getType() != Material.AIR && n.hasItemMeta())
                         .anyMatch(n -> n.getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.INTEGER))) {
 
+                    //get the armor contents from that player
+                    List<ItemStack> items = Arrays.stream(player.getEquipment().getArmorContents())
+                            .filter(n -> n.getType() != Material.AIR
+                                    && n.hasItemMeta()
+                                    && n.getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.INTEGER))
+                            .collect(Collectors.toList());
+
+                    //another check for whether the list contains at least one item which matches the invisbility cloak pdc
+                    if(items.size() < 1) return;
+
+                    //damage if the item is damageable
+                    if(items.get(0) instanceof Damageable){
+
+                        if(((Damageable)items.get(0).getItemMeta()).getHealth() < 1){
+                            items.get(0).setAmount(items.get(0).getAmount() - 1);
+                            return;
+                        }
+
+                        ((Damageable)items.get(0).getItemMeta()).damage(items.get(0).getType().getMaxDurability() - (((Damageable) items.get(0)).getHealth() - 1));
+                    }
+
+                    //execute the invisibility ability for the player
                     itemAbility(player);
 
                 }
