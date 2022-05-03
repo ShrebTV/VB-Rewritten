@@ -4,6 +4,7 @@ import me.shreb.vanillabosses.bosses.VBBoss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.commands.VBCommands;
+import me.shreb.vanillabosses.items.InvisibilityCloak;
 import me.shreb.vanillabosses.listeners.VBListeners;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.Languages;
@@ -63,6 +64,8 @@ public final class Vanillabosses extends JavaPlugin {
 
         //initialize respawning bosses
         RespawningBoss.spawnRespawningBosses();
+
+        InvisibilityCloak.instance.initializeChecks();
 
 
         new VBLogger(getClass().getName(), Level.INFO, "Plugin enabled!").logToFile();
