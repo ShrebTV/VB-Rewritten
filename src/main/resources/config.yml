@@ -566,6 +566,7 @@ Items:
     boostSoundVolume: 1       #keep low, or earrape
     enableDamagingOnUse: true
     damageOnUseAmount: 1
+    antiFallDamageTime: 5 #in seconds, how long after you use the slingshot you are protected from fall damage for. Fall damage is cancelled once at the most
     enableCraftingRecipe: true
     Lore:
       - Makes you leap forward when rightclicked!
@@ -642,6 +643,7 @@ Items:
     recipeIngredients:
       - B:BouncySlime
 
+    fallDamageMultiplier: 0.2 #has to be between 0 and 1, the multiplier for how much damage the player will take
     damageOnUseMultiplier: 3    #the damage the slime boots take depends on how much damage the wearer would take without them. This multiplier makes the boots take more or less damage.
     # allowed multipliers: {0,1,2,3,....}
 
