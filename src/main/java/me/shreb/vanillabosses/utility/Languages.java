@@ -119,7 +119,8 @@ public enum Languages {
             "Wither Egg",
             "You have been given the Wither Egg",
 
-            "You have been given the Boss Egg(s)"
+            "You have been given the Boss Egg(s)",
+            "Boss Egg"
     ),
 
     GER("Zu wenige Argumente!",
@@ -239,7 +240,8 @@ public enum Languages {
             "Wither Ei",
             "Du hast das Wither Ei erhalten!",
 
-            "Du hast das Boss Ei/die Boss Eier erhalten!"
+            "Du hast das Boss Ei/die Boss Eier erhalten!",
+            "Boss Ei"
     ),
 
     CN(
@@ -358,7 +360,8 @@ public enum Languages {
             "凋零刷怪蛋",
             "你获得了凋零刷怪蛋！",
 
-            "你获得了boss刷怪蛋！"
+            "你获得了boss刷怪蛋！",
+            "boss刷怪蛋"
 
     );
 
@@ -416,9 +419,10 @@ public enum Languages {
     public String itemWitherEggGivenMessage;
 
     public String itemBossEggGivenMessage;
+    public String itemBossEggName;
 
 
-    Languages(String notEnoughArguments, String badArgument, String badPermissions, String errorMessage, String commandDisabled, String inventoryFull, String badAmount, String spawnedMessage, String vbh0, String vbhBlaze, String vbhCreeper, String vbhEnderman, String vbhMagmaCube, String vbhSkeleton, String vbhSlime, String vbhSpider, String vbhWitch, String vbhWither, String vbhZombie, String vbhPiglin, String vbhInfo, String itemBaseballBatName, String itemBaseballBatGivenMessage, String itemBlazerName, String itemBlazerNameGivenMessage, String itemButchersAxeName, String itemButchersAxeNameGivenMessage, String itemHMCName, String itemHMCNameGivenMessage, String itemInvisibilityCloakName, String itemInvisibilityCloakNameGivenMessage, String itemSkeletorName, String itemSkeletorGivenMessage, String itemSlimeBootsName, String itemSlimeBootsGivenMessage, String itemBouncySlimeName, String itemBouncySlimeGivenMessage, String itemSlingshotName, String itemSlingshotGivenMessage, String witherEggName, String itemWitherEggGivenMessage, String itemBossEggGivenMessage) {
+    Languages(String notEnoughArguments, String badArgument, String badPermissions, String errorMessage, String commandDisabled, String inventoryFull, String badAmount, String spawnedMessage, String vbh0, String vbhBlaze, String vbhCreeper, String vbhEnderman, String vbhMagmaCube, String vbhSkeleton, String vbhSlime, String vbhSpider, String vbhWitch, String vbhWither, String vbhZombie, String vbhPiglin, String vbhInfo, String itemBaseballBatName, String itemBaseballBatGivenMessage, String itemBlazerName, String itemBlazerNameGivenMessage, String itemButchersAxeName, String itemButchersAxeNameGivenMessage, String itemHMCName, String itemHMCNameGivenMessage, String itemInvisibilityCloakName, String itemInvisibilityCloakNameGivenMessage, String itemSkeletorName, String itemSkeletorGivenMessage, String itemSlimeBootsName, String itemSlimeBootsGivenMessage, String itemBouncySlimeName, String itemBouncySlimeGivenMessage, String itemSlingshotName, String itemSlingshotGivenMessage, String witherEggName, String itemWitherEggGivenMessage, String itemBossEggGivenMessage, String itemBossEggName) {
 
         this.notEnoughArguments = notEnoughArguments;
         this.badArgument = badArgument;
@@ -462,5 +466,6 @@ public enum Languages {
         this.witherEggName = witherEggName;
         this.itemWitherEggGivenMessage = itemWitherEggGivenMessage;
         this.itemBossEggGivenMessage = itemBossEggGivenMessage;
+        this.itemBossEggName = itemBossEggName;
     }
 }
