@@ -3,10 +3,12 @@ package me.shreb.vanillabosses.items;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,8 +16,10 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 public class InvisibilityCloak extends VBItem {
@@ -64,8 +68,11 @@ public class InvisibilityCloak extends VBItem {
         return cloak;
     }
 
+    //saves the Entity UUID along with the task id of the task timer assigned to them
+
     @Override
     public void itemAbility(LivingEntity entity) {
+
         int time = config.getInt("Items.cloakOfInvisibility.delayBetweenChecks");
 
         if (time < 2) {
@@ -73,13 +80,37 @@ public class InvisibilityCloak extends VBItem {
             return;
         }
 
-        entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, time * 20 + 1, 1));
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, (time * 20) + 10, 1));
 
     }
 
     @Override
     <T extends Event> void itemAbility(T e) {
 
+        new VBLogger(getClass().getName(), Level.WARNING, "tried to invoke item Ability of Invisibility cloak. Event: " + e.getEventName()).logToFile();
+
     }
 
+    BukkitTask checkTask = null;
+
+    public void initializeChecks() {
+
+        if (checkTask != null && !checkTask.isCancelled()) {
+            checkTask.cancel();
+        }
+
+        checkTask = Bukkit.getScheduler().runTaskTimer(Vanillabosses.getInstance(), () -> {
+            for (Player player : Vanillabosses.getInstance().getServer().getOnlinePlayers()) {
+
+                if (player.getEquipment() != null
+                        && Arrays.stream(player.getEquipment().getArmorContents())
+                        .filter(n -> n.getType() != Material.AIR && n.hasItemMeta())
+                        .anyMatch(n -> n.getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.INTEGER))) {
+
+                    itemAbility(player);
+
+                }
+            }
+        }, 10, config.getInt("Items.cloakOfInvisibility.delayBetweenChecks") * 20L);
+    }
 }
