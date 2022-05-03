@@ -39,6 +39,8 @@ public class InvisibilityCloak extends VBItem {
             return;
         }
         this.lore = (ArrayList<String>) config.getStringList("Items.cloakOfInvisibility.Lore");
+        this.itemName = Vanillabosses.getCurrentLanguage().itemInvisibilityCloakName;
+        this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemInvisibilityCloakNameGivenMessage;
     }
 
     @Override
@@ -69,6 +71,11 @@ public class InvisibilityCloak extends VBItem {
         cloak.setItemMeta(meta);
 
         return cloak;
+    }
+
+    @Override
+    public void registerListener() {
+        pluginManager.registerEvents(this, Vanillabosses.getInstance());
     }
 
     //saves the Entity UUID along with the task id of the task timer assigned to them

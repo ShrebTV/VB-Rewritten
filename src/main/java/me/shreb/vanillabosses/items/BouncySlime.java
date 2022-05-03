@@ -26,6 +26,8 @@ public class BouncySlime extends VBItem {
         this.configSection = "BouncySlime";
         this.itemMaterial = Material.SLIME_BALL;
         this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.itemName = Vanillabosses.getCurrentLanguage().itemBouncySlimeName;
+        this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBouncySlimeGivenMessage;
     }
 
     @Override
@@ -55,6 +57,11 @@ public class BouncySlime extends VBItem {
         bouncySlime.setItemMeta(meta);
 
         return bouncySlime;
+    }
+
+    @Override
+    public void registerListener() {
+        pluginManager.registerEvents(this, Vanillabosses.getInstance());
     }
 
     @Override

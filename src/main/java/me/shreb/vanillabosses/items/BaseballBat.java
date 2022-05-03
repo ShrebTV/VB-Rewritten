@@ -12,6 +12,7 @@ import org.bukkit.Particle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,6 +33,8 @@ public class BaseballBat extends VBItem {
         this.configSection = "BaseballBat";
         this.itemMaterial = Material.WOODEN_SWORD;
         this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.itemName = Vanillabosses.getCurrentLanguage().itemBaseballBatName;
+        this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBaseballBatGivenMessage;
     }
 
     @Override
@@ -85,6 +88,11 @@ public class BaseballBat extends VBItem {
         return baseballBat;
     }
 
+    @Override
+    public void registerListener() {
+        pluginManager.registerEvents(this, Vanillabosses.getInstance());
+    }
+
     /**
      *
      * Effect of this item: Blindness, "Concuss"
@@ -99,6 +107,7 @@ public class BaseballBat extends VBItem {
         }
     }
 
+    @EventHandler
     @Override
     <T extends Event> void itemAbility(T e) {
 

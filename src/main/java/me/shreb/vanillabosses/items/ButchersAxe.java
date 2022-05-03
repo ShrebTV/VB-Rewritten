@@ -12,6 +12,7 @@ import org.bukkit.Particle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,6 +38,8 @@ public class ButchersAxe extends VBItem {
             return;
         }
         this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.itemName = Vanillabosses.getCurrentLanguage().itemButchersAxeName;
+        this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemButchersAxeNameGivenMessage;
     }
 
     @Override
@@ -83,6 +86,11 @@ public class ButchersAxe extends VBItem {
         return axe;
     }
 
+    @Override
+    public void registerListener() {
+        pluginManager.registerEvents(this, Vanillabosses.getInstance());
+    }
+
     /**
      *
      * Effect of this item: Slowness, "Bind II"
@@ -97,6 +105,7 @@ public class ButchersAxe extends VBItem {
         }
     }
 
+    @EventHandler
     @Override
     <T extends Event> void itemAbility(T e) {
 

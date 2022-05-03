@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -31,6 +32,8 @@ public class HeatedMagmaCream extends VBItem {
         this.configSection = "HeatedMagmaCream";
         this.itemMaterial = Material.MAGMA_CREAM;
         this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.itemName = Vanillabosses.getCurrentLanguage().itemHMCName;
+        this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemHMCNameGivenMessage;
     }
 
     public HeatedMagmaCream(int level) {
@@ -103,10 +106,16 @@ public class HeatedMagmaCream extends VBItem {
     }
 
     @Override
+    public void registerListener() {
+        pluginManager.registerEvents(this, Vanillabosses.getInstance());
+    }
+
+    @Override
     public void itemAbility(LivingEntity entity) {
 
     }
 
+    @EventHandler
     @Override
     <T extends Event> void itemAbility(T e) {
 

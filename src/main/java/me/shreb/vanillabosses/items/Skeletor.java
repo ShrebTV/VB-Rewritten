@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -23,6 +24,8 @@ public class Skeletor extends VBItem {
         this.configSection = "Skeletor";
         this.itemMaterial = Material.BOW;
         this.lore = (ArrayList<String>) config.getStringList("Items.Skeletor.Lore");
+        this.itemName = Vanillabosses.getCurrentLanguage().itemSkeletorName;
+        this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemSkeletorGivenMessage;
     }
 
 
@@ -59,10 +62,16 @@ public class Skeletor extends VBItem {
     }
 
     @Override
+    public void registerListener() {
+        pluginManager.registerEvents(this, Vanillabosses.getInstance());
+    }
+
+    @Override
     public void itemAbility(LivingEntity entity) {
 
     }
 
+    @EventHandler
     @Override
     <T extends Event> void itemAbility(T e) {
 

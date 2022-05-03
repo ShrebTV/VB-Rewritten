@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -35,6 +36,8 @@ public class Blazer extends VBItem {
             return;
         }
         this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.itemName = Vanillabosses.getCurrentLanguage().itemBlazerName;
+        this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBlazerNameGivenMessage;
     }
 
     @Override
@@ -88,12 +91,18 @@ public class Blazer extends VBItem {
     }
 
     @Override
+    public void registerListener() {
+        pluginManager.registerEvents(this, Vanillabosses.getInstance());
+    }
+
+    @Override
     public void itemAbility(LivingEntity entity) {
 
         entity.setFireTicks(config.getInt("Items.Blazer.ticksOfFire"));
 
     }
 
+    @EventHandler
     @Override
     <T extends Event> void itemAbility(T e) {
 

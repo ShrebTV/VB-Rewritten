@@ -32,6 +32,8 @@ public class BossEggs extends VBItem {
         this.configSection = "BossEggs";
         this.itemMaterial = null;
         this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.itemName = Vanillabosses.getCurrentLanguage().itemBossEggName;
+        this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBossEggGivenMessage;
     }
 
     public BossEggs(EntityType type){
@@ -163,7 +165,11 @@ public class BossEggs extends VBItem {
 
 //TODO edit PDC of the item
         return null;
+    }
 
+    @Override
+    public void registerListener() {
+        pluginManager.registerEvents(this, Vanillabosses.getInstance());
     }
 
     @Override
@@ -171,8 +177,8 @@ public class BossEggs extends VBItem {
 
     }
 
-    @Override
     @EventHandler
+    @Override
     <T extends Event> void itemAbility(T e) {
         if (!(e instanceof PlayerInteractEvent)) return;
 
