@@ -70,10 +70,4 @@ public class BouncySlime extends VBItem {
         throw new ItemAbilityNotFoundException("Could not find ability for Bouncy Slime item");
 
     }
-
-    @Override
-    <T extends Event> void itemAbility(T e) {
-        new VBLogger(getClass().getName(), Level.WARNING, "Attempted to invoke itemAbility(T e) on Bouncy slime. The Author has to fix this, please report this error.").logToFile();
-        throw new ItemAbilityNotFoundException("Could not find ability for Bouncy Slime item");
-    }
 }

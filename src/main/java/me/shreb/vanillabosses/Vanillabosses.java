@@ -5,6 +5,7 @@ import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.commands.VBCommands;
 import me.shreb.vanillabosses.items.InvisibilityCloak;
+import me.shreb.vanillabosses.items.utility.ItemListeners;
 import me.shreb.vanillabosses.listeners.VBListeners;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.Languages;
@@ -59,6 +60,7 @@ public final class Vanillabosses extends JavaPlugin {
         //registering listeners and commands
         BossCommand.registerListeners();
         VBBoss.registerListeners();
+        ItemListeners.registerItemListeners();
         VBCommands.registerAll();
         VBListeners.registerListeners();
 

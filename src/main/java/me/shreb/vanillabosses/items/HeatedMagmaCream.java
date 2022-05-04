@@ -116,17 +116,13 @@ public class HeatedMagmaCream extends VBItem {
     }
 
     @EventHandler
-    @Override
-    <T extends Event> void itemAbility(T e) {
+    void itemAbility(final PlayerInteractEvent event) {
 
-        boolean ret = !(e instanceof PlayerInteractEvent)
-                || ((PlayerInteractEvent) e).getItem() == null
-                || ((PlayerInteractEvent) e).getHand() == null
-                || (((PlayerInteractEvent) e).getAction() != Action.RIGHT_CLICK_AIR && ((PlayerInteractEvent) e).getAction() != Action.RIGHT_CLICK_BLOCK);
+        boolean ret = event.getItem() == null
+                || event.getHand() == null
+                || (event.getAction() != Action.RIGHT_CLICK_AIR && ((PlayerInteractEvent) event).getAction() != Action.RIGHT_CLICK_BLOCK);
 
         if (ret) return;
-
-        PlayerInteractEvent event = (PlayerInteractEvent) e;
 
         if (event.getItem().getType() == Material.MAGMA_CREAM
                 && (event.getItem().getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER))) {

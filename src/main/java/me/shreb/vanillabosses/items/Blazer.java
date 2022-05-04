@@ -103,12 +103,7 @@ public class Blazer extends VBItem {
     }
 
     @EventHandler
-    @Override
-    <T extends Event> void itemAbility(T e) {
-
-        if(!(e instanceof EntityDamageByEntityEvent)) return;
-
-        EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) e;
+    public void itemAbility(final EntityDamageByEntityEvent event) {
 
         boolean executeAbility =
                 //check whether the entity is a living entity

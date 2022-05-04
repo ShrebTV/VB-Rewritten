@@ -25,9 +25,4 @@ public class WitherEgg extends VBItem{
     public void registerListener() {
 
     }
-
-    @Override
-    <T extends Event> void itemAbility(T e) {
-
-    }
 }

@@ -19,17 +19,6 @@ public class VBListeners {
         pm.registerEvents(new SpawnEvent(), Vanillabosses.getInstance());
         pm.registerEvents(new AFKChecker(), Vanillabosses.getInstance());
 
-        BaseballBat.instance.registerListener();
-        Blazer.instance.registerListener();
-        BossEggs.instance.registerListener();
-        BouncySlime.instance.registerListener();
-        ButchersAxe.instance.registerListener();
-        HeatedMagmaCream.instance.registerListener();
-        InvisibilityCloak.instance.registerListener();
-        Skeletor.instance.registerListener();
-        SlimeBoots.instance.registerListener();
-        Slingshot.instance.registerListener();
-
         new VBLogger("VBListeners", Level.INFO, "Registered VBListeners").logToFile();
     }
 }

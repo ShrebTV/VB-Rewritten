@@ -178,11 +178,7 @@ public class BossEggs extends VBItem {
     }
 
     @EventHandler
-    @Override
-    <T extends Event> void itemAbility(T e) {
-        if (!(e instanceof PlayerInteractEvent)) return;
-
-        PlayerInteractEvent event = (PlayerInteractEvent) e;
+    public void itemAbility(final PlayerInteractEvent event) {
 
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || !event.hasItem() || !event.hasBlock()) return;
 

@@ -78,8 +78,7 @@ public class Skeletor extends VBItem {
     }
 
     @EventHandler
-    @Override
-    <T extends Event> void itemAbility(T e) {
+    <T extends Event> void itemAbility(final T e) {
 
     }
 

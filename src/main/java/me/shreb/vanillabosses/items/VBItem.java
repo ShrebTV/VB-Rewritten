@@ -39,11 +39,4 @@ public abstract class VBItem implements Listener {
 
     public abstract void registerListener();
 
-    /**
-     * This method is used to activate the ability of the item.
-     * @param <T> the event which is used to activate the ability
-     */
-    @EventHandler
-    abstract <T extends Event> void itemAbility(T e);
-
 }

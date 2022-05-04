@@ -106,11 +106,7 @@ public class ButchersAxe extends VBItem {
     }
 
     @EventHandler
-    @Override
-    <T extends Event> void itemAbility(T e) {
-
-        if(!(e instanceof EntityDamageByEntityEvent)) return;
-        EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) e;
+    public void itemAbility(final EntityDamageByEntityEvent event) {
 
         boolean hasPluginItemInHand = event.getDamager() instanceof LivingEntity
                 && ((LivingEntity) event.getDamager()).getEquipment() != null

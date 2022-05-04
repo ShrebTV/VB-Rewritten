@@ -13,6 +13,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,7 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class BaseballBat extends VBItem {
+public class BaseballBat extends VBItem implements Listener {
 
     public static BaseballBat instance = new BaseballBat();
 
@@ -90,7 +91,7 @@ public class BaseballBat extends VBItem {
 
     @Override
     public void registerListener() {
-        pluginManager.registerEvents(this, Vanillabosses.getInstance());
+        pluginManager.registerEvents(new BaseballBat(), Vanillabosses.getInstance());
     }
 
     /**
@@ -108,8 +109,7 @@ public class BaseballBat extends VBItem {
     }
 
     @EventHandler
-    @Override
-    <T extends Event> void itemAbility(T e) {
+    <T extends Event> void itemAbility(final T e) {
 
         if(!(e instanceof EntityDamageByEntityEvent)) return;
         EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) e;

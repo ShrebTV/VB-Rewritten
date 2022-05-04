@@ -90,11 +90,7 @@ public class SlimeBoots extends VBItem {
     }
 
     @EventHandler
-    @Override
-    <T extends Event> void itemAbility(T e) {
-        if(!(e instanceof EntityDamageEvent)) return;
-
-        EntityDamageEvent event = (EntityDamageEvent) e;
+    void itemAbility(final EntityDamageEvent event) {
 
         if(!(event.getEntity() instanceof Player)) return;
 

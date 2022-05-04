@@ -94,13 +94,6 @@ public class InvisibilityCloak extends VBItem {
 
     }
 
-    @Override
-    <T extends Event> void itemAbility(T e) {
-
-        new VBLogger(getClass().getName(), Level.WARNING, "tried to invoke item Ability of Invisibility cloak. Event: " + e.getEventName()).logToFile();
-
-    }
-
     BukkitTask checkTask = null;
 
     public void initializeChecks() {

@@ -89,11 +89,7 @@ public class Slingshot extends VBItem {
     }
 
     @EventHandler
-    @Override
-    <T extends Event> void itemAbility(T e) {
-        if (!(e instanceof PlayerInteractEvent)) return;
-
-        PlayerInteractEvent event = (PlayerInteractEvent) e;
+    <T extends Event> void itemAbility(final PlayerInteractEvent event) {
 
         boolean ret = (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
                 || event.getItem() == null
