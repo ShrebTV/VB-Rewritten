@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses.items;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.items.utility.ItemAbilityNotFoundException;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.ChatColor;
@@ -83,6 +84,7 @@ public class Slingshot extends VBItem {
     @Override
     public void itemAbility(LivingEntity entity) {
 
+        throw new ItemAbilityNotFoundException("Could not invoke itemAbility on LivingEntity for Slingshot.");
 
     }
 
@@ -119,7 +121,7 @@ public class Slingshot extends VBItem {
                 ItemMeta meta = item.getItemMeta();
 
                 if (((Damageable) meta).getDamage() + Vanillabosses.getInstance().getConfig().getInt("Items.slingshot.damageOnUseAmount") > item.getType().getMaxDurability()) {      //Item breaking upon reaching 0 Durability
-                    event.getPlayer().getEquipment().getItem(event.getHand()).setAmount(0);
+                    event.getPlayer().getEquipment().getItem(event.getHand()).setAmount(event.getPlayer().getEquipment().getItem(event.getHand()).getAmount() - 1);
                     event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
                     return;
                 }
@@ -134,13 +136,14 @@ public class Slingshot extends VBItem {
      * Cancels the event if the Player in question has used a Slingshot within the configurable amount of time.
      * If they have, their fall damage tag is removed so that they will take fall damage again.
      * If they have not the tag is left inside the map and fall damage is not cancelled
+     *
      * @param event The event to check the player for a tag in
      */
     @EventHandler
     public void onFallDamage(EntityDamageEvent event) {
 
         if (!(event.getEntity() instanceof Player)
-        || !event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
+                || !event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) return;
 
         UUID entityID = event.getEntity().getUniqueId();
 
@@ -149,7 +152,7 @@ public class Slingshot extends VBItem {
             long currentTime = System.currentTimeMillis();
             long tagTime = fallDamageTags.get(entityID);
 
-            if((currentTime - tagTime) > 1000 * FALL_DAMAGE_TAG_TIMEOUT){
+            if ((currentTime - tagTime) > 1000 * FALL_DAMAGE_TAG_TIMEOUT) {
                 return;
             }
 
