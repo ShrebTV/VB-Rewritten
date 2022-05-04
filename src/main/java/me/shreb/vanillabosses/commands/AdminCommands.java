@@ -244,7 +244,8 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
      *
      * @param toParse the string to parse for a plugin item reference
      * @param amount  the amount of the item the itemStack should have
-     * @return
+     * @return the itemstack gotten from the input string or null if it couldn't be parsed or it was HMC or boss eggs
+     * for HMC and boss eggs, a different method should be used
      */
     ItemStack parseForItem(String toParse, int amount) {
         ItemStack itemStack = null;
@@ -306,7 +307,6 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
      * @param p         the player to give the item to
      * @param itemStack the item to give the player
      * @param retriever the retriever of the item
-     * @return true if the item was successfully given to the player, false if the inventory was full
      */
     void giveItemToPlayer(CommandSender sender, Player p, ItemStack itemStack, ItemDataRetriever retriever) {
         if (p.getInventory().firstEmpty() != -1) {
@@ -480,8 +480,6 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
             }
 
         }
-
-
         return false;
     }
 
