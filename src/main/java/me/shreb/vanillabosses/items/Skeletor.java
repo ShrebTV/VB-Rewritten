@@ -77,11 +77,6 @@ public class Skeletor extends VBItem {
 
     }
 
-    @EventHandler
-    <T extends Event> void itemAbility(final T e) {
-
-    }
-
     static class SkeletorArrow implements Listener {
 
         //TODO Test this

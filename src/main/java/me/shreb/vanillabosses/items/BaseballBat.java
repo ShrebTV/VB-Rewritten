@@ -109,10 +109,7 @@ public class BaseballBat extends VBItem implements Listener {
     }
 
     @EventHandler
-    <T extends Event> void itemAbility(final T e) {
-
-        if(!(e instanceof EntityDamageByEntityEvent)) return;
-        EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) e;
+    public void itemAbility(final EntityDamageByEntityEvent event) {
 
         boolean hasPluginItemInHand = event.getDamager() instanceof LivingEntity
                 && ((LivingEntity) event.getDamager()).getEquipment() != null
