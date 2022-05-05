@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses.commands;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.WitherBoss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
@@ -300,6 +301,10 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
                 } else if (toParse.equalsIgnoreCase("Slingshot")) {
 
                     itemStack = Slingshot.instance.makeItem(amount);
+
+                } else if (toParse.equalsIgnoreCase("witherEgg")) {
+
+                    itemStack = WitherBoss.makeWitherEgg();
 
                 }
 
