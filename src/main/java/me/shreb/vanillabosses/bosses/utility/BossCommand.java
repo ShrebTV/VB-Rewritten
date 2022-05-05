@@ -69,11 +69,18 @@ public class BossCommand implements Listener {
 
     public BossCommand(int index) {
         this.index = index;
+        this.command = commandMap.get(index);
         setDelay();
     }
 
     //Gets the intended delay for this command from this.command and sets it. sets this.command to only have the things before 'DELAY:'
     private void setDelay() {
+
+        if(!this.command.contains("DELAY:")) {
+            delay = 0;
+            return;
+        }
+
         String[] strings = this.command.split("DELAY:");
 
         //make sure the strings array has 2 objects. If it doesn't the Command string was faulty
@@ -347,7 +354,7 @@ public class BossCommand implements Listener {
         private double bossHealth;
         private int registeredHits = 0; //How often this boss has been hit by players
 
-        private MostDamagePHReplacer() {
+        MostDamagePHReplacer() {
         }
 
         public MostDamagePHReplacer(UUID bossUUID) {
@@ -425,7 +432,6 @@ public class BossCommand implements Listener {
             if (entry == null) return null;
 
             UUID id = entry.getKey();
-            System.out.println(id);
             Player player = Bukkit.getPlayer(id);
             if (player == null) {
                 new VBLogger("BossCommands", Level.WARNING, "Player gotten from replaceMostDamage was null.\n" +
