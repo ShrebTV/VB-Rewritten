@@ -19,6 +19,7 @@ public class ItemListeners {
         Skeletor.instance.registerListener();
         SlimeBoots.instance.registerListener();
         Slingshot.instance.registerListener();
+        WitherEgg.instance.registerListener();
 
         new VBLogger("ItemListeners", Level.INFO, "Registered Item Listeners.").logToFile();
     }
