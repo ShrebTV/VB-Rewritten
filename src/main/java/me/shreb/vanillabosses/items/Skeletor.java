@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses.items;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.CreeperBoss;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.*;
@@ -153,6 +154,7 @@ public class Skeletor extends VBItem {
 
                     int fuseTicks = config.getInt("Items.Skeletor.ShootTNTFromOffHand.TNTTimer");
                     double tntYield = config.getInt("Items.Skeletor.ShootTNTFromOffHand.TNTYield");
+                    boolean cancelExplosion = config.getBoolean("Items.Skeletor.ShootTNTFromOffHand.TNTDoesNoBlockDamage");
 
                     Vector vector = arrow.getVelocity();
 
@@ -170,6 +172,11 @@ public class Skeletor extends VBItem {
                         new VBLogger(getClass().getName(), Level.WARNING, "Skeletor TNT yield was set too low. Cannot be less than 0. Yield: " + tntYield).logToFile();
                     } else {
                         tnt.setYield((float) tntYield);
+                    }
+
+                    if (cancelExplosion) {
+                        tnt.getScoreboardTags().add(CANCEL_TNT_EXPLOSION);
+                        tnt.getScoreboardTags().add(CreeperBoss.CANCEL_BLOWUP_ITEMS);
                     }
 
                     tnt.setVelocity(vector);
@@ -225,6 +232,7 @@ public class Skeletor extends VBItem {
 
                 if (cancelTNT) {
                     tnt.getScoreboardTags().add(CANCEL_TNT_EXPLOSION);
+                    tnt.getScoreboardTags().add(CreeperBoss.CANCEL_BLOWUP_ITEMS);
                 }
             }
         }
