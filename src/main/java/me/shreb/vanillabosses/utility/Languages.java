@@ -415,7 +415,7 @@ public enum Languages {
     public String itemSlingshotName;
     public String itemSlingshotGivenMessage;
 
-    public String witherEggName;
+    public String itemWitherEggName;
     public String itemWitherEggGivenMessage;
 
     public String itemBossEggGivenMessage;
@@ -463,7 +463,7 @@ public enum Languages {
         this.itemBouncySlimeGivenMessage = itemBouncySlimeGivenMessage;
         this.itemSlingshotName = itemSlingshotName;
         this.itemSlingshotGivenMessage = itemSlingshotGivenMessage;
-        this.witherEggName = witherEggName;
+        this.itemWitherEggName = witherEggName;
         this.itemWitherEggGivenMessage = itemWitherEggGivenMessage;
         this.itemBossEggGivenMessage = itemBossEggGivenMessage;
         this.itemBossEggName = itemBossEggName;
