@@ -12,6 +12,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -151,6 +152,7 @@ public class SkeletonBoss extends VBBoss{
         return true;
     }
 
+    @EventHandler
     public void onHitAbility(EntityDamageByEntityEvent event){
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();

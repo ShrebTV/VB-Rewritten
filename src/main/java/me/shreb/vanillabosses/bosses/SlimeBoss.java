@@ -12,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
@@ -115,10 +116,11 @@ public class SlimeBoss extends VBBoss {
         return null;
     }
 
-    public void onSlimeBossFallDMG(EntityDamageEvent event){
+    @EventHandler
+    public void onSlimeBossFallDMG(EntityDamageEvent event) {
 
-        if(event.getCause() != EntityDamageEvent.DamageCause.FALL) return;
-        if(event.getEntity().getScoreboardTags().contains("NoFallDMG") && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)){
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL) return;
+        if (event.getEntity().getScoreboardTags().contains("NoFallDMG") && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) {
             event.setCancelled(true);
             event.getEntity().getScoreboardTags().removeIf(n -> n.equals("NoFallDMG"));
         }
@@ -127,7 +129,8 @@ public class SlimeBoss extends VBBoss {
 
     static boolean isJumping = false;
 
-    public void onHitAbility(EntityDamageByEntityEvent event){
+    @EventHandler
+    public void onHitAbility(EntityDamageByEntityEvent event) {
 
         if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.SLIME) {
 
@@ -178,7 +181,5 @@ public class SlimeBoss extends VBBoss {
                 }, 20);
             }
         }
-
     }
-
 }

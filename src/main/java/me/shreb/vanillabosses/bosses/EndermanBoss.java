@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
@@ -118,6 +119,7 @@ public class EndermanBoss extends VBBoss {
      * It spawns a certain amount of endermites if enabled in the config
      * @param event the event to check for enderman bosses in
      */
+    @EventHandler
     public void onTeleport(EntityTeleportEvent event) {
 
         if (event.getEntity().getType().equals(EntityType.ENDERMAN) && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) {
@@ -137,6 +139,7 @@ public class EndermanBoss extends VBBoss {
      * It will not let the enderman boss target endermites.
      * @param event
      */
+    @EventHandler
     public void onEndermanTargetMite(EntityTargetEvent event) {
 
         if(event.getTarget() == null) return;
@@ -155,9 +158,8 @@ public class EndermanBoss extends VBBoss {
 
     }
 
+    @EventHandler
     public void onHitEvent(EntityDamageByEntityEvent event){
-
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
         if (event.getEntity().getScoreboardTags().contains("BossEnderman") && event.getEntityType() == EntityType.ENDERMAN) {
 

@@ -18,6 +18,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -113,6 +116,8 @@ public class CreeperBoss extends VBBoss {
         entity.getScoreboardTags().add(SCOREBOARDTAG);
         entity.getScoreboardTags().add(BOSSTAG);
         entity.getScoreboardTags().add(REMOVE_ON_DISABLE_TAG);
+        entity.getScoreboardTags().add(CANCEL_BLOWUP_ITEMS);
+        entity.addScoreboardTag(CANCEL_EXPLOSION);
 
         new NormalBoss(entity.getType()).putCommandsToPDC(entity);
 
@@ -170,7 +175,7 @@ public class CreeperBoss extends VBBoss {
             event.getEntity().getWorld().playSound(event.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1F, 1F);
 
             //If the creeper is almost or pretty much dead, let it die
-            if(creeper.getHealth() < 0.0001){
+            if (creeper.getHealth() < 0.0001) {
                 return;
             }
 
@@ -180,6 +185,8 @@ public class CreeperBoss extends VBBoss {
                     .anyMatch(n -> n.getValue() == creeper.getUniqueId()
                             &&
                             creeper.getScoreboardTags().contains(RespawningBoss.RESPAWNING_BOSS_TAG));
+
+            LivingEntity creeperNew;
 
             if (isRespawningBoss) {
 
@@ -202,51 +209,47 @@ public class CreeperBoss extends VBBoss {
                         .map(Map.Entry::getKey)
                         .collect(Collectors.toList()).get(0);
 
-                LivingEntity newCreeper;
-
                 //remake the creeper boss which just blew up
                 try {
-                    newCreeper = respawningBoss.spawnBoss();
+                    creeperNew = respawningBoss.spawnBoss();
                 } catch (BossCreationException e) {
                     new VBLogger(getClass().getName(), Level.WARNING, "Could not respawn Creeper boss. If you cannot fix this using the config, please let the author know.").logToFile();
                     return;
                 }
 
                 //check whether the new entity is actually a creeper, supposed to catch some coding and logic errors on my end
-                if (!(newCreeper instanceof Creeper)) {
+                if (!(creeperNew instanceof Creeper)) {
                     new VBLogger(getClass().getName(), Level.WARNING, "Unexpected Respawning boss type inside Respawning Boss list. Expected: Creeper. Found: " + respawningBoss.getType()).logToFile();
                     return;
                 }
 
-                newCreeper.setHealth(creeper.getHealth());
+                creeperNew.setHealth(creeper.getHealth());
+            } else {
 
-                return;
+                //else, the boss is not a respawning boss. gotta have some stuff for that here
+
+                //Attempt to spawn a new Creeper to replace the old one.
+                try {
+                    creeperNew = new NormalBoss(EntityType.CREEPER).spawnBoss(creeper.getLocation());
+                } catch (BossCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Unable to respawn Creeper for some reason. Exception: " + e).logToFile();
+                    return;
+                }
+
+                Utility.spawnParticles(Particle.FLAME, event.getEntity().getWorld(), event.getLocation(), 4, 2, 4, 30, 3);
+
+                creeperNew.setHealth(creeper.getHealth());
+
+                creeperNew.addScoreboardTag("ExplodingATM");
+                Creeper finalCreeper1 = (Creeper) creeperNew;
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
+                    finalCreeper1.removeScoreboardTag("ExplodingATM");
+                }, 20L * config.getInt("Bosses.CreeperBoss.thrownTNT.TNTFuse"));
+
+                //always have the same explosion radius
             }
 
-            //else, the boss is not a respawning boss. gotta have some stuff for that here
-
-            Creeper creeperNew;
-
-            //Attempt to spawn a new Creeper to replace the old one.
-            try {
-                creeperNew = (Creeper) new NormalBoss(EntityType.CREEPER).spawnBoss(creeper.getLocation());
-            } catch (BossCreationException e) {
-                new VBLogger(getClass().getName(), Level.WARNING, "Unable to respawn Creeper for some reason. Exception: " + e).logToFile();
-                return;
-            }
-
-            Utility.spawnParticles(Particle.FLAME, event.getEntity().getWorld(), event.getLocation(), 4, 2, 4, 30, 3);
-
-            creeperNew.setHealth(creeper.getHealth());
-
-            creeperNew.addScoreboardTag("ExplodingATM");
-            Creeper finalCreeper1 = creeperNew;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
-                finalCreeper1.removeScoreboardTag("ExplodingATM");
-            }, 20L * config.getInt("Bosses.CreeperBoss.thrownTNT.TNTFuse"));
-
-            //always have the same explosion radius
-            creeperNew.setExplosionRadius(creeper.getExplosionRadius());
+            ((Creeper) creeperNew).setExplosionRadius(creeper.getExplosionRadius());
 
             BossCommand.replaceMappedUUIDs(creeper.getUniqueId(), creeperNew.getUniqueId());
 
@@ -287,6 +290,26 @@ public class CreeperBoss extends VBBoss {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onTNTExplode(EntityExplodeEvent event) {
+        //cancel explosions with the CANCEL_EXPLOSION tag
+        if (event.getEntity().getScoreboardTags().contains(CANCEL_EXPLOSION)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onTNTBlowUpItem(EntityDamageByEntityEvent event) {
+        //cancel blowing up items
+        if (event.getDamager().getScoreboardTags().contains(CANCEL_BLOWUP_ITEMS) && event.getEntity().getType() == EntityType.DROPPED_ITEM) {
+            event.setCancelled(true);
+        }
+        //cancel boss creepers taking damage from explosions
+        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) {
+            event.setCancelled(true);
         }
     }
 }

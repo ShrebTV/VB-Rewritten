@@ -174,5 +174,4 @@ public class Zombified_PiglinBoss extends VBBoss {
 
         return true;
     }
-
 }

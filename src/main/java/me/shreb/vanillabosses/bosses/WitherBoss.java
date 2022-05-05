@@ -10,6 +10,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -121,6 +122,7 @@ public class WitherBoss extends VBBoss {
         return null;
     }
 
+    @EventHandler
     public void onPlaceWitherEgg(BlockPlaceEvent event) {
 
         if (!(event.getBlock().getType().equals(Material.DRAGON_EGG))) return;
@@ -259,6 +261,7 @@ public class WitherBoss extends VBBoss {
      * This is what will happen once an Arrow from a Passive Wither hits a target.
      * @param event the event to check for arrows fired by passive withers in
      */
+    @EventHandler
     public void onWitherArrowHit(EntityDamageByEntityEvent event){
 
         if(!(event.getDamager() instanceof Arrow)
@@ -282,6 +285,7 @@ public class WitherBoss extends VBBoss {
      * The method which is meant to edit a wither spawned over a netherite block into a boss wither.
      * @param event the event to check for a netherite block at the correct position in
      */
+    @EventHandler
     public void onWitherSpawn(CreatureSpawnEvent event) {
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
@@ -334,6 +338,7 @@ public class WitherBoss extends VBBoss {
         }
     }
 
+    @EventHandler
     public void onHitAbility(EntityDamageByEntityEvent event){
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();

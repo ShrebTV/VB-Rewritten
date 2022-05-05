@@ -131,8 +131,6 @@ public class BlazeBoss extends VBBoss {
     @EventHandler
     public void blazeAbility(ProjectileLaunchEvent event) {
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
-
         if (!checkForBlazeBoss(event.getEntity())) return;
 
         Vector v = null;

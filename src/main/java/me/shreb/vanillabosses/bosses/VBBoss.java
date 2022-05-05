@@ -4,6 +4,7 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -14,6 +15,7 @@ public abstract class VBBoss implements Listener {
 
     public static final String BOSSTAG = "VB-Boss";
     public static final String REMOVE_ON_DISABLE_TAG = "Vanilla Bosses - Remove on Disable";
+    public FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
     /**
      * creates a completely new Entity and makes it into a boss

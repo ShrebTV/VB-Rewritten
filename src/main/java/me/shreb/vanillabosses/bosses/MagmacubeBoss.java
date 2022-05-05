@@ -13,6 +13,7 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -113,6 +114,7 @@ public class MagmacubeBoss extends VBBoss {
         return null;
     }
 
+    @EventHandler
     public void onBossHitByPlayer(EntityDamageByEntityEvent event) {
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
@@ -149,6 +151,4 @@ public class MagmacubeBoss extends VBBoss {
             }, 60L);
         }
     }
-
-
 }

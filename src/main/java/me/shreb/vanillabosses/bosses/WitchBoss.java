@@ -11,6 +11,7 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
@@ -121,6 +122,7 @@ public class WitchBoss extends VBBoss {
 
     /**
      * A method to make a custom potion for the witch to throw and drop
+     *
      * @return the potion of the type specified in the method name
      */
     public ItemStack makeDamagePot() {
@@ -134,6 +136,7 @@ public class WitchBoss extends VBBoss {
 
     /**
      * A method to make a custom potion for the witch to throw and drop
+     *
      * @return the potion of the type specified in the method name
      */
     public ItemStack makePoisonPot() {
@@ -147,6 +150,7 @@ public class WitchBoss extends VBBoss {
 
     /**
      * A method to make a custom potion for the witch to throw and drop
+     *
      * @return the potion of the type specified in the method name
      */
     public ItemStack makeBlindnessPot() {
@@ -160,6 +164,7 @@ public class WitchBoss extends VBBoss {
 
     /**
      * A method to make a custom potion for the witch to throw and drop
+     *
      * @return the potion of the type specified in the method name
      */
     public ItemStack makeWitherPot() {
@@ -173,6 +178,7 @@ public class WitchBoss extends VBBoss {
 
     /**
      * A method to make a custom potion for the witch to throw and drop
+     *
      * @return the potion of the type specified in the method name
      */
     public ItemStack makeHungerPot() {
@@ -187,8 +193,10 @@ public class WitchBoss extends VBBoss {
     /**
      * This is what happens when a Witch boss throws a potion.
      * The potion will be replaced by the custom potions added by this plugin.
+     *
      * @param event the event to check for a boss witch in and to change the thrown potion in.
      */
+    @EventHandler
     public void onPotionThrow(ProjectileLaunchEvent event) {
 
         double harmChance = config.getDouble(path + "Harm.chance");
@@ -198,16 +206,16 @@ public class WitchBoss extends VBBoss {
         double hungerChance = config.getDouble(path + "Hunger.chance");
 
         //Don't want non living entities
-        if(!(event.getEntity().getShooter() instanceof LivingEntity)) return;
+        if (!(event.getEntity().getShooter() instanceof LivingEntity)) return;
 
         //Don't want entities which don't have the witch boss scoreboard tag
-        if(!event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) return;
+        if (!event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) return;
 
         //Don't want any living entity which isn't a witch
-        if(!((LivingEntity) event.getEntity().getShooter()).getType().equals(EntityType.WITCH)) return;
+        if (!((LivingEntity) event.getEntity().getShooter()).getType().equals(EntityType.WITCH)) return;
 
         //Don't want a projectile which isn't a splash potion
-        if(!event.getEntity().getType().equals(EntityType.SPLASH_POTION)) return;
+        if (!event.getEntity().getType().equals(EntityType.SPLASH_POTION)) return;
 
         Vector v = event.getEntity().getVelocity();
         Location loc = event.getLocation();
@@ -277,7 +285,8 @@ public class WitchBoss extends VBBoss {
 
     static HashMap<UUID, Integer> cooldownMap = new HashMap<>();
 
-    public void onHitAbility(EntityDamageByEntityEvent event){
+    @EventHandler
+    public void onHitAbility(EntityDamageByEntityEvent event) {
 
         if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.WITCH && event.getDamager() instanceof Player) {
 
@@ -286,7 +295,7 @@ public class WitchBoss extends VBBoss {
 
             //if the map contains the uuid and the value isnt null get the value from the map. if that value is greater than 0 decrement ant return,
             //otherwise get cooldown from config and write to map.
-            if(cooldownMap.containsKey(witchUUID) && cooldownMap.get(witchUUID) != null){
+            if (cooldownMap.containsKey(witchUUID) && cooldownMap.get(witchUUID) != null) {
                 witchAbilityCooldown = cooldownMap.get(witchUUID);
 
                 if (witchAbilityCooldown > 0) {
@@ -294,11 +303,10 @@ public class WitchBoss extends VBBoss {
                     return;
                 }
 
-            } else{
+            } else {
                 witchAbilityCooldown = config.getInt("Bosses.WitchBoss.onHitEvents.PlayersSwitchPlaces.cooldown");
                 cooldownMap.put(witchUUID, witchAbilityCooldown);
             }
-
 
 
             if (config.getBoolean("Bosses.WitchBoss.onHitEvents.PlayersSwitchPlaces.enabled") && new Random().nextDouble() < config.getDouble("Bosses.WitchBoss.onHitEvents.PlayersSwitchPlaces.chance")) {
@@ -367,6 +375,4 @@ public class WitchBoss extends VBBoss {
             }
         }
     }
-
-
 }
