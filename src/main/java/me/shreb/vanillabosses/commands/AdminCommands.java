@@ -43,6 +43,11 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
 
         if (!sender.isOp()) sender.sendMessage(ChatColor.RED + Vanillabosses.getCurrentLanguage().badPermissions);
 
+        if (args.length < 2) {
+            sender.sendMessage(Vanillabosses.getCurrentLanguage().notEnoughArguments);
+            return true;
+        }
+
         if (args[0].equalsIgnoreCase("respawningBoss")) {
 
             return respawningBossCommandReaction(sender, args);
@@ -58,6 +63,10 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("spawnBoss")) {
 
             return spawnBossCommandReaction(sender, args);
+
+        } else if (args[0].equalsIgnoreCase("specialItem")) {
+
+            return hmcBossEggsReaction(sender, args);
 
         } else {
             return false;
@@ -89,16 +98,16 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
             return false;
         }
 
-        Location location = ((Player) sender).getLocation();
-        String world;
-        EntityType type;
-        int respawnTime;
-        int[] commands = new int[args.length - 3];
-
         if (args.length < 4) {
             sender.sendMessage("Not enough arguments");
             return false;
         }
+
+        Location location = ((Player) sender).getLocation();
+        String world;
+        EntityType type;
+        int respawnTime;
+        int[] commands = new int[args[3].length() / 2 + 1];
 
         try {
             world = location.getWorld().getName();
@@ -119,20 +128,22 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
             return false;
         }
 
-        int commandNumber;
-        //adding the expected command indexes to a new arrray in order to set the commands array in the respawningBoss object
-        for (int i = 3; i < args.length - 1; i++) {
-            try {
-                commandNumber = Integer.parseInt(args[i]);
-                commands[i - 3] = commandNumber;
+        if (args[3] != null) {
+            String[] indexes = args[3].split(",");
+            //adding the expected command indexes to a new arrray in order to set the commands array in the respawningBoss object
+            for (int i = 0; i < indexes.length; i++) {
+                try {
 
-            } catch (NumberFormatException e) {
-                sender.sendMessage("Commands have to be referred to by numbers. Found: " + args[i]);
-                return false;
+                    commands[i] = Integer.parseInt(indexes[i]);
+
+                } catch (NumberFormatException e) {
+                    sender.sendMessage("Commands have to be referred to by numbers. Found: " + args[i]);
+                    return false;
+                }
             }
         }
 
-        RespawningBoss bossObject = new RespawningBoss(type, world, location.getX(), location.getY(), location.getZ(), respawnTime, commands, true);
+        RespawningBoss bossObject = new RespawningBoss(type, world, (int) location.getX(), (int) location.getY(), (int) location.getZ(), respawnTime, commands, true);
         sender.sendMessage(bossObject.serialize());
         return true;
     }
@@ -145,7 +156,7 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
         EntityType type;
 
         try {
-            type = EntityType.valueOf(args[1]);
+            type = EntityType.valueOf(args[1].toUpperCase());
             BossDataRetriever retriever = new BossDataRetriever(type);
             sender.sendMessage(retriever.toString());
             return true;
@@ -156,7 +167,6 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
     }
 
     boolean giveItemCommandReaction(CommandSender sender, String[] args) {
-        //TODO Test this command
 
         //first argument: giveItem /static
         //second argument: Item identifier /static
@@ -226,7 +236,7 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
 
         ItemDataRetriever retriever;
         try {
-            retriever = new ItemDataRetriever(itemToGive);
+            retriever = new ItemDataRetriever(itemToGive.getType());
         } catch (ItemCreationException e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Bad Item from parseForItem() in Admin Commands.\n" +
                     "Item: " + itemToGive + "\n" +
@@ -235,7 +245,7 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
             return true;
         }
 
-        giveItemToPlayer(sender, receivingPlayer, itemToGive, retriever);
+        giveItemToPlayer(sender, receivingPlayer, itemToGive, retriever.instance);
         return true;
     }
 
@@ -300,18 +310,23 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
         return itemStack;
     }
 
+
     /**
      * Gives the item to the specified player
      *
      * @param sender    the command sender
      * @param p         the player to give the item to
      * @param itemStack the item to give the player
-     * @param retriever the retriever of the item
+     * @param instance  the instance of the item
      */
-    void giveItemToPlayer(CommandSender sender, Player p, ItemStack itemStack, ItemDataRetriever retriever) {
+    void giveItemToPlayer(CommandSender sender, Player p, ItemStack itemStack, VBItem instance) {
         if (p.getInventory().firstEmpty() != -1) {
             p.getInventory().addItem(itemStack);
-            p.sendMessage(ChatColor.AQUA + retriever.instance.itemGivenMessage);
+
+            if (instance != null) {
+                p.sendMessage(ChatColor.AQUA + instance.itemGivenMessage);
+            }
+
         } else {
             sender.sendMessage(ChatColor.RED + Vanillabosses.getCurrentLanguage().inventoryFull);
         }
@@ -339,7 +354,7 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
         BossDataRetriever retriever;
 
         try {
-            retriever = new BossDataRetriever(EntityType.valueOf(type));
+            retriever = new BossDataRetriever(EntityType.valueOf(type.toUpperCase()));
         } catch (IllegalArgumentException ignored) {
             return false;
         }
@@ -395,13 +410,10 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
             //Just in case the locationToSpawn is still null, try to get it from the player, which was specified or set to be the sender
             if (locationToSpawn == null) {
 
-                int i = 5;
+                int i = 8;
                 Block block = player.getTargetBlock(null, i);
+                locationToSpawn = block.getLocation();
 
-                while (block.getType() == Material.AIR && i > 0) {
-                    block = player.getTargetBlock(null, --i);
-                    locationToSpawn = block.getLocation();
-                }
             }
 
             try {
@@ -409,9 +421,9 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
             } catch (BossCreationException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
                 sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
-                return true;
             }
 
+            return true;
 
         } else if (args.length < 3) {
             //command via console and not enough arguments for that
@@ -447,7 +459,7 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
                     double y = Double.parseDouble(strings[2]);
                     double z = Double.parseDouble(strings[3]);
 
-                    if(world == null){
+                    if (world == null) {
                         sender.sendMessage(Vanillabosses.getCurrentLanguage().badArgument + ": " + strings[0]);
                         return true;
                     }
@@ -483,4 +495,118 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
         return false;
     }
 
+    public boolean hmcBossEggsReaction(CommandSender sender, String[] args) {
+
+        String itemGetterString;
+        Player receivingPlayer;
+
+        int amount = 1;
+
+        if (args.length < 2) {
+
+            sender.sendMessage(Vanillabosses.getCurrentLanguage().notEnoughArguments);
+            return false;
+
+        } else if (args.length == 2) {
+
+            if (sender instanceof Player) {
+                receivingPlayer = (Player) sender;
+                itemGetterString = args[1];
+            } else {
+                sender.sendMessage(Vanillabosses.getCurrentLanguage().notEnoughArguments);
+                return true;
+            }
+
+        } else {
+
+            itemGetterString = args[1];
+            String receivingPlayerName = args[2];
+
+            //get the receiving player from the third argument or get an amount
+            receivingPlayer = Vanillabosses.getInstance().getServer().getPlayer(receivingPlayerName);
+            if (receivingPlayer == null) {
+
+                //player could not be found, telling the sender something went wrong
+                sender.sendMessage(Vanillabosses.getCurrentLanguage().badArgument + ": " + receivingPlayerName);
+                return true;
+            }
+
+            if (args.length >= 4) {
+                try {
+                    amount = Integer.parseInt(args[3]);
+                } catch (NumberFormatException ignored) {
+                    sender.sendMessage(Vanillabosses.getCurrentLanguage().badArgument);
+                    return true;
+                }
+            }
+
+            if (1 > amount || amount > 64) {
+                sender.sendMessage(Vanillabosses.getCurrentLanguage().badAmount);
+                return true;
+            }
+        }
+
+        ItemStack itemToGive = null;
+
+        if (itemGetterString.equalsIgnoreCase("hmc")) {
+            int level;
+            if (args.length >= 5) {
+                try {
+                    level = Integer.parseInt(args[4]);
+                } catch (NumberFormatException ignored) {
+                    sender.sendMessage(Vanillabosses.getCurrentLanguage().badArgument);
+                    return true;
+                }
+                try {
+                    itemToGive = new HeatedMagmaCream(level).makeItem(amount);
+                } catch (ItemCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Could not make Heated magma cream. Exception: " + e).logToFile();
+                } catch (IllegalArgumentException ignored) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+
+        } else if (itemGetterString.equalsIgnoreCase("bossegg")) {
+
+            EntityType type;
+            if (args.length >= 5) {
+                try {
+                    type = EntityType.valueOf(args[4].toUpperCase());
+                } catch (NumberFormatException ignored) {
+                    sender.sendMessage(Vanillabosses.getCurrentLanguage().badArgument);
+                    return true;
+                } catch (IllegalArgumentException ignored) {
+                    return false;
+                }
+                try {
+                    itemToGive = new BossEggs(type).makeItem(amount);
+                } catch (ItemCreationException | NullPointerException e) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+
+        if (itemToGive == null) return false;
+
+        ItemDataRetriever retriever;
+        try {
+            retriever = new ItemDataRetriever(itemToGive);
+        } catch (ItemCreationException e) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Bad Item from parseForItem() in Admin Commands.\n" +
+                    "Item: " + itemToGive + "\n" +
+                    "Exception: " + e).logToFile();
+            sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
+            return true;
+        }
+
+        giveItemToPlayer(sender, receivingPlayer, itemToGive, retriever.instance);
+        return true;
+    }
 }
