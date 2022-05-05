@@ -29,6 +29,7 @@ public class ItemDataRetriever extends DataRetriever {
         materialInstanceMap.put(Skeletor.instance.itemMaterial, Skeletor.instance);
         materialInstanceMap.put(SlimeBoots.instance.itemMaterial, SlimeBoots.instance);
         materialInstanceMap.put(Slingshot.instance.itemMaterial, Slingshot.instance);
+        materialInstanceMap.put(WitherEgg.instance.itemMaterial, WitherEgg.instance);
 
         materialInstanceMap.put(Material.BLAZE_SPAWN_EGG, new BossEggs(EntityType.BLAZE));
         materialInstanceMap.put(Material.CREEPER_SPAWN_EGG, new BossEggs(EntityType.CREEPER));
