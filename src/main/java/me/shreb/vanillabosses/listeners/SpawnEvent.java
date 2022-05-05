@@ -4,8 +4,13 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.*;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
+import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.Utility;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -23,7 +28,7 @@ public class SpawnEvent implements Listener {
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
 
-        if(!spawn) return;
+        if (!spawn) return;
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
@@ -43,118 +48,96 @@ public class SpawnEvent implements Listener {
 
         if (!spawnWorldChecker(event)) return;
 
-        switch (type) {
+        if (Utility.roll(chance)) {
 
-            case BLAZE:
+            LivingEntity spawnedBoss = null;
 
-                if (Utility.roll(chance)) {
+            switch (type) {
+
+                case BLAZE:
 
                     try {
-                        BlazeBoss.instance.makeBoss(entity);
+                        spawnedBoss = BlazeBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Blaze Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
+                    break;
 
-            case CREEPER:
-
-                if (Utility.roll(chance)) {
+                case CREEPER:
 
                     try {
-                        CreeperBoss.instance.makeBoss(entity);
+                        spawnedBoss = CreeperBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Creeper Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
+                    break;
 
-            case ENDERMAN:
-
-                if (Utility.roll(chance)) {
+                case ENDERMAN:
 
                     try {
-                        EndermanBoss.instance.makeBoss(entity);
+                        spawnedBoss = EndermanBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Enderman Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
+                    break;
 
-            case MAGMA_CUBE:
-
-                if (Utility.roll(chance)) {
+                case MAGMA_CUBE:
 
                     try {
-                        MagmacubeBoss.instance.makeBoss(entity);
+                        spawnedBoss = MagmacubeBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Magmacube Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
+                    break;
 
-            case SKELETON:
-
-                if (Utility.roll(chance)) {
+                case SKELETON:
 
                     try {
-                        SkeletonBoss.instance.makeBoss(entity);
+                        spawnedBoss = SkeletonBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Skeleton Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
+                    break;
 
-            case SLIME:
-
-                if (Utility.roll(chance)) {
+                case SLIME:
 
                     try {
-                        SlimeBoss.instance.makeBoss(entity);
+                        spawnedBoss = SlimeBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Slime Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
+                    break;
 
-            case SPIDER:
-
-                if (Utility.roll(chance)) {
+                case SPIDER:
 
                     try {
-                        SpiderBoss.instance.makeBoss(entity);
+                        spawnedBoss = SpiderBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Spider Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
+                    break;
 
-            case WITCH:
-
-                if (Utility.roll(chance)) {
+                case WITCH:
 
                     try {
-                        WitchBoss.instance.makeBoss(entity);
+                        spawnedBoss = WitchBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Witch Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
+                    break;
 
-            case ZOMBIE:
-
-                if (Utility.roll(chance)) {
+                case ZOMBIE:
 
                     try {
-                        ZombieBoss.instance.makeBoss(entity);
+                        spawnedBoss = ZombieBoss.instance.makeBoss(entity);
                         ZombieBoss.zombieHorde(
                                 config.getInt("Bosses.ZombieBoss.zombieHorde.radius"),
                                 config.getInt("Bosses.ZombieBoss.zombieHorde.amount"),
@@ -164,21 +147,26 @@ public class SpawnEvent implements Listener {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Zombie Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
 
-            case ZOMBIFIED_PIGLIN:
+                    break;
 
-                if (Utility.roll(chance)) {
+                case ZOMBIFIED_PIGLIN:
 
                     try {
-                        Zombified_PiglinBoss.instance.makeBoss(entity);
+                        spawnedBoss = Zombified_PiglinBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Zombified Piglin Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
-                }
-                break;
+                    break;
+
+                default:
+                    return;
+            }
+
+            if(spawnedBoss != null && config.getBoolean("Bosses.AllBossesHaveBossBars")){
+                new VBBossBar(spawnedBoss, Bukkit.createBossBar(spawnedBoss.getName(), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC)).showBossBar();
+            }
         }
     }
 

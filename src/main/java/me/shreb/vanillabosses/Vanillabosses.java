@@ -3,6 +3,7 @@ package me.shreb.vanillabosses;
 import me.shreb.vanillabosses.bosses.VBBoss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
+import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.commands.VBCommands;
 import me.shreb.vanillabosses.items.InvisibilityCloak;
 import me.shreb.vanillabosses.items.WitherEgg;
@@ -73,6 +74,7 @@ public final class Vanillabosses extends JavaPlugin {
 
         InvisibilityCloak.instance.initializeChecks();
 
+        VBBossBar.startBarShowTimer();
 
         new VBLogger(getClass().getName(), Level.INFO, "Plugin enabled!").logToFile();
 
