@@ -553,9 +553,9 @@ Items:
       - B:Enchanted_Book
       - D:Diamond_Block
       - I:Iron_Ingot
-      - P:pot             #pot = invisibility potion.
+      - P:Pot             #pot = invisibility potion.
         #to include items from this plugin in crafting recipes, use the following words: (BaseballBat, Blazer, ButchersAxe, InvisibilityCloak,
-        #                                                                             Skeletor, Slimeboots, BouncySlime, Slingshot, Pot, HeatedCream1, HeatedCream2, HeatedCream3)
+      #                                                                             Skeletor, Slimeboots, BouncySlime, Slingshot, Pot, HeatedCream1, HeatedCream2, HeatedCream3)
       # Using one of these words as a materialType in the syntax for recipeIngredients will make the recipe require the specified special Item at the specified slot.
 
   Slingshot:
