@@ -5,6 +5,7 @@ import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.DataRetriever;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -29,6 +30,18 @@ public class ItemDataRetriever extends DataRetriever {
         materialInstanceMap.put(SlimeBoots.instance.itemMaterial, SlimeBoots.instance);
         materialInstanceMap.put(Slingshot.instance.itemMaterial, Slingshot.instance);
 
+        materialInstanceMap.put(Material.BLAZE_SPAWN_EGG, new BossEggs(EntityType.BLAZE));
+        materialInstanceMap.put(Material.CREEPER_SPAWN_EGG, new BossEggs(EntityType.CREEPER));
+        materialInstanceMap.put(Material.ENDERMAN_SPAWN_EGG, new BossEggs(EntityType.ENDERMAN));
+        materialInstanceMap.put(Material.MAGMA_CUBE_SPAWN_EGG, new BossEggs(EntityType.MAGMA_CUBE));
+        materialInstanceMap.put(Material.SKELETON_SPAWN_EGG, new BossEggs(EntityType.SKELETON));
+        materialInstanceMap.put(Material.SLIME_SPAWN_EGG, new BossEggs(EntityType.SLIME));
+        materialInstanceMap.put(Material.SPIDER_SPAWN_EGG, new BossEggs(EntityType.SPIDER));
+        materialInstanceMap.put(Material.WITCH_SPAWN_EGG, new BossEggs(EntityType.WITCH));
+        materialInstanceMap.put(Material.WITHER_SKELETON_SPAWN_EGG, new BossEggs(EntityType.WITHER));
+        materialInstanceMap.put(Material.ZOMBIE_SPAWN_EGG, new BossEggs(EntityType.ZOMBIE));
+        materialInstanceMap.put(Material.ZOMBIFIED_PIGLIN_SPAWN_EGG, new BossEggs(EntityType.ZOMBIFIED_PIGLIN));
+
         if ((long) materialInstanceMap.keySet().size() != materialInstanceMap.keySet().stream().distinct().count()) {
             new VBLogger("ItemDataRetriever", Level.SEVERE, "Duplicate Item materials ").logToFile();
         }
@@ -42,8 +55,6 @@ public class ItemDataRetriever extends DataRetriever {
      */
     public ItemDataRetriever(Material material) throws ItemCreationException {
 
-        //TODO Test this
-
         if (!materialInstanceMap.containsKey(material))
             throw new ItemCreationException("Could not create ItemDataRetriever using the material " + material);
 
@@ -54,7 +65,6 @@ public class ItemDataRetriever extends DataRetriever {
         }
 
         this.CONFIGSECTION = this.instance.configSection;
-
     }
 
     /**
@@ -65,29 +75,79 @@ public class ItemDataRetriever extends DataRetriever {
      */
     public ItemDataRetriever(ItemStack itemStack) throws ItemCreationException {
 
-        if(itemStack == null) throw new ItemCreationException("Item passed to Data Retriever was null");
+        if (itemStack == null) throw new ItemCreationException("Item passed to Data Retriever was null");
 
-        //TODO Test this
         ItemDataRetriever retriever;
 
-        if (itemStack.hasItemMeta() &&
-                !itemStack.getItemMeta().getPersistentDataContainer().has(VBItem.VBItemKey, PersistentDataType.INTEGER)) {
+        VBItem helperInstance = null;
+
+        if (!itemStack.getItemMeta().getPersistentDataContainer().has(VBItem.VBItemKey, PersistentDataType.STRING)) {
             return;
         } else {
 
             Material mat = itemStack.getType();
 
+            String pdcOutput = itemStack.getItemMeta().getPersistentDataContainer().get(VBItem.VBItemKey, PersistentDataType.STRING);
+            String bossEggType = null;
+            if (itemStack.getItemMeta().getPersistentDataContainer().has(BossEggs.instance.pdcKey, PersistentDataType.STRING)) {
+                bossEggType = itemStack.getItemMeta().getPersistentDataContainer().get(BossEggs.instance.pdcKey, PersistentDataType.STRING);
+            }
+
+            if (pdcOutput == null) {
+                return;
+            }
+
+            switch (pdcOutput) {
+                case "BaseballBat":
+                    mat = BaseballBat.instance.itemMaterial;
+                    break;
+                case "Blazer":
+                    mat = Blazer.instance.itemMaterial;
+                    break;
+                case "BossEggs":
+                    mat = new BossEggs(EntityType.valueOf(bossEggType)).itemMaterial;
+
+                    break;
+                case "BouncySlime":
+                    mat = BouncySlime.instance.itemMaterial;
+                    break;
+                case "ButchersAxe":
+                    mat = ButchersAxe.instance.itemMaterial;
+                    break;
+                case "HMC":
+                    mat = HeatedMagmaCream.instance.itemMaterial;
+                    break;
+                case "InvisibilityCloak":
+                    mat = InvisibilityCloak.instance.itemMaterial;
+                    break;
+                case "Skeletor":
+                    mat = Skeletor.instance.itemMaterial;
+                    break;
+                case "SlimeBoots":
+                    mat = SlimeBoots.instance.itemMaterial;
+                    break;
+                case "Slingshot":
+                    mat = Slingshot.instance.itemMaterial;
+                    break;
+            }
+
             try {
                 retriever = new ItemDataRetriever(mat);
+
+                if (helperInstance != null) {
+                    retriever.instance = helperInstance;
+                }
+
             } catch (ItemCreationException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Bad Item input had a VB tag. Please let the author know about this and whether there are Vanilla Bosses extension plugins installed.").logToFile();
                 return;
             }
         }
 
-        this.instance = retriever.instance;
+        if (helperInstance == null) {
+            this.instance = retriever.instance;
+        }
         this.CONFIGSECTION = retriever.CONFIGSECTION;
-
     }
 
 
