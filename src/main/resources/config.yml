@@ -623,7 +623,7 @@ Items:
 
   BaseballBat:
     dropChance: 0.2
-    chanceToConcuss: 0.05  # in %, applies Blindness
+    chanceToConcuss: 0.15  # in %, applies Blindness
     concussionDuration: 3 #in seconds
     enableSpawnCommand: true
     Lore:
@@ -660,8 +660,8 @@ Items:
     Chestplate: Leather_Chestplate  #define the type of chestplate to be used for the item!
     dropChance: 10 #drops from the Blaze Boss!
     enableCraftingRecipe: true
-    chanceToCombust: 0.2  # in %
-    ticksOfFire: 100 # 20 ticks = 1 second, defines how long the attacker will be set on fire for
+    chanceToCombust: 0.333  # in %
+    ticksOfFire: 140 # 20 ticks = 1 second, defines how long the attacker will be set on fire for
     Lore:
       - Has a fiery aura
 
