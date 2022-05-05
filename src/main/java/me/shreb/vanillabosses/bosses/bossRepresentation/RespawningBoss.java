@@ -7,10 +7,12 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.logging.VBLogger;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -28,16 +30,16 @@ public class RespawningBoss extends Boss {
     public static final String RESPAWNING_BOSS_TAG = "Respawning Boss";
 
     //The NamespaceKey used to store the commands for respawning bosses
-    public static final NamespacedKey RESPAWNING_BOSS_PDC = new NamespacedKey(Vanillabosses.getInstance(), "Respawning Boss");
+    public static final NamespacedKey RESPAWNING_BOSS_PDC = new NamespacedKey(Vanillabosses.getInstance(), "RespawningBoss");
 
     //A map which contains all Respawning bosses from the bossList as keys and the UUID of the currently alive boss.
     public static final HashMap<RespawningBoss, UUID> livingRespawningBossesMap = new HashMap<>();
 
     @SerializedName("worldName")
     String world;
-    double x;
-    double y;
-    double z;
+    int x;
+    int y;
+    int z;
 
     long respawnTime;
 
@@ -68,7 +70,7 @@ public class RespawningBoss extends Boss {
      * @param respawnTime Respawn time for the boss in seconds
      * @param commands    an array of commands which are to be executed upon boss death
      */
-    public RespawningBoss(EntityType type, String world, double x, double y, double z, long respawnTime, int[] commands, boolean enableBoss) {
+    public RespawningBoss(EntityType type, String world, int x, int y, int z, long respawnTime, int[] commands, boolean enableBoss) {
         this.type = type;
         this.world = world;
         this.x = x;
@@ -85,7 +87,6 @@ public class RespawningBoss extends Boss {
      * Should only be called once by the onEnable() method
      */
     public static void spawnRespawningBosses() {
-//TODO implement spawnRespawningBosses() method
 
         if(bossList.isEmpty()){
             new VBLogger("RespawningBoss", Level.INFO, "Respawning boss list was empty. Not spawning any respawning bosses").logToFile();
@@ -127,7 +128,7 @@ public class RespawningBoss extends Boss {
             new VBLogger("RespawningBoss", Level.SEVERE, "Could not find specified Boss type: " + boss.type).logToFile();
         }
 
-        if (boss.respawnTime > 1) {
+        if (boss.respawnTime < 1) {
             new VBLogger("RespawningBoss", Level.SEVERE, "Respawn time was less than 1. Please specify a respawn time of 1 second or more. Time: " + boss.respawnTime).logToFile();
         }
 
@@ -213,11 +214,11 @@ public class RespawningBoss extends Boss {
 
         container.set(RESPAWN_TIMER, PersistentDataType.LONG, this.respawnTime);
 
-        container.set(X_COORDS, PersistentDataType.DOUBLE, this.x);
+        container.set(X_COORDS, PersistentDataType.INTEGER, this.x);
 
-        container.set(Y_COORDS, PersistentDataType.DOUBLE, this.y);
+        container.set(Y_COORDS, PersistentDataType.INTEGER, this.y);
 
-        container.set(Z_COORDS, PersistentDataType.DOUBLE, this.z);
+        container.set(Z_COORDS, PersistentDataType.INTEGER, this.z);
 
     }
 
@@ -231,6 +232,39 @@ public class RespawningBoss extends Boss {
                 "X-Coordinates: '" + this.x + "'" +
                 "Y-Coordinates: '" + this.y + "'" +
                 "Y-Coordinates: '" + this.z + "'";
+    }
+
+    /**
+     * A method to respawn all non alive and non null respawning bosses using their specific details.
+     * Using this method will attempt to respawn all respawning bosses in the bossList created at startup of the plugin
+     * Will log an error if the bossList contains a value not present in the livingRespawningBossesMap
+     * Will log an error if the spawning process failed for any reason
+     */
+    public static void respawnBosses(){
+        for(RespawningBoss boss: bossList){
+
+            if(livingRespawningBossesMap.containsKey(boss)){
+
+                UUID uuid = livingRespawningBossesMap.get(boss);
+                Entity entity = Bukkit.getEntity(uuid);
+
+                if(entity == null || entity.isDead()){
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
+
+                        try {
+                            boss.spawnBoss();
+                        } catch (BossCreationException e) {
+                            new VBLogger("RespawningBoss", Level.WARNING, "Respawning Boss could not be respawned. Please report this.\n" +
+                                    "Error: " + e).logToFile();
+                        }
+
+                    }, boss.respawnTime * 20);
+                }
+
+            } else {
+                new VBLogger("RespawningBoss", Level.WARNING, "Respawning Bosses map did not contain respawning boss. Please report this error").logToFile();
+            }
+        }
     }
 
     public EntityType getType() {
