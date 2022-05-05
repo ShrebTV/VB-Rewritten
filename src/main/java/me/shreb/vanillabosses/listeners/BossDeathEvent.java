@@ -5,11 +5,14 @@ import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.bosses.utility.BossDeathMessage;
 import me.shreb.vanillabosses.bosses.utility.BossDrops;
+import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.logging.Level;
 
 public class BossDeathEvent implements Listener {
 
@@ -44,6 +47,11 @@ public class BossDeathEvent implements Listener {
             for (int i : bossData.commandIndexes) {
                 //Make a new BossCommand object using the index of the command, the delay intended and the command String which is supposed to be executed
                 BossCommand command = new BossCommand(i);
+
+                if (command.command == null) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Used command which is not declared. Attempted to fetch a command with an index which did not exist.").logToFile();
+                    continue;
+                }
                 //replace and read all placeholders, add necessary players to a list to execute the commands for, then execute the command for the players in that list
                 command.executeBossCommand(event);
             }
@@ -57,7 +65,10 @@ public class BossDeathEvent implements Listener {
             for (int i : indexes) {
                 //Make a new BossCommand object using the index of the command, the delay intended and the command String which is supposed to be executed
                 BossCommand command = new BossCommand(i);
-                //replace and read all placeholders, add necessary players to a list to execute the commands for, then execute the command for the players in that list
+                if (command.command == null) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Used command which is not declared. Attempted to fetch a command with an index which did not exist.").logToFile();
+                    continue;
+                }                //replace and read all placeholders, add necessary players to a list to execute the commands for, then execute the command for the players in that list
                 command.executeBossCommand(event);
             }
 
