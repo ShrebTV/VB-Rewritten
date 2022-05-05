@@ -5,11 +5,10 @@ import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -44,6 +43,7 @@ public class Skeletor extends VBItem {
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.STRING, "Shoots TNT");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "Skeletor");
         meta.setLore(lore);
         bow.setItemMeta(meta);
 
@@ -60,6 +60,7 @@ public class Skeletor extends VBItem {
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.STRING, "Shoots TNT");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "Skeletor");
         meta.setLore(lore);
         bow.setItemMeta(meta);
 
@@ -78,8 +79,6 @@ public class Skeletor extends VBItem {
     }
 
     static class SkeletorArrow implements Listener {
-
-        //TODO Test this
 
         public static final String EXPLODING_ARROW = "Vanilla Bosses - Exploding Arrow";
         public static final String CANCEL_TNT_EXPLOSION = "Vanilla Bosses - Cancel Explosion";
@@ -185,24 +184,24 @@ public class Skeletor extends VBItem {
          * @param event the event to spawn the tnt inside of
          */
         @EventHandler
-        public void onExplodingArrowHit(ProjectileHitEvent event) {
+        public void onExplodingArrowHit(EntityDamageByEntityEvent event) {
 
-            if (config.getBoolean("Items.Skeletor.TNTOnArrowHit.enable")) return;
+            if (!config.getBoolean("Items.Skeletor.TNTOnArrowHit.enable")
+                    || !(event.getDamager() instanceof Arrow)) return;
 
-            Projectile projectile = event.getEntity();
+            Arrow arrow = (Arrow) event.getDamager();
 
-            boolean isSkeletorArrow = projectile instanceof Arrow
-                    && projectile.getScoreboardTags().contains(EXPLODING_ARROW);
+            boolean isSkeletorArrow = arrow.getScoreboardTags().contains(EXPLODING_ARROW);
 
-            boolean hitLivingEntity = event.getHitEntity() instanceof LivingEntity;
+            boolean hitLivingEntity = event.getEntity() instanceof LivingEntity;
 
             if (isSkeletorArrow && hitLivingEntity) {
 
-                ((Arrow) projectile).setDamage(0);
-                projectile.setFireTicks(1);
-                projectile.remove();
+                arrow.setDamage(0);
+                arrow.setFireTicks(1);
+                arrow.remove();
 
-                Location location = projectile.getLocation();
+                Location location = arrow.getLocation();
 
                 if (location.getWorld() == null) return;
 

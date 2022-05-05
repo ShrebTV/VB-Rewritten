@@ -6,7 +6,6 @@ import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -53,6 +52,7 @@ public class SlimeBoots extends VBItem {
         meta.setLore(lore);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.STRING, "negateFallDamage");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "SlimeBoots");
         slimeBoots.setItemMeta(meta);
 
         return slimeBoots;
@@ -74,6 +74,7 @@ public class SlimeBoots extends VBItem {
         meta.setLore(lore);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.STRING, "negateFallDamage");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "SlimeBoots");
         slimeBoots.setItemMeta(meta);
 
         return slimeBoots;
@@ -92,14 +93,16 @@ public class SlimeBoots extends VBItem {
     @EventHandler
     void itemAbility(final EntityDamageEvent event) {
 
-        if(!(event.getEntity() instanceof Player)) return;
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL) return;
 
-        if(((Player)event.getEntity()).getEquipment().getBoots() != null){
-            if(((Player)event.getEntity()).getEquipment().getBoots().getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.STRING)){
+        if (!(event.getEntity() instanceof Player)) return;
+
+        if (((Player) event.getEntity()).getEquipment().getBoots() != null) {
+            if (((Player) event.getEntity()).getEquipment().getBoots().getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.STRING)) {
 
                 double fallDamageMultiplier = config.getDouble("Items.SlimeBoots.fallDamageMultiplier");
 
-                if(fallDamageMultiplier > 1 || fallDamageMultiplier < 0){
+                if (fallDamageMultiplier > 1 || fallDamageMultiplier < 0) {
                     new VBLogger(getClass().getName(),
                             Level.WARNING,
                             "Fall damage multiplier had a bad value for the Slime boots ability. Please keep it between 0 and 1. Current multiplier: " + fallDamageMultiplier)

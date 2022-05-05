@@ -11,7 +11,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -53,6 +52,7 @@ public class ButchersAxe extends VBItem {
         ItemMeta meta = axe.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.STRING, "Bind II");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "ButchersAxe");
 
         ArrayList<String> lore = new ArrayList<>();
         meta.setDisplayName(ChatColor.DARK_RED + Vanillabosses.getCurrentLanguage().itemButchersAxeName);
@@ -75,6 +75,7 @@ public class ButchersAxe extends VBItem {
         ItemMeta meta = axe.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.STRING, "Bind II");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "ButchersAxe");
 
         ArrayList<String> lore = new ArrayList<>();
         meta.setDisplayName(ChatColor.DARK_RED + Vanillabosses.getCurrentLanguage().itemButchersAxeName);
@@ -99,9 +100,9 @@ public class ButchersAxe extends VBItem {
      */
     @Override
     public void itemAbility(LivingEntity entity) {
-        if (Utility.roll(config.getInt("Items.ButchersAxe.ChanceToApplySlowness"))) {
+        if (Utility.roll(config.getDouble("Items.ButchersAxe.ChanceToApplySlowness"))) {
             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * config.getInt("Items.ButchersAxe.SlownessDuration"), 2));
-            Utility.spawnParticles(Particle.FLASH, entity.getWorld(), entity.getLocation(), 1,1,1, 5, 3);
+            Utility.spawnParticles(Particle.FLASH, entity.getWorld(), entity.getLocation(), 1, 1, 1, 5, 3);
         }
     }
 
@@ -114,9 +115,8 @@ public class ButchersAxe extends VBItem {
                 && ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand().hasItemMeta()
                 && ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.STRING);
 
-        ItemStack stack = ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand();
-
         if(hasPluginItemInHand){
+            ItemStack stack = ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand();
             try{
                 new ItemDataRetriever(stack);
             } catch (ItemCreationException itemCreationException) {
@@ -125,7 +125,7 @@ public class ButchersAxe extends VBItem {
                 return;
             }
 
-            this.itemAbility((LivingEntity) event.getDamager());
+            this.itemAbility((LivingEntity) event.getEntity());
         }
     }
 }

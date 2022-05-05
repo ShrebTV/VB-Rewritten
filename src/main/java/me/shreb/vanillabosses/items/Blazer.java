@@ -9,7 +9,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -54,6 +53,7 @@ public class Blazer extends VBItem {
         ItemMeta armorMeta = blazer.getItemMeta();
         PersistentDataContainer container = armorMeta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.INTEGER, 1);
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "Blazer");
 
         armorMeta.setDisplayName(ChatColor.DARK_BLUE + Vanillabosses.getCurrentLanguage().itemBlazerName);
         ArrayList<String> lore = new ArrayList<>(this.lore);
@@ -79,6 +79,7 @@ public class Blazer extends VBItem {
         ItemMeta armorMeta = blazer.getItemMeta();
         PersistentDataContainer container = armorMeta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.INTEGER, 1);
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "Blazer");
 
         armorMeta.setDisplayName(ChatColor.DARK_BLUE + Vanillabosses.getCurrentLanguage().itemBlazerName);
         ArrayList<String> lore = new ArrayList<>(this.lore);
@@ -117,7 +118,7 @@ public class Blazer extends VBItem {
 
         if(executeAbility){
 
-            itemAbility((LivingEntity) event.getEntity());
+            itemAbility((LivingEntity) event.getDamager());
 
         }
     }

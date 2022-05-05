@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -39,6 +38,7 @@ public class BouncySlime extends VBItem {
         ArrayList<String> lore = new ArrayList<>(this.lore);
         meta.setLore(lore);
         container.set(this.pdcKey, PersistentDataType.STRING, "BouncySlime");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "BouncySlime");
         meta.setDisplayName(ChatColor.DARK_GREEN + Vanillabosses.getCurrentLanguage().itemBouncySlimeName);
         bouncySlime.setItemMeta(meta);
 
@@ -53,6 +53,7 @@ public class BouncySlime extends VBItem {
         ArrayList<String> lore = new ArrayList<>(this.lore);
         meta.setLore(lore);
         container.set(this.pdcKey, PersistentDataType.STRING, "BouncySlime");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "BouncySlime");
         meta.setDisplayName(ChatColor.DARK_GREEN + Vanillabosses.getCurrentLanguage().itemBouncySlimeName);
         bouncySlime.setItemMeta(meta);
 

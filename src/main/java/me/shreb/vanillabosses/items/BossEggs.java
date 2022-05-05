@@ -11,11 +11,11 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -30,26 +30,73 @@ public class BossEggs extends VBItem {
     private BossEggs() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "BossEgg");
         this.configSection = "BossEggs";
-        this.itemMaterial = null;
         this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemBossEggName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBossEggGivenMessage;
     }
 
-    public BossEggs(EntityType type){
+    public BossEggs(EntityType type) {
         this();
         this.type = type;
+
+        switch (type) {
+
+            case BLAZE:
+                this.itemMaterial = Material.BLAZE_SPAWN_EGG;
+                break;
+
+            case CREEPER:
+                this.itemMaterial = Material.CREEPER_SPAWN_EGG;
+                break;
+
+            case ENDERMAN:
+                this.itemMaterial = Material.ENDERMAN_SPAWN_EGG;
+                break;
+
+            case MAGMA_CUBE:
+                this.itemMaterial = Material.MAGMA_CUBE_SPAWN_EGG;
+                break;
+
+            case SKELETON:
+                this.itemMaterial = Material.SKELETON_SPAWN_EGG;
+                break;
+
+            case SLIME:
+                this.itemMaterial = Material.SLIME_SPAWN_EGG;
+                break;
+
+            case SPIDER:
+                this.itemMaterial = Material.SPIDER_SPAWN_EGG;
+                break;
+
+            case WITCH:
+                this.itemMaterial = Material.WITCH_SPAWN_EGG;
+                break;
+
+            case WITHER:
+                this.itemMaterial = Material.WITHER_SKELETON_SPAWN_EGG;
+                break;
+
+            case ZOMBIE:
+                this.itemMaterial = Material.ZOMBIE_SPAWN_EGG;
+                break;
+
+            case ZOMBIFIED_PIGLIN:
+                this.itemMaterial = Material.ZOMBIFIED_PIGLIN_SPAWN_EGG;
+                break;
+        }
     }
 
     /**
      * Has to be called on a custom BossEggs object made with an EntityType
+     *
      * @return the ItemStack requested containing one boss egg
      * @throws ItemCreationException if the item could not be created
      */
     @Override
     public ItemStack makeItem() throws ItemCreationException {
         ItemStack stack;
-        switch(this.type){
+        switch (this.type) {
 
             case BLAZE:
                 stack = new ItemStack(Material.BLAZE_SPAWN_EGG);
@@ -99,20 +146,44 @@ public class BossEggs extends VBItem {
                 new VBLogger(getClass().getName(), Level.WARNING, "Error at Boss egg creation. Could not match EntityType passed in with a boss type!").logToFile();
                 throw new ItemCreationException("Could not make Boss egg: Type mismatch. Type passed in: " + type);
         }
+        ItemMeta meta = stack.getItemMeta();
 
-//TODO edit PDC of the item
-        return null;
+        String name = type.toString().toLowerCase();
+        name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+
+        name = name + "Boss spawn egg";
+
+        BossDataRetriever retriever = new BossDataRetriever(type);
+        String colorString = config.getString("Bosses." + retriever.CONFIGSECTION + ".displayNameColor");
+
+        if (colorString == null) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Color String could not be resolved for: " + type).logToFile();
+            return stack;
+        }
+
+        ChatColor color = ChatColor.of(colorString);
+
+        meta.setDisplayName(color + name);
+
+        meta.getPersistentDataContainer().set(pdcKey, PersistentDataType.STRING, this.type.toString());
+        meta.getPersistentDataContainer().set(VBItem.VBItemKey, PersistentDataType.STRING, "BossEggs");
+
+        meta.setLore(config.getStringList("Items.BossEggs.lore"));
+
+        stack.setItemMeta(meta);
+
+        return stack;
     }
 
     @Override
     public ItemStack makeItem(int amount) throws ItemCreationException {
 
         ItemStack stack;
-        switch(this.type){
+        switch (this.type) {
 
             case BLAZE:
                 stack = new ItemStack(Material.BLAZE_SPAWN_EGG, amount);
-            break;
+                break;
 
             case CREEPER:
                 stack = new ItemStack(Material.CREEPER_SPAWN_EGG, amount);
@@ -138,21 +209,17 @@ public class BossEggs extends VBItem {
                 stack = new ItemStack(Material.SPIDER_SPAWN_EGG, amount);
                 break;
 
-
             case WITCH:
                 stack = new ItemStack(Material.WITCH_SPAWN_EGG, amount);
                 break;
-
 
             case WITHER:
                 stack = new ItemStack(Material.WITHER_SKELETON_SPAWN_EGG, amount);
                 break;
 
-
             case ZOMBIE:
                 stack = new ItemStack(Material.ZOMBIE_SPAWN_EGG, amount);
                 break;
-
 
             case ZOMBIFIED_PIGLIN:
                 stack = new ItemStack(Material.ZOMBIFIED_PIGLIN_SPAWN_EGG, amount);
@@ -163,8 +230,33 @@ public class BossEggs extends VBItem {
                 throw new ItemCreationException("Could not make Boss egg: Type mismatch. Type passed in: " + type);
         }
 
-//TODO edit PDC of the item
-        return null;
+        ItemMeta meta = stack.getItemMeta();
+
+        String name = type.toString().toLowerCase();
+        name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+
+        name = name + "Boss spawn egg";
+
+        BossDataRetriever retriever = new BossDataRetriever(type);
+        String colorString = config.getString("Bosses." + retriever.CONFIGSECTION + ".displayNameColor");
+
+        if (colorString == null) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Color String could not be resolved for: " + type).logToFile();
+            return stack;
+        }
+
+        ChatColor color = ChatColor.of(colorString);
+
+        meta.setDisplayName(color + name);
+
+        meta.getPersistentDataContainer().set(pdcKey, PersistentDataType.STRING, this.type.toString());
+        meta.getPersistentDataContainer().set(VBItem.VBItemKey, PersistentDataType.STRING, "BossEggs");
+
+        meta.setLore(config.getStringList("Items.BossEggs.lore"));
+
+        stack.setItemMeta(meta);
+
+        return stack;
     }
 
     @Override
@@ -193,7 +285,7 @@ public class BossEggs extends VBItem {
 
             try {
                 bossData = new BossDataRetriever(type);
-            } catch(IllegalArgumentException exception){
+            } catch (IllegalArgumentException exception) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Could not get Data for boss type:" + type + "\n Error:" + exception).logToFile();
                 event.getPlayer().sendMessage("An error occurred! Error written to log file!");
                 return;

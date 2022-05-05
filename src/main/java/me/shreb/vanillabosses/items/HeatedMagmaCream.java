@@ -9,7 +9,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -70,6 +69,8 @@ public class HeatedMagmaCream extends VBItem {
         meta.setDisplayName(Vanillabosses.getCurrentLanguage().itemHMCName + " Lv." + level);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.INTEGER, level);
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "HMC");
+
         cream.setItemMeta(meta);
 
         return cream;
@@ -100,6 +101,7 @@ public class HeatedMagmaCream extends VBItem {
         meta.setDisplayName(Vanillabosses.getCurrentLanguage().itemHMCName + " Lv." + level);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.INTEGER, level);
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "HMC");
         cream.setItemMeta(meta);
 
         return cream;

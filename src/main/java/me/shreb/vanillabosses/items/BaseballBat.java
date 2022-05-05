@@ -11,7 +11,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -48,6 +47,7 @@ public class BaseballBat extends VBItem implements Listener {
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         container.set(this.pdcKey, PersistentDataType.STRING, "Concuss I");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "BaseballBat");
 
         lore.add("Concuss I");
         lore.addAll(this.lore);
@@ -74,6 +74,7 @@ public class BaseballBat extends VBItem implements Listener {
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         container.set(this.pdcKey, PersistentDataType.STRING, "Concuss I");
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "BaseballBat");
 
         lore.add("Concuss I");
         lore.addAll(this.lore);
@@ -102,9 +103,9 @@ public class BaseballBat extends VBItem implements Listener {
      */
     @Override
     public void itemAbility(LivingEntity entity) {
-            if (Utility.roll(config.getInt("Items.BaseballBat.chanceToConcuss"))) {
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * config.getInt("Items.BaseballBat.concussionDuration"), 2));
-                Utility.spawnParticles(Particle.FIREWORKS_SPARK, entity.getWorld(), entity.getLocation(), 1,1,1, 20, 3);
+        if (Utility.roll(config.getDouble("Items.BaseballBat.chanceToConcuss"))) {
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * config.getInt("Items.BaseballBat.concussionDuration"), 2));
+            Utility.spawnParticles(Particle.FIREWORKS_SPARK, entity.getWorld(), entity.getLocation(), 1, 1, 1, 20, 3);
         }
     }
 
@@ -117,10 +118,11 @@ public class BaseballBat extends VBItem implements Listener {
                 && ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand().hasItemMeta()
                 && ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.STRING);
 
-        ItemStack stack = ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand();
+        if(hasPluginItemInHand) {
 
-        if(hasPluginItemInHand){
-            try{
+            ItemStack stack = ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand();
+
+            try {
                 new ItemDataRetriever(stack);
             } catch (ItemCreationException itemCreationException) {
                 new VBLogger(getClass().getName(), Level.WARNING, "An Error has occurred. The item Baseball bat was identified by PDC. But didn't match any Item materials. \n" +
@@ -128,7 +130,7 @@ public class BaseballBat extends VBItem implements Listener {
                 return;
             }
 
-            this.itemAbility((LivingEntity) event.getDamager());
+            this.itemAbility((LivingEntity) event.getEntity());
         }
     }
 }

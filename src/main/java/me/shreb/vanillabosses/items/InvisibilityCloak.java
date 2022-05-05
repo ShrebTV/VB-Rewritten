@@ -7,11 +7,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -52,6 +51,7 @@ public class InvisibilityCloak extends VBItem {
         meta.setLore(lore);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.INTEGER, 1);
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "InvisibilityCloak");
 
         cloak.setItemMeta(meta);
 
@@ -67,6 +67,7 @@ public class InvisibilityCloak extends VBItem {
         meta.setLore(lore);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.INTEGER, 1);
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "InvisibilityCloak");
 
         cloak.setItemMeta(meta);
 
@@ -108,33 +109,35 @@ public class InvisibilityCloak extends VBItem {
                 //check whether the player has at least one Invisibility cloak item on
                 if (player.getEquipment() != null
                         && Arrays.stream(player.getEquipment().getArmorContents())
-                        .filter(n -> n.getType() != Material.AIR && n.hasItemMeta())
+                        .filter(n -> n != null && n.getType() != Material.AIR && n.hasItemMeta())
                         .anyMatch(n -> n.getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.INTEGER))) {
 
                     //get the armor contents from that player
                     List<ItemStack> items = Arrays.stream(player.getEquipment().getArmorContents())
-                            .filter(n -> n.getType() != Material.AIR
+                            .filter(n -> n != null && n.getType() != Material.AIR
                                     && n.hasItemMeta()
                                     && n.getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.INTEGER))
                             .collect(Collectors.toList());
 
                     //another check for whether the list contains at least one item which matches the invisbility cloak pdc
-                    if(items.size() < 1) return;
+                    if (items.size() < 1) return;
 
-                    //damage if the item is damageable
-                    if(items.get(0) instanceof Damageable){
-
-                        if(((Damageable)items.get(0).getItemMeta()).getHealth() < 1){
-                            items.get(0).setAmount(items.get(0).getAmount() - 1);
-                            return;
-                        }
-
-                        ((Damageable)items.get(0).getItemMeta()).damage(items.get(0).getType().getMaxDurability() - (((Damageable) items.get(0)).getHealth() - 1));
+                    if (((items.get(0).getType().getMaxDurability() - ((Damageable) items.get(0).getItemMeta()).getDamage()) < 1)) {
+                        items.get(0).setAmount(items.get(0).getAmount() - 1);
+                        return;
                     }
+
+                    ItemMeta meta = items.get(0).getItemMeta();
+                    if (!(meta instanceof Damageable)) {
+                        return;
+                    }
+
+                    ((Damageable) meta).setDamage(((Damageable) items.get(0).getItemMeta()).getDamage() + 1);
+
+                    items.get(0).setItemMeta(meta);
 
                     //execute the invisibility ability for the player
                     itemAbility(player);
-
                 }
             }
         }, 10, config.getInt("Items.cloakOfInvisibility.delayBetweenChecks") * 20L);

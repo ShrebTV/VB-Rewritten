@@ -10,7 +10,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -57,6 +56,7 @@ public class Slingshot extends VBItem {
         meta.setLore(lore);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.INTEGER, 1);
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "Slingshot");
         slingshot.setItemMeta(meta);
 
         return slingshot;
@@ -71,6 +71,7 @@ public class Slingshot extends VBItem {
         meta.setLore(lore);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(this.pdcKey, PersistentDataType.INTEGER, 1);
+        container.set(VBItem.VBItemKey, PersistentDataType.STRING, "Slingshot");
         slingshot.setItemMeta(meta);
 
         return slingshot;
@@ -89,7 +90,7 @@ public class Slingshot extends VBItem {
     }
 
     @EventHandler
-    <T extends Event> void itemAbility(final PlayerInteractEvent event) {
+    public void itemAbility(final PlayerInteractEvent event) {
 
         boolean ret = (!event.getAction().equals(Action.RIGHT_CLICK_AIR) && !event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
                 || event.getItem() == null
@@ -102,26 +103,26 @@ public class Slingshot extends VBItem {
             event.getPlayer().getScoreboardTags().add("NoFallDMG");
             fallDamageTags.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
 
-            double multiplier = Vanillabosses.getInstance().getConfig().getDouble("Items.slingshot.thrustMultiplier");
+            double multiplier = Vanillabosses.getInstance().getConfig().getDouble("Items.Slingshot.thrustMultiplier");
             Vector v = event.getPlayer().getLocation().getDirection();
             double x = v.getX() * multiplier;
             double y = v.getY() * multiplier;
             double z = v.getZ() * multiplier;
             v = new Vector(x, y, z);
             event.getPlayer().setVelocity(v);
-            if (Vanillabosses.getInstance().getConfig().getBoolean("Items.slingshot.enableBoostSound")) {
-                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PARROT_IMITATE_SPIDER, (float) Vanillabosses.getInstance().getConfig().getDouble("Items.slingshot.boostSoundVolume"), 0.5F);
+            if (Vanillabosses.getInstance().getConfig().getBoolean("Items.Slingshot.enableBoostSound")) {
+                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PARROT_IMITATE_SPIDER, (float) Vanillabosses.getInstance().getConfig().getDouble("Items.Slingshot.boostSoundVolume"), 0.5F);
             }
-            if (Vanillabosses.getInstance().getConfig().getBoolean("Items.slingshot.enableDamagingOnUse")) {
+            if (Vanillabosses.getInstance().getConfig().getBoolean("Items.Slingshot.enableDamagingOnUse")) {
                 ItemStack item = event.getItem();
                 ItemMeta meta = item.getItemMeta();
 
-                if (((Damageable) meta).getDamage() + Vanillabosses.getInstance().getConfig().getInt("Items.slingshot.damageOnUseAmount") > item.getType().getMaxDurability()) {      //Item breaking upon reaching 0 Durability
+                if (((Damageable) meta).getDamage() + Vanillabosses.getInstance().getConfig().getInt("Items.Slingshot.damageOnUseAmount") > item.getType().getMaxDurability()) {      //Item breaking upon reaching 0 Durability
                     event.getPlayer().getEquipment().getItem(event.getHand()).setAmount(event.getPlayer().getEquipment().getItem(event.getHand()).getAmount() - 1);
                     event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
                     return;
                 }
-                ((Damageable) meta).setDamage(((Damageable) meta).getDamage() + Vanillabosses.getInstance().getConfig().getInt("Items.slingshot.damageOnUseAmount"));
+                ((Damageable) meta).setDamage(((Damageable) meta).getDamage() + Vanillabosses.getInstance().getConfig().getInt("Items.Slingshot.damageOnUseAmount"));
                 item.setItemMeta(meta);
             }
         }
