@@ -3,6 +3,7 @@ package me.shreb.vanillabosses.listeners;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
+import me.shreb.vanillabosses.bosses.utility.BossDeathMessage;
 import me.shreb.vanillabosses.bosses.utility.BossDrops;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -28,6 +29,10 @@ public class BossDeathEvent implements Listener {
             return;
         }
 
+        if (event.getEntity().getKiller() != null) {
+            new BossDeathMessage(bossData.bossKilledMessage, event).sendMessage();
+        }
+
         //Get the boss drops corresponding to the boss data object
         BossDrops drops = new BossDrops(bossData);
         //Drop the items from the BossDrops object after converting them toItemStacks()
@@ -47,7 +52,7 @@ public class BossDeathEvent implements Listener {
 
             int[] indexes = entity.getPersistentDataContainer().get(RespawningBoss.RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY);
 
-            if(indexes == null) return;
+            if (indexes == null) return;
 
             for (int i : indexes) {
                 //Make a new BossCommand object using the index of the command, the delay intended and the command String which is supposed to be executed
@@ -55,6 +60,9 @@ public class BossDeathEvent implements Listener {
                 //replace and read all placeholders, add necessary players to a list to execute the commands for, then execute the command for the players in that list
                 command.executeBossCommand(event);
             }
+
+            RespawningBoss.respawnBosses();
+
         }
     }
 }
