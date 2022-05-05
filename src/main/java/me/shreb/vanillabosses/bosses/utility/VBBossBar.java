@@ -90,6 +90,8 @@ public class VBBossBar implements Listener {
         if (this.assignedEntity != null && !this.assignedEntity.isDead()) {
             location = this.assignedEntity.getLocation();
         } else {
+            this.bossBar.removeAll();
+            bossBarMap.remove(this.assignedEntity.getUniqueId());
             return;
         }
 
