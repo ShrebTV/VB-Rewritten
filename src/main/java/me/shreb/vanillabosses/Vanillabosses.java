@@ -79,9 +79,6 @@ public final class Vanillabosses extends JavaPlugin {
 
         VBLogger.exitLogger();
 
-        //TODO Test removal of Bosses with the Scoreboard tag VBBoss.REMOVE_ON_DISABLE_TAG
-
-
         //remove all Entities in all worlds on the server which have the Scoreboard tag which marks the entity for removal on disable of the plugin
         getInstance().getServer().getWorlds()
                 .forEach(world -> world.getEntities()
