@@ -2,6 +2,7 @@ package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
+import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -48,6 +49,7 @@ public abstract class VBBoss implements Listener {
         pm.registerEvents(new WitherBoss(), Vanillabosses.getInstance());
         pm.registerEvents(new ZombieBoss(), Vanillabosses.getInstance());
         pm.registerEvents(new Zombified_PiglinBoss(), Vanillabosses.getInstance());
+        pm.registerEvents(new VBBossBar(), Vanillabosses.getInstance());
 
         new VBLogger("VBBoss", Level.INFO, "Registered Boss Event listeners!").logToFile();
     }

@@ -6,11 +6,15 @@ import com.google.gson.annotations.SerializedName;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
+import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -252,7 +256,8 @@ public class RespawningBoss extends Boss {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
 
                         try {
-                            boss.spawnBoss();
+                            LivingEntity e = boss.spawnBoss();
+                            new VBBossBar(e, Bukkit.createBossBar(e.getName(), BarColor.RED, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
                         } catch (BossCreationException e) {
                             new VBLogger("RespawningBoss", Level.WARNING, "Respawning Boss could not be respawned. Please report this.\n" +
                                     "Error: " + e).logToFile();

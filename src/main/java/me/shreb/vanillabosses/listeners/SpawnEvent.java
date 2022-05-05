@@ -50,14 +50,12 @@ public class SpawnEvent implements Listener {
 
         if (Utility.roll(chance)) {
 
-            LivingEntity spawnedBoss = null;
-
             switch (type) {
 
                 case BLAZE:
 
                     try {
-                        spawnedBoss = BlazeBoss.instance.makeBoss(entity);
+                        BlazeBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Blaze Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
@@ -67,7 +65,7 @@ public class SpawnEvent implements Listener {
                 case CREEPER:
 
                     try {
-                        spawnedBoss = CreeperBoss.instance.makeBoss(entity);
+                        CreeperBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Creeper Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
@@ -77,7 +75,7 @@ public class SpawnEvent implements Listener {
                 case ENDERMAN:
 
                     try {
-                        spawnedBoss = EndermanBoss.instance.makeBoss(entity);
+                        EndermanBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Enderman Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
@@ -87,7 +85,7 @@ public class SpawnEvent implements Listener {
                 case MAGMA_CUBE:
 
                     try {
-                        spawnedBoss = MagmacubeBoss.instance.makeBoss(entity);
+                        MagmacubeBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Magmacube Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
@@ -97,7 +95,7 @@ public class SpawnEvent implements Listener {
                 case SKELETON:
 
                     try {
-                        spawnedBoss = SkeletonBoss.instance.makeBoss(entity);
+                        SkeletonBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Skeleton Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
@@ -107,7 +105,7 @@ public class SpawnEvent implements Listener {
                 case SLIME:
 
                     try {
-                        spawnedBoss = SlimeBoss.instance.makeBoss(entity);
+                        SlimeBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Slime Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
@@ -117,7 +115,7 @@ public class SpawnEvent implements Listener {
                 case SPIDER:
 
                     try {
-                        spawnedBoss = SpiderBoss.instance.makeBoss(entity);
+                        SpiderBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Spider Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
@@ -127,7 +125,7 @@ public class SpawnEvent implements Listener {
                 case WITCH:
 
                     try {
-                        spawnedBoss = WitchBoss.instance.makeBoss(entity);
+                        WitchBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Witch Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
@@ -137,7 +135,7 @@ public class SpawnEvent implements Listener {
                 case ZOMBIE:
 
                     try {
-                        spawnedBoss = ZombieBoss.instance.makeBoss(entity);
+                        ZombieBoss.instance.makeBoss(entity);
                         ZombieBoss.zombieHorde(
                                 config.getInt("Bosses.ZombieBoss.zombieHorde.radius"),
                                 config.getInt("Bosses.ZombieBoss.zombieHorde.amount"),
@@ -153,19 +151,16 @@ public class SpawnEvent implements Listener {
                 case ZOMBIFIED_PIGLIN:
 
                     try {
-                        spawnedBoss = Zombified_PiglinBoss.instance.makeBoss(entity);
+                        Zombified_PiglinBoss.instance.makeBoss(entity);
                     } catch (BossCreationException e) {
                         new VBLogger(getClass().getName(), Level.WARNING, "Problem detected while naturally spawning Zombified Piglin Boss.\n" +
                                 e + "\n" + entity + "\n" + event.getSpawnReason());
                     }
                     break;
-
-                default:
-                    return;
             }
 
-            if(spawnedBoss != null && config.getBoolean("Bosses.AllBossesHaveBossBars")){
-                new VBBossBar(spawnedBoss, Bukkit.createBossBar(spawnedBoss.getName(), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC)).showBossBar();
+            if (config.getBoolean("Bosses.AllBossesHaveBossBars")) {
+                new VBBossBar(event.getEntity(), Bukkit.createBossBar(event.getEntity().getName(), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
             }
         }
     }

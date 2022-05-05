@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,9 +20,13 @@ import java.util.UUID;
 public class VBBossBar implements Listener {
 
     private LivingEntity assignedEntity;
-    private final BossBar bossBar;
+    public BossBar bossBar;
 
     public static final HashMap<UUID, VBBossBar> bossBarMap = new HashMap<>();
+
+    public VBBossBar() {
+
+    }
 
     public VBBossBar(LivingEntity assignedEntity, BossBar bossBar) {
         this.assignedEntity = assignedEntity;
@@ -40,7 +45,6 @@ public class VBBossBar implements Listener {
     public static void replaceAssignedEntity(UUID oldID, UUID newID) {
 
         //TODO implement boss bar support for respawning bosses
-        //TODO implement the creeper boss uuid being replaced with this method when it explodes
         VBBossBar bar = bossBarMap.get(oldID);
 
         if (bar == null) {
@@ -70,6 +74,7 @@ public class VBBossBar implements Listener {
             this.bossBar.setProgress(assignedEntity.getHealth() / assignedEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 
         } else {
+            this.bossBar.removeAll();
             bossBarMap.remove(assignedEntity.getUniqueId());
         }
     }
@@ -88,19 +93,12 @@ public class VBBossBar implements Listener {
             return;
         }
 
-        ArrayList<Entity> players = (ArrayList<Entity>) location.getWorld().getNearbyEntities(location, 35, 20, 35, n -> n instanceof Player);
-        ArrayList<Player> onlinePlayers = new ArrayList<>(Vanillabosses.getInstance().getServer().getOnlinePlayers());
+        ArrayList<Entity> players = (ArrayList<Entity>) location.getWorld().getNearbyEntities(location, 20, 15, 20, n -> n instanceof Player);
+        this.bossBar.removeAll();
 
         for (Entity player : players) {
-
             Player p = (Player) player;
-            onlinePlayers.remove(p);
-
             this.bossBar.addPlayer(p);
-        }
-
-        for (Player player : onlinePlayers) {
-            this.bossBar.removePlayer(player);
         }
     }
 
@@ -109,22 +107,29 @@ public class VBBossBar implements Listener {
      * @param event
      */
     @EventHandler
-    public void onBossDamaged(EntityDamageEvent event){
+    public void onBossDamaged(EntityDamageEvent event) {
 
-        if(bossBarMap.containsKey(event.getEntity().getUniqueId())){
-
+        if (bossBarMap.containsKey(event.getEntity().getUniqueId())) {
             VBBossBar bar = bossBarMap.get(event.getEntity().getUniqueId());
-
             bar.updateBossBar();
         }
     }
 
+    @EventHandler
+    public void onBossDeath(EntityDeathEvent event) {
+        if (bossBarMap.containsKey(event.getEntity().getUniqueId())) {
+            bossBarMap.get(event.getEntity().getUniqueId()).bossBar.removeAll();
+            bossBarMap.remove(event.getEntity().getUniqueId());
+        }
+    }
+
+
     /**
      * This method starts a timer to periodically update the list of players each bossBar from this plugin is shown to
-     *
+     * <p>
      * This should only be called once on startup
      */
-    public static void startBarShowTimer(){
+    public static void startBarShowTimer() {
 
         Bukkit.getScheduler().runTaskTimer(Vanillabosses.getInstance(), () -> {
 

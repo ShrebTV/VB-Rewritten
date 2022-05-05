@@ -8,6 +8,7 @@ import me.shreb.vanillabosses.commands.VBCommands;
 import me.shreb.vanillabosses.items.InvisibilityCloak;
 import me.shreb.vanillabosses.items.WitherEgg;
 import me.shreb.vanillabosses.items.utility.ItemListeners;
+import me.shreb.vanillabosses.items.utility.VBItemRecipe;
 import me.shreb.vanillabosses.listeners.VBListeners;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.Languages;
@@ -68,6 +69,7 @@ public final class Vanillabosses extends JavaPlugin {
 
         WitherEgg.initializePassiveWithers();
 
+        VBItemRecipe.registerAllRecipes();
 
         //initialize respawning bosses
         RespawningBoss.spawnRespawningBosses();
@@ -93,6 +95,11 @@ public final class Vanillabosses extends JavaPlugin {
                         .forEach(Entity::remove));
 
         // Plugin shutdown logic
+
+        for (VBBossBar bar : VBBossBar.bossBarMap.values()) {
+            bar.bossBar.removeAll();
+        }
+
     }
 
     private void createConfigFile() {

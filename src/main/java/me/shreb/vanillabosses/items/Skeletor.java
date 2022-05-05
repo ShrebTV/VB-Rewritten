@@ -251,7 +251,6 @@ public class Skeletor extends VBItem {
             if (isCancelledTNT) {
                 event.setCancelled(true);
             }
-
         }
     }
 }
