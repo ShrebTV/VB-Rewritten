@@ -13,9 +13,12 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Zombie;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -189,5 +192,53 @@ public class ZombieBoss extends VBBoss {
 
         }
         SpawnEvent.spawn = true;
+    }
+
+    /**
+     * The ability of the zombie boss. Idea: The more zombies are around the boss the stronger it gets
+     * This method contains checks only for whether the entity is not null and alive.
+     * Checks for whether the ability should be applied have to be made before calling this method
+     */
+    @EventHandler
+    private void zombieAbility(EntityDamageByEntityEvent event) {
+
+        Entity damagedEntity = event.getEntity();
+        Entity damager = event.getDamager();
+
+        int zombiesAround;
+
+        double maxDamageMultiplier = config.getDouble("Bosses.ZombieBoss.zombieAbility.maxDamageModifier");
+        double maxArmorMultiplier = config.getDouble("Bosses.ZombieBoss.zombieAbility.maxDamageTakenModifier");
+
+        double bossMultiplier = config.getDouble("Bosses.ZombieBoss.zombieAbility.modifierPerZombie");
+
+        if (damager.getScoreboardTags().contains(SCOREBOARDTAG)) {
+            //damageMultiplier apply
+
+            //Get the zombies around the damaged boss
+            zombiesAround = damager.getWorld().getNearbyEntities(damager.getLocation(), 8, 5, 8, n -> n instanceof Zombie).size();
+
+            //multiplier is 1 + the multiplier per zombie * zombies
+            double actualMultiplier = 1 + zombiesAround * bossMultiplier;
+            //Apply max multiplier
+            if (actualMultiplier > maxDamageMultiplier) actualMultiplier = maxDamageMultiplier;
+
+            event.setDamage(event.getDamage() * actualMultiplier);
+        }
+
+        if (damagedEntity.getScoreboardTags().contains(SCOREBOARDTAG)) {
+            //damage taken multiplier apply
+
+            zombiesAround = damagedEntity.getWorld().getNearbyEntities(damagedEntity.getLocation(), 8, 5, 8, n -> n instanceof Zombie).size();
+            //multiplier is 1 + the multiplier per zombie * zombies
+            double actualMultiplier = 1 + zombiesAround * bossMultiplier;
+            //Apply max multiplier
+            if (actualMultiplier > maxArmorMultiplier) actualMultiplier = maxArmorMultiplier;
+
+            //get a value between 0 and 1 indirectly proportional to the actualMultiplier
+            double modifier = 1/actualMultiplier;
+
+            event.setDamage(event.getDamage() * modifier);
+        }
     }
 }
