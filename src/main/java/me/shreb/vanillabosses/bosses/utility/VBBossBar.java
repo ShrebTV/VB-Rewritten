@@ -24,10 +24,28 @@ public class VBBossBar implements Listener {
 
     public static final HashMap<UUID, VBBossBar> bossBarMap = new HashMap<>();
 
-    public VBBossBar() {
+    /**
+     * private constructor for registering listeners in this class
+     * <p>
+     * This constructor should not be called anywhere else
+     */
+    private VBBossBar() {
 
     }
 
+    /**
+     * registers the Listeners of this class
+     */
+    public static void registerListeners() {
+        Vanillabosses.getInstance().getServer().getPluginManager().registerEvents(new VBBossBar(), Vanillabosses.getInstance());
+    }
+
+    /**
+     * Makes a new VBBossBar and puts it inside the bossBarMap automatically so that it is updated, shown and removed if the entity dies
+     *
+     * @param assignedEntity the entity this bossBar should be watching
+     * @param bossBar        the bossBar for the assignedEntity
+     */
     public VBBossBar(LivingEntity assignedEntity, BossBar bossBar) {
         this.assignedEntity = assignedEntity;
         this.bossBar = bossBar;
@@ -45,21 +63,26 @@ public class VBBossBar implements Listener {
     public static void replaceAssignedEntity(UUID oldID, UUID newID) {
 
         //TODO implement boss bar support for respawning bosses
+        //get the referenced bar with the old id
         VBBossBar bar = bossBarMap.get(oldID);
 
+        //check for whether the map even contained that value
         if (bar == null) {
+            //return if not
             return;
         }
 
+        //remove the old bar from the map
         bossBarMap.remove(oldID);
 
+        //get the entity with the new UUID
         Entity entity = Vanillabosses.getInstance().getServer().getEntity(newID);
 
+        //check whether the entity is valid and a LivingEntity
         if (entity != null && !entity.isDead() && entity instanceof LivingEntity) {
-
+            //If check successful, assign the new entity to the bar object and put into map
             bar.assignedEntity = (LivingEntity) entity;
             bossBarMap.put(newID, bar);
-
         }
     }
 
@@ -69,13 +92,14 @@ public class VBBossBar implements Listener {
      */
     public void updateBossBar() {
 
+        //check for valid assigned entity
         if (assignedEntity != null && !assignedEntity.isDead()) {
-
+            //Update progress of the bar
             this.bossBar.setProgress(assignedEntity.getHealth() / assignedEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 
         } else {
-            this.bossBar.removeAll();
-            bossBarMap.remove(assignedEntity.getUniqueId());
+            //if not valid, kill the bossBar
+            this.killBossBar();
         }
     }
 
@@ -87,17 +111,20 @@ public class VBBossBar implements Listener {
 
         Location location;
 
+        // check for valid assigned entity, kill the boss bar if not valid
         if (this.assignedEntity != null && !this.assignedEntity.isDead()) {
             location = this.assignedEntity.getLocation();
         } else {
-            this.bossBar.removeAll();
-            bossBarMap.remove(this.assignedEntity.getUniqueId());
+            this.killBossBar();
             return;
         }
 
+        //List containing all players within a 20x20 radius and 15 up and down.
         ArrayList<Entity> players = (ArrayList<Entity>) location.getWorld().getNearbyEntities(location, 20, 15, 20, n -> n instanceof Player);
+        //remove all players from seeing the bossbar
         this.bossBar.removeAll();
 
+        //add all players which were in the radius when checked
         for (Entity player : players) {
             Player p = (Player) player;
             this.bossBar.addPlayer(p);
@@ -106,6 +133,7 @@ public class VBBossBar implements Listener {
 
     /**
      * This updates the boss bar linked to the damaged boss whenever the boss is damaged
+     *
      * @param event
      */
     @EventHandler
@@ -117,28 +145,41 @@ public class VBBossBar implements Listener {
         }
     }
 
+    /**
+     * When the entity associated with a bossBar dies, kill the boss bar
+     *
+     * @param event
+     */
     @EventHandler
     public void onBossDeath(EntityDeathEvent event) {
-        if (bossBarMap.containsKey(event.getEntity().getUniqueId())) {
-            bossBarMap.get(event.getEntity().getUniqueId()).bossBar.removeAll();
-            bossBarMap.remove(event.getEntity().getUniqueId());
-        }
+        bossBarMap.get(event.getEntity().getUniqueId()).killBossBar();
+    }
+
+    /**
+     * removes the bossBar from the bossBarMap and makes sure no player can see the bossBar anymore
+     */
+    private void killBossBar() {
+        this.bossBar.removeAll();
+        bossBarMap.remove(this.assignedEntity.getUniqueId());
     }
 
 
     /**
-     * This method starts a timer to periodically update the list of players each bossBar from this plugin is shown to
-     * <p>
+     * This method starts a timer to periodically update the list of players each bossBar from this plugin is shown to the players near the assigned entity
      * This should only be called once on startup
      */
     public static void startBarShowTimer() {
 
         Bukkit.getScheduler().runTaskTimer(Vanillabosses.getInstance(), () -> {
 
-            for(VBBossBar bar : bossBarMap.values()){
-                bar.showBossBar();
-            }
+            for (VBBossBar bar : bossBarMap.values()) {
 
+                if (bar.assignedEntity.isDead()) {
+                    bar.killBossBar();
+                } else {
+                    bar.showBossBar();
+                }
+            }
         }, 80, 40);
     }
 }
