@@ -2,9 +2,6 @@ Bosses:
 
   configVersion: 1.7.0  # This is important to check for an outdated config file. do not change or remove it. to update your config, please consider saving your current config file and using the "resetConfig" Option below.
   # after this you can paste your original values at the appropriate positions if you wish to. (Alternatively to reset the config you can delete the entire config file instead of using the reset option)
-  enablePlugin: true
-  resetConfig: false  #If set true this will set your configuration to a state that definitely works, aka the state you found it in when you first opened this file.
-  #For the resetConfig setting to work, you must restart your server or type '/rl confirm'. The command for reloading the config file will not work here.
 
   PluginLanguage: EN  # Currently implemented Languages: EN (English), GER (German), CN (Chinese)
   #In case the entered language is not implemented. it will default to English
@@ -13,10 +10,10 @@ Bosses:
   disableBlazeBossesSpawningFromSpawners: false #no bosses except for the blaze boss can spawn from spawners. setting this to true will disable Blaze bosses from spawning from spawners aswell.
 
   bossesGetGlowingPotionEffect: false
-  # The following 4 lines are for people who want to discourage autoclicking to farm mobs/bosses.
 
   AllBossesHaveBossBars: false #this set to true will give all bosses which spawn a boss bar. If set to false only respawning bosses will have boss bars
 
+  # The following 4 lines are for people who want to discourage autoclicking to farm mobs/bosses.
   enableAntiAFKTeleports: false # If set to true mobs will have a chance to be teleported to the attacking player. If the player is afk the mob could kill the player. This should discourage from using autoclickers and afk farming mobs.
   AntiAFKChance: 100   # 1 = 0.1% chance. 10 = 1% chance. after the AntiAFKHitLimit is reached this is the % chance to teleport the hit mob directly onto the player.
   AntiAFKHitLimit: 15 #This is the amount of hits the player has to land on mobs until the Mob can teleport to them. Boss abilities are separate from this.
@@ -46,7 +43,6 @@ Bosses:
   ########################################################################################################################
   SkeletonBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "The Skeleton King"  # To remove the name, replace with "" and set 'showDisplayNameAlways' to 'false'
     displayNameColor: "#7B7B7B" #Hex color codes, use a website with a Hex Color code picker or similar programs to get this code from the wanted color.
     showDisplayNameAlways: true
@@ -114,7 +110,6 @@ Bosses:
   ######################################################################################################################
   CreeperBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "Bomby the Bomber"
     displayNameColor: "#1DE00C"
     showDisplayNameAlways: true
@@ -153,7 +148,6 @@ Bosses:
   ######################################################################################################################
   SpiderBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "Dolores"
     displayNameColor: "#A70FE1"
     showDisplayNameAlways: true
@@ -197,7 +191,6 @@ Bosses:
 
   BlazeBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "Blaze Warden"
     displayNameColor: "#FF7501"
     showDisplayNameAlways: true
@@ -236,7 +229,6 @@ Bosses:
 
   EndermanBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "Edna"
     displayNameColor: "#682294"
     showDisplayNameAlways: true
@@ -284,7 +276,6 @@ Bosses:
 
   ZombieBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "Bob"
     displayNameColor: "#249400"
     showDisplayNameAlways: true
@@ -301,6 +292,12 @@ Bosses:
     zombieHorde:
       amount: 8
       radius: 4
+
+    zombieAbility:
+      maxArmorModifier: 2.5 # boss takes a minimum of 1/2.5 times the normal damage
+      maxDamageModifier: 2.0 # can do max 2x normal damage
+      modifierPerZombie: 0.3 #modifier is multiplied with the amount of zombies around the boss and added to the normal values.
+      # 4 zombies around the boss with standard values: 4*0.3 = 1.2 -> damage is 2x normal damage; Damage taken is 1/2.2 the normal damage taken
 
     droppedXP: 50
 
@@ -319,7 +316,6 @@ Bosses:
 
   Zombified_PiglinBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "The Butcher"
     displayNameColor: "#850000"
     showDisplayNameAlways: true
@@ -350,7 +346,6 @@ Bosses:
 
   WitchBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "Margeret"
     displayNameColor: "#440D8A"
     showDisplayNameAlways: true
@@ -419,7 +414,6 @@ Bosses:
 
   SlimeBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "Chester"
     displayNameColor: "#4AD502"
     showDisplayNameAlways: true
@@ -455,7 +449,6 @@ Bosses:
   ######################################################################################################################
   WitherBoss:
     enabled: true
-    enableSummonCommand: true
     removeNetheriteBlockOnSpawn: true
     displayName: "X AE A-12"
     displayNameColor: "#1B1D19"
@@ -481,7 +474,6 @@ Bosses:
 
   Magma_cubeBoss:
     enabled: true
-    enableSummonCommand: true
     displayName: "Chesters' younger brother"
     displayNameColor: "#FF0000"
     showDisplayNameAlways: true
