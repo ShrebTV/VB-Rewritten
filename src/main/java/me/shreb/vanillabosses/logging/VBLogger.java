@@ -36,6 +36,10 @@ public class VBLogger {
         logger.log(logLevel, stringToLog);
     }
 
+    public void setStringToLog(String stringToLog) {
+        this.stringToLog = stringToLog;
+    }
+
     public static void exitLogger(){
         handler.close();
     }
