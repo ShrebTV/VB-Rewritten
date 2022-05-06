@@ -62,7 +62,7 @@ public class VBBossBar implements Listener {
      */
     public static void replaceAssignedEntity(UUID oldID, UUID newID) {
 
-        //TODO implement boss bar support for respawning bosses
+        //TODO test boss bar support for respawning bosses
         //get the referenced bar with the old id
         VBBossBar bar = bossBarMap.get(oldID);
 
@@ -162,7 +162,6 @@ public class VBBossBar implements Listener {
         this.bossBar.removeAll();
         bossBarMap.remove(this.assignedEntity.getUniqueId());
     }
-
 
     /**
      * This method starts a timer to periodically update the list of players each bossBar from this plugin is shown to the players near the assigned entity

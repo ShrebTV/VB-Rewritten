@@ -160,9 +160,7 @@ public class CreeperBoss extends VBBoss {
 
     @EventHandler
     public void onEntityExplode(org.bukkit.event.entity.EntityExplodeEvent event) {
-
-        //TODO Test this
-//BossCreeper
+        //BossCreeper
 
         if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.CREEPER) {
 

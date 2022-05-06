@@ -37,12 +37,6 @@ public final class Vanillabosses extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
 
-        //general things I still have to do
-        //TODO boss bars
-        //TODO Passive Wither
-        //TODO Creeper boss exploding ability testing
-
-
         instance = this;
 
         createConfigFile();

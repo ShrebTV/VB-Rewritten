@@ -32,8 +32,6 @@ public class WitherEgg extends VBItem {
 
     public static NamespacedKey PASSIVE_WITHER_PDC_KEY = new NamespacedKey(Vanillabosses.getInstance(), "PassiveWither");
 
-    //TODO Test the passive wither spawning and abilities
-
     public WitherEgg() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "WitherEgg");
         this.configSection = "WitherEgg";
