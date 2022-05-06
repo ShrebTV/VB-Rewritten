@@ -49,7 +49,8 @@ public abstract class VBBoss implements Listener {
         pm.registerEvents(new WitherBoss(), Vanillabosses.getInstance());
         pm.registerEvents(new ZombieBoss(), Vanillabosses.getInstance());
         pm.registerEvents(new Zombified_PiglinBoss(), Vanillabosses.getInstance());
-        pm.registerEvents(new VBBossBar(), Vanillabosses.getInstance());
+
+        VBBossBar.registerListeners();
 
         new VBLogger("VBBoss", Level.INFO, "Registered Boss Event listeners!").logToFile();
     }
