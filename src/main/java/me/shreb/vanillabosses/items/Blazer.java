@@ -111,7 +111,7 @@ public class Blazer extends VBItem {
                 event.getEntity() instanceof LivingEntity
                 //checking whether the attacked entity is wearing a blazer. could theoretically be set to be any armor
                 && Arrays.stream(((LivingEntity) event.getEntity()).getEquipment().getArmorContents())
-                .filter(n -> n.getType() != Material.AIR && n.hasItemMeta())
+                        .filter(n -> n != null && n.getType() != Material.AIR && n.hasItemMeta())
                 .anyMatch(n -> n.getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER))
                 //check whether the chance applies
                 && Utility.roll(config.getDouble("Items.Blazer.chanceToCombust"));
