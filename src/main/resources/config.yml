@@ -106,20 +106,6 @@ Bosses:
 
     spawnNaturally: true    #if set to false, specify worlds and locations below or leave the list empty.
 
-    # worldName: (just copy paste the name of the world in the server files)
-    # X,Y,Z: Coordinates at which the boss will be spawning and respawning
-    # secondsToRespawnAfterDeath: time, which the boss will take to respawn after dying
-    # CommandToExecuteOnDeath: number of the command you want the boss to execute upon dying. The first entry in the list at the top of the config is the number 0, the second is the number 1, ...
-    # CommandTimer: in seconds, this defines how long after the boss' death the specified command will activate.
-
-    worldsLocationsTimer:   # syntax:  'worldName:X:Y:Z:secondsToRespawnAfterDeath:CommandToExecuteOnDeath:CommandTimer'  This will spawn a respawning boss in your world upon reload. be careful!
-    #     - world:0.0:0.0:0.0:120:1:5      #This is an example. replace the '#' at the beginning with a space to make it active. then you can copy/paste it to every spot you need it.
-
-    #make sure there is a 2 space difference between the 'worldsLocationsTimer' and the '-' below.
-
-    enableBossBars: true
-    bossBarColor: blue
-
   ######################################################################################################################
   CreeperBoss:
     enabled: true
@@ -153,20 +139,14 @@ Bosses:
 
     spawnNaturally: true
 
-    worldsLocationsTimer:
-      - world:0.0:0.0:0.0:120:1:5
-
-    enableBossBars: true
-    bossBarColor: blue
-
   ######################################################################################################################
   SpiderBoss:
     enabled: true
     displayName: "Dolores"
     displayNameColor: "#A70FE1"
     showDisplayNameAlways: true
-    DamageModifier: 2.0
-    SpeedModifier: 1.0
+    DamageModifier: 3.0
+    SpeedModifier: 1.5
     health: 150
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
@@ -197,11 +177,6 @@ Bosses:
 
     spawnNaturally: true
 
-    worldsLocationsTimer:
-
-    enableBossBars: true
-    bossBarColor: blue
-
   ######################################################################################################################
 
   BlazeBoss:
@@ -209,7 +184,7 @@ Bosses:
     displayName: "Blaze Warden"
     displayNameColor: "#FF7501"
     showDisplayNameAlways: true
-    DamageModifier: 1.0
+    DamageModifier: 2.0
     SpeedModifier: 1.0
     health: 100
     spawnChance: 0.01
@@ -235,11 +210,6 @@ Bosses:
       largeFireBall: 0.2
 
     spawnNaturally: true
-
-    worldsLocationsTimer:
-
-    enableBossBars: true
-    bossBarColor: blue
 
   ######################################################################################################################
 
@@ -410,11 +380,6 @@ Bosses:
 
     spawnNaturally: true
 
-    worldsLocationsTimer:
-
-    enableBossBars: true
-    bossBarColor: blue
-
   ######################################################################################################################
 
   SlimeBoss:
@@ -447,11 +412,6 @@ Bosses:
 
     spawnNaturally: true
 
-    worldsLocationsTimer:
-
-    enableBossBars: true
-    bossBarColor: blue
-
   ######################################################################################################################
   WitherBoss:
     enabled: true
@@ -474,8 +434,6 @@ Bosses:
 
     onHitEvents:
       spectralArrowDamageMultiplier: 4
-
-    worldsLocationsTimer:
 
   ######################################################################################################################
 
@@ -509,11 +467,6 @@ Bosses:
         time: 10  #how long the entities within the range stay on fire for in seconds
 
     spawnNaturally: true
-
-    worldsLocationsTimer:
-
-    enableBossBars: true
-    bossBarColor: blue
 
 Items:
 
@@ -582,7 +535,7 @@ Items:
       - C:Cobweb
 
   Skeletor:
-    dropChance: 0.2
+    dropChance: 0.05
     enableCraftingRecipe: true
     Lore:
       - The favorite bow of the Skeleton King
