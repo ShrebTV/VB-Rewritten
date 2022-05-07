@@ -4,6 +4,7 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.items.*;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -15,12 +16,15 @@ import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 
 public class VBItemRecipe {
 
     //A map in order to
     private static final HashMap<String, ItemStack> specialItemMap = new HashMap<>();
+    private static final List<ShapedRecipe> recipeList = new LinkedList<>();
 
     static {
         try {
@@ -94,6 +98,8 @@ public class VBItemRecipe {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
+        if (this.itemEnum == VBItemEnum.HMC) return;
+
         if (!config.getBoolean(this.itemEnum.configSection + ".enableCraftingRecipe")) {
             new VBLogger(getClass().getName(), Level.INFO, itemEnum.name() + " Recipe disabled or does not exist!").logToFile();
             return;
@@ -129,6 +135,7 @@ public class VBItemRecipe {
             }
         }
 
+        recipeList.add(recipe);
         Vanillabosses.getInstance().getServer().addRecipe(recipe);
     }
 
@@ -142,6 +149,28 @@ public class VBItemRecipe {
             } catch (IllegalArgumentException ignored) {
             }
         }
+        registerHMCRecipe(2);
+        registerHMCRecipe(3);
+    }
+
+    private static void registerHMCRecipe(int levelTo) {
+
+        try {
+            ItemStack from = new HeatedMagmaCream(levelTo - 1).makeItem();
+            ItemStack to = new HeatedMagmaCream(levelTo).makeItem();
+
+            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(Vanillabosses.getInstance(), "HMCRecipe" + levelTo), to);
+
+            recipe.shape("HHH", "   ", "   ");
+
+            recipe.setIngredient('H', new RecipeChoice.ExactChoice(from));
+
+            Vanillabosses.getInstance().getServer().addRecipe(recipe);
+
+        } catch (ItemCreationException e) {
+            new VBLogger("VBItemRecipe", Level.WARNING, "Problem occurred making Heated magma cream recipe. " + e).logToFile();
+        }
+
     }
 
 
