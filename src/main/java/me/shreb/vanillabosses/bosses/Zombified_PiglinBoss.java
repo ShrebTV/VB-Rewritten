@@ -9,23 +9,27 @@ import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.ConfigVerification;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.PigZombie;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
 
     public static Zombified_PiglinBoss instance = new Zombified_PiglinBoss();
+
+    public static LinkedList<UUID> piglinBossList = new LinkedList<>();
 
     public static final String CONFIGSECTION = "Zombified_PiglinBoss";
     public static final String SCOREBOARDTAG = "BossZombified_Piglin";
@@ -87,15 +91,11 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        //Setting the pigZombie to be angry all the time every time. might need tweaking.
-        //Attempted tweaking: delayed the task by 2 seconds.
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
-            ((PigZombie) entity).setAngry(true);
-            ((PigZombie) entity).setAnger(Integer.MAX_VALUE);
-        }, 40);
-
-
         String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
+
+        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        if (speedMultiplier < 0.0001) speedMultiplier = 1;
+        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
         //setting the entity Attributes. Logging failure as Warning.
         try {
@@ -125,6 +125,8 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
         if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.bossesGetGlowingPotionEffect")) {
             entity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1));
         }
+
+        piglinBossList.add(entity.getUniqueId());
 
         return null;
     }
@@ -175,6 +177,43 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
 
         return true;
     }
+
+
+    /**
+     *
+     */
+    public static void aggressionTimer() {
+
+        Bukkit.getScheduler().runTaskTimer(Vanillabosses.getInstance(), () -> {
+
+            for (UUID uuid : new LinkedList<>(piglinBossList)) {
+
+                Entity entity = Bukkit.getEntity(uuid);
+                if (entity == null || entity.isDead()) {
+
+                    piglinBossList.remove(uuid);
+                } else if (entity.getType() == EntityType.ZOMBIFIED_PIGLIN) {
+
+                    ArrayList<Entity> playerList = (ArrayList<Entity>) entity.getWorld().getNearbyEntities(entity.getLocation(), 30, 20, 30, n -> n instanceof Player && ((Player) n).getGameMode() == GameMode.SURVIVAL);
+                    if (playerList.isEmpty()) return;
+
+                    Location bossLoc = entity.getLocation();
+                    double latestDistance = 1000;
+                    Player latestPlayer = null;
+                    for (Entity e : playerList) {
+                        double thisDistance = bossLoc.distance(e.getLocation());
+                        if (thisDistance < latestDistance) {
+                            latestDistance = thisDistance;
+                            latestPlayer = (Player) e;
+                        }
+                    }
+
+                    ((PigZombie) entity).setTarget(latestPlayer);
+                }
+            }
+        }, 100, 30);
+    }
+
 
     @Override
     public boolean verifyConfig() {
