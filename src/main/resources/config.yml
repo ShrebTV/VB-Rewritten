@@ -45,11 +45,27 @@ Bosses:
     showDisplayNameAlways: true
     health: 80
     DamageModifier: 1.0
+    SpeedModifier: 1.0
     spawnChance: 0.005        # Chance of a Skeleton which was spawned into the world becoming a boss skeleton. 1 = 100%, 0.005 = 0.5% => every 200th skeleton will be a boss
     dropArmorChance: 0.0  # recommended to keep at 0 or at least pretty low since the armor is pretty op.
     dropOffHandChance: 0.3  # 0.1 = 10% chance of dropping the item. 1 = 100% chance of dropping it.
+    ArmorMaterial: Iron # Possible accepted values: Leather; Gold; Iron; Diamond; Netherite
     ProtectionMin: 3      # Armor Protection Enchantment level
     ProtectionMax: 6     # ^^
+
+    BowEnchants:
+      Power:
+        min: 3
+        max: 5
+      Punch:
+        min: 1
+        max: 3
+      Unbreaking:
+        min: 3
+        max: 5
+      Flame:
+        min: 1
+        max: 3
 
     killedMessage: "<killedName> was slain by <killer>" #<killedName> is replaced by the name of the killed Entity
     #<killer> is replaced by the name of the killer
@@ -111,6 +127,7 @@ Bosses:
     displayNameColor: "#1DE00C"
     showDisplayNameAlways: true
     DamageModifier: 1.0
+    SpeedModifier: 1.0
     health: 120
     spawnChance: 0.005
     thrownTNT:
@@ -149,6 +166,7 @@ Bosses:
     displayNameColor: "#A70FE1"
     showDisplayNameAlways: true
     DamageModifier: 2.0
+    SpeedModifier: 1.0
     health: 150
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
@@ -192,6 +210,7 @@ Bosses:
     displayNameColor: "#FF7501"
     showDisplayNameAlways: true
     DamageModifier: 1.0
+    SpeedModifier: 1.0
     health: 100
     spawnChance: 0.01
     killedMessage: "<killedName> was slain by <killer>"
@@ -230,6 +249,7 @@ Bosses:
     displayNameColor: "#682294"
     showDisplayNameAlways: true
     DamageModifier: 2.0
+    SpeedModifier: 1.0
     health: 150
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
@@ -273,6 +293,7 @@ Bosses:
     displayNameColor: "#249400"
     showDisplayNameAlways: true
     DamageModifier: 1.0
+    SpeedModifier: 1.0
     health: 65
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
@@ -308,6 +329,7 @@ Bosses:
     displayNameColor: "#850000"
     showDisplayNameAlways: true
     DamageModifier: 1.0
+    SpeedModifier: 1.0
     health: 100
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
@@ -333,6 +355,7 @@ Bosses:
     displayNameColor: "#440D8A"
     showDisplayNameAlways: true
     health: 125
+    SpeedModifier: 1.0
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
@@ -400,6 +423,7 @@ Bosses:
     displayNameColor: "#4AD502"
     showDisplayNameAlways: true
     DamageModifier: 1.0
+    SpeedModifier: 1.0
     health: 200
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
@@ -436,6 +460,7 @@ Bosses:
     displayNameColor: "#1B1D19"
     showDisplayNameAlways: true
     DamageModifier: 1.0
+    SpeedModifier: 1.0
     Health: 750  #standard health of the boss is 750 (pretty hard without spectral arrows)
     killedMessage: "<killedName> was slain by <killer>"
 
@@ -460,6 +485,7 @@ Bosses:
     displayNameColor: "#FF0000"
     showDisplayNameAlways: true
     DamageModifier: 1.0
+    SpeedModifier: 1.0
     health: 90
     spawnChance: 0.01
     killedMessage: "<killedName> was slain by <killer>"
