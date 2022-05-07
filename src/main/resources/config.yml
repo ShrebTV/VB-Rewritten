@@ -361,32 +361,31 @@ Bosses:
         canSwitchWithOtherEntities: true  # leave this enabled if youre alone, or this ability will not work at all.
 
 
-    dropCustomPotionsChances:    #each of the following will be dropped with the set chance. Dropping is not exclusive, so theoretically all of them can drop at once.
-      - 15    # Potion of harming
-      - 10    # Potion of poison
-      - 15    # Potion of blindness
-      - 5     # Potion of wither
-      - 10    # Potion of hunger
-
+    dropCustomPotionsChances: #each of the following will be dropped with the set chance. Dropping is not exclusive, so theoretically all of them can drop at once.
+      - 0.15    # Potion of harming
+      - 0.1    # Potion of poison
+      - 0.15    # Potion of blindness
+      - 0.05     # Potion of wither
+      - 0.1    # Potion of hunger
 
     customThrownPotions:
       Harm: # The types of Potions cannot currently be edited, only the values of each one can. IMPORTANT: The values you type in will be used in the drops too!
-        amplifier: 4
+        amplifier: 3
         chance: 0.2    #chances have to add up to 1 or be less than 1. if the sum of chances is less than 1, vanilla potions will be thrown sometimes.
       Poison:         # if the sum of chances is over 1, chances will not be applied properly
         amplifier: 4
-        duration: 20 #in seconds
-        chance: 0.2
+        duration: 10 #in seconds
+        chance: 0.1
       Blindness:
         duration: 20
         chance: 0.2
       Wither:
         amplifier: 4
-        duration: 15
-        chance: 0.2
+        duration: 5
+        chance: 0.1
       Hunger:
-        amplifier: 2
-        duration: 20
+        amplifier: 5
+        duration: 4
         chance: 0.2
 
     spawnNaturally: true
@@ -649,7 +648,6 @@ Items:
       - D:Diamond
 
   HeatedMagmaCream:         #3 levels of this item
-    enableSpawnCommand: true
     enableImproving: true #craft the better version of the item by combining 3 of the same level (level 1 or 2)
     #result is a heated Magmacream of a level one higher than the ingredients
     #to improve the level you have to fill out the top line of a crafting table with 3 heatedMagmaCream of level 1 or 2.
