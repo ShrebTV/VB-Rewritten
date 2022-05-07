@@ -378,7 +378,7 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
             //try to get a player from the third argument
             Player fromString = null;
             if (args.length > 2) {
-                fromString = Vanillabosses.getInstance().getServer().getPlayer(args[1]);
+                fromString = Vanillabosses.getInstance().getServer().getPlayer(args[2]);
             }
 
             //in case the third argument contained a player name, set player to that one.
