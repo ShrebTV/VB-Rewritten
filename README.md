@@ -26,13 +26,13 @@ In case you have never installed a plugin on your spigot server:
  - put the plugin.jar in the plugins folder
 
 ### Inside the config file:
- - CommandsExecutedOnBossDeath: // Copy and paste the standard values directly below the others in order to make a new command. In this new command you can now edit the command and the delay for the command to take effect. To edit the delay you just have to change the number behind the 'DELAY:' to the delay you want. If you want no delay you may leave out the 'DELAY:5' or put 'DELAY:0'
-The first command is an empty command by default and has the key '0'. After this you can begin counting up. the first non-empty command (so the second actual command) has the key '1'
-The commands have certain Placeholders, such as: 
-"<killer>" is replaced with the name of the killer (the last person to damage it)
-"<25>" executes the command for all players within the radius 25, can put that anywhere in the command basically
-"<mostDamage>" executes the command for the player who did the most damage to the boss
-"<damager>" executes the command for all players who damaged the boss
+ - CommandsExecutedOnBossDeath: // Copy and paste the standard values directly below the others in order to make a new command. In this new command you can now edit the command and the delay for the command to take effect. To edit the delay you just have to change the number behind the 'DELAY:' to the delay you want. If you want no delay you may leave out the 'DELAY:5' or put 'DELAY:0'.\
+The first command is an empty command by default and has the key '0'. After this you can begin counting up. the first non-empty command (so the second actual command) has the key '1'\
+The commands have certain Placeholders, such as:\
+<"killer"> is replaced with the name of the killer (the last person to damage it)\
+"<25>" executes the command for all players within the radius 25, can put that anywhere in the command basically\
+"mostDamage" executes the command for the player who did the most damage to the boss\
+"damager" executes the command for all players who damaged the boss\
  
  - RespawningBosses: //This feature allows you to put a boss at a certain location whenever the server starts up and make it respawn if killed. the respawn delay is configurable, as are the commands this specific boss should execute when killed.
     - "{\"type\":\"ZOMBIE\",\"worldName\":\"world\",\"x\":\"0.0\",\"y\":\"70.0\",\"z\":\"0.0\",\"respawnTime\":\"20\",\"commands\":[\"1\",\"2\"],\"enableBoss\":\"false\"}"
