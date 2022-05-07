@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses;
 
 import me.shreb.vanillabosses.bosses.VBBoss;
+import me.shreb.vanillabosses.bosses.Zombified_PiglinBoss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.bosses.utility.VBBossBar;
@@ -71,6 +72,8 @@ public final class Vanillabosses extends JavaPlugin {
         InvisibilityCloak.instance.initializeChecks();
 
         VBBossBar.startBarShowTimer();
+
+        Zombified_PiglinBoss.aggressionTimer();
 
         new VBLogger(getClass().getName(), Level.INFO, "Plugin enabled!").logToFile();
 
