@@ -1,17 +1,23 @@
 package me.shreb.vanillabosses.listeners;
 
+import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.*;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.bosses.utility.BossDeathMessage;
 import me.shreb.vanillabosses.bosses.utility.BossDrops;
+import me.shreb.vanillabosses.items.*;
+import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
-import org.bukkit.entity.LivingEntity;
+import me.shreb.vanillabosses.utility.Utility;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 public class BossDeathEvent implements Listener {
@@ -75,5 +81,64 @@ public class BossDeathEvent implements Listener {
             RespawningBoss.respawnBosses();
 
         }
+
+        if (event.getEntity() instanceof Spider && event.getEntity().getScoreboardTags().contains(SpiderBoss.SCOREBOARDTAG)) {
+            if (Utility.roll(Vanillabosses.getInstance().getConfig().getDouble("Items.Slingshot.chance"))) {
+                try {
+                    event.getDrops().add(Slingshot.instance.makeItem());
+                } catch (ItemCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Could not make a Slingshot for Boss Drops." + e).logToFile();
+                }
+            }
+        }
+
+        if (event.getEntity() instanceof Enderman && event.getEntity().getScoreboardTags().contains(EndermanBoss.SCOREBOARDTAG)) {
+            if (Utility.roll(Vanillabosses.getInstance().getConfig().getDouble("Items.cloakOfInvisibility.chance"))) {
+                try {
+                    event.getDrops().add(InvisibilityCloak.instance.makeItem());
+                } catch (ItemCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Could not make an Invisibility cloak for Boss Drops." + e).logToFile();
+                }
+            }
+        }
+
+        if (event.getEntity() instanceof Slime && event.getEntity().getScoreboardTags().contains(SlimeBoss.SCOREBOARDTAG)) {
+            if (Utility.roll(Vanillabosses.getInstance().getConfig().getDouble("Items.SlimeBoots.dropChance"))) {
+                try {
+                    event.getDrops().add(SlimeBoots.instance.makeItem());
+                    event.getDrops().add(BouncySlime.instance.makeItem(Vanillabosses.getInstance().getConfig().getInt("Items.BouncySlime.DroppedPerKill")));
+
+                } catch (ItemCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Could not make Slime boots for Boss Drops." + e).logToFile();
+                }
+            }
+        }
+
+        if (event.getEntity() instanceof Blaze && event.getEntity().getScoreboardTags().contains(BlazeBoss.SCOREBOARDTAG)) {
+            if (Utility.roll(Vanillabosses.getInstance().getConfig().getDouble("Items.Blazer.dropChance"))) {
+                try {
+                    event.getDrops().add(Blazer.instance.makeItem());
+                } catch (ItemCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Could not make Blazer for Boss Drops." + e).logToFile();
+                }
+            }
+        }
+
+        if (event.getEntity() instanceof MagmaCube && event.getEntity().getScoreboardTags().contains(MagmacubeBoss.SCOREBOARDTAG)) {
+
+            int drop1 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level1.maxDropped"));
+            int drop2 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level2.maxDropped"));
+            int drop3 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level3.maxDropped"));
+
+            try {
+                event.getDrops().add(new HeatedMagmaCream(1).makeItem(drop1));
+                event.getDrops().add(new HeatedMagmaCream(2).makeItem(drop2));
+                event.getDrops().add(new HeatedMagmaCream(3).makeItem(drop3));
+            } catch (ItemCreationException e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not make Blazer for Boss Drops." + e).logToFile();
+            }
+
+        }
+
     }
 }
