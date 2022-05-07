@@ -95,4 +95,67 @@ public interface ConfigVerification {
         }
         return true;
     }
+
+    default boolean verifyInt(String configPath, int min, int max) {
+
+        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+
+        VBLogger logger = new VBLogger(getClass().getName(), Level.WARNING, "");
+
+        String s;
+        int i;
+
+        try {
+
+            if ((s = config.getString(configPath)) == null) {
+                logger.setStringToLog("Could not read config value for " + configPath + " Null value: @ " + configPath);
+                logger.logToFile();
+                return false;
+            }
+
+            i = Integer.parseInt(s);
+        } catch (NumberFormatException ignored) {
+            logger.setStringToLog("Could not read config value for " + configPath + " Unexpected value: " + config.getString(configPath) + " @ " + configPath);
+            logger.logToFile();
+            return false;
+        }
+
+        if (i > max || i < min) {
+            logger.setStringToLog("Could not read config value for " + configPath + " Has to be greater than " + min + " and less than " + max + ". Was actually " + config.getInt(configPath) + " @ " + configPath);
+            logger.logToFile();
+            return false;
+        }
+        return true;
+    }
+
+    default boolean verifyDouble(String configPath, double min, double max) {
+
+        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+
+        VBLogger logger = new VBLogger(getClass().getName(), Level.WARNING, "");
+
+        String s;
+        double d;
+
+        try {
+            if ((s = config.getString(configPath)) == null) {
+                logger.setStringToLog("Could not read config value for " + configPath + " Null value: @ " + configPath);
+                logger.logToFile();
+                return false;
+            }
+
+            d = Double.parseDouble(s);
+        } catch (NumberFormatException ignored) {
+            logger.setStringToLog("Could not read config value for " + configPath + " Unexpected value: " + config.getString(configPath) + " @ " + configPath);
+            logger.logToFile();
+            return false;
+        }
+
+        if (d > max || d < min) {
+            logger.setStringToLog("Could not read config value for " + configPath + " Has to be greater than " + min + " and less than " + max + ". Was actually " + config.getInt(configPath) + " @ " + configPath);
+            logger.logToFile();
+            return false;
+        }
+        return true;
+    }
 }
