@@ -78,7 +78,7 @@ public class DamageModifiers implements Listener {
         //get damage modifier from the retriever
         double modifier = retriever.damageModifier;
         //Apply it
-        event.setDamage(event.getFinalDamage() * modifier);
+        event.setDamage(event.getDamage() * modifier);
 
     }
 
