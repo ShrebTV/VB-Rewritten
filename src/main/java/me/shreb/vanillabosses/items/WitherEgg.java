@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses.items;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.VBBoss;
 import me.shreb.vanillabosses.items.utility.ItemAbilityNotFoundException;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
@@ -195,6 +196,7 @@ public class WitherEgg extends VBItem {
         arrow.setDamage(config.getDouble("Items.WitherEgg.arrowDamageMultiplier") * arrow.getDamage());
         arrow.setGravity(false);
         arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+        arrow.getScoreboardTags().add(VBBoss.REMOVE_ON_DISABLE_TAG);
 
         arrow.getPersistentDataContainer().set(new NamespacedKey(Vanillabosses.getInstance(), "targetUUID"), PersistentDataType.STRING, target.getUniqueId().toString());
         arrow.getPersistentDataContainer().set(new NamespacedKey(Vanillabosses.getInstance(), "shooterUUID"), PersistentDataType.STRING, wither.getUniqueId().toString());
