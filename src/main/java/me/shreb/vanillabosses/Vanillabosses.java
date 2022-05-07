@@ -94,6 +94,8 @@ public final class Vanillabosses extends JavaPlugin {
             bar.bossBar.removeAll();
         }
 
+        VBItemRecipe.removeAllRecipes();
+
     }
 
     private void createConfigFile() {

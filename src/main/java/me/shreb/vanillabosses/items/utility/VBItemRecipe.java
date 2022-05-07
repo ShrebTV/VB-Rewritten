@@ -153,6 +153,12 @@ public class VBItemRecipe {
         registerHMCRecipe(3);
     }
 
+    public static void removeAllRecipes() {
+        for (ShapedRecipe recipe : recipeList) {
+            Vanillabosses.getInstance().getServer().removeRecipe(recipe.getKey());
+        }
+    }
+
     private static void registerHMCRecipe(int levelTo) {
 
         try {
@@ -165,14 +171,14 @@ public class VBItemRecipe {
 
             recipe.setIngredient('H', new RecipeChoice.ExactChoice(from));
 
+            recipeList.add(recipe);
+
             Vanillabosses.getInstance().getServer().addRecipe(recipe);
 
         } catch (ItemCreationException e) {
             new VBLogger("VBItemRecipe", Level.WARNING, "Problem occurred making Heated magma cream recipe. " + e).logToFile();
         }
-
     }
-
 
     /**
      * A class to represent the key-material pairs required in shaped recipes
