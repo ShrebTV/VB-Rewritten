@@ -28,7 +28,7 @@ In case you have never installed a plugin on your spigot server:
 ### Inside the config file:
  - CommandsExecutedOnBossDeath: // Copy and paste the standard values directly below the others in order to make a new command. In this new command you can now edit the command and the delay for the command to take effect. To edit the delay you just have to change the number behind the 'DELAY:' to the delay you want. If you want no delay you may leave out the 'DELAY:5' or put 'DELAY:0'.\
 The first command is an empty command by default and has the key '0'. After this you can begin counting up. the first non-empty command (so the second actual command) has the key '1'\
-Please ignore the "" inside the <> for placeholders, .md does not show the contents otherwise
+Please ignore the "" inside the <> for placeholders, .md does not show the contents otherwise\
 The commands have certain Placeholders, such as:\
 <"killer"> is replaced with the name of the killer (the last person to damage it)\
 <"25"> executes the command for all players within the radius 25, can put that anywhere in the command basically\
