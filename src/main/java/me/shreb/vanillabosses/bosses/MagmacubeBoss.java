@@ -128,7 +128,7 @@ public class MagmacubeBoss extends VBBoss implements ConfigVerification {
         int radius = config.getInt("Bosses.Magma_cubeBoss.onHitEvents.BurningAir.range");
         int time = config.getInt("Bosses.Magma_cubeBoss.onHitEvents.BurningAir.time");
 
-        double chance = config.getInt("Bosses.Magma_cubeBoss.onHitEvents.BurningAir.chance");
+        double chance = config.getDouble("Bosses.Magma_cubeBoss.onHitEvents.BurningAir.chance");
 
         if (config.getBoolean("Bosses.Magma_cubeBoss.onHitEvents.BurningAir.enabled")
                 && Utility.roll(chance)
