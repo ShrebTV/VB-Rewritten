@@ -126,9 +126,9 @@ public class BossDeathEvent implements Listener {
 
         if (event.getEntity() instanceof MagmaCube && event.getEntity().getScoreboardTags().contains(MagmacubeBoss.SCOREBOARDTAG)) {
 
-            int drop1 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level1.maxDropped"));
-            int drop2 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level2.maxDropped"));
-            int drop3 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level3.maxDropped"));
+            int drop1 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level1.maxDropped") + 1);
+            int drop2 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level2.maxDropped") + 1);
+            int drop3 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level3.maxDropped") + 1);
 
             try {
                 event.getDrops().add(new HeatedMagmaCream(1).makeItem(drop1));
@@ -139,6 +139,5 @@ public class BossDeathEvent implements Listener {
             }
 
         }
-
     }
 }
