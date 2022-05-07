@@ -5,19 +5,21 @@ import me.shreb.vanillabosses.bosses.WitherBoss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
+import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.items.*;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.items.utility.ItemDataRetriever;
 import me.shreb.vanillabosses.logging.VBLogger;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -422,7 +424,8 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
             }
 
             try {
-                retriever.instance.makeBoss(locationToSpawn);
+                LivingEntity entity = retriever.instance.makeBoss(locationToSpawn);
+                new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
             } catch (BossCreationException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
                 sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
@@ -489,7 +492,8 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
             }
 
             try {
-                retriever.instance.makeBoss(locationToSpawn);
+                LivingEntity entity = retriever.instance.makeBoss(locationToSpawn);
+                new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
             } catch (BossCreationException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
                 sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
