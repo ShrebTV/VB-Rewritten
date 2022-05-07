@@ -46,7 +46,7 @@ Bosses:
     displayName: "The Skeleton King"  # To remove the name, replace with "" and set 'showDisplayNameAlways' to 'false'
     displayNameColor: "#7B7B7B" #Hex color codes, use a website with a Hex Color code picker or similar programs to get this code from the wanted color.
     showDisplayNameAlways: true
-    health: 40
+    health: 80
     DamageModifier: 1.0
     spawnChance: 0.005        # Chance of a Skeleton which was spawned into the world becoming a boss skeleton. 1 = 100%, 0.005 = 0.5% => every 200th skeleton will be a boss
     dropArmorChance: 0.0  # recommended to keep at 0 or at least pretty low since the armor is pretty op.
@@ -114,7 +114,7 @@ Bosses:
     displayNameColor: "#1DE00C"
     showDisplayNameAlways: true
     DamageModifier: 1.0
-    health: 50
+    health: 120
     spawnChance: 0.005
     thrownTNT:
       throwTNTEnable: true            #creeper will throw TNT in all directions when it blows up. The creeper will not die to exploding like a normal creeper
@@ -151,8 +151,8 @@ Bosses:
     displayName: "Dolores"
     displayNameColor: "#A70FE1"
     showDisplayNameAlways: true
-    DamageModifier: 1.0
-    health: 30
+    DamageModifier: 2.0
+    health: 150
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
@@ -171,13 +171,13 @@ Bosses:
 
     onHitEvents:
       invisibility:
-        chance: 0.05           #1 = 100%
+        chance: 0.2           #1 = 100%
         duration: 3         # in seconds
         teleportToPlayer: true
         teleportBack: true
 
       leap:
-        chance: 0.15
+        chance: 0.3
         maxDelayAfterHit: 2 #in seconds
 
     spawnNaturally: true
@@ -195,8 +195,8 @@ Bosses:
     displayNameColor: "#FF7501"
     showDisplayNameAlways: true
     DamageModifier: 1.0
-    health: 75
-    spawnChance: 0.005
+    health: 100
+    spawnChance: 0.01
     killedMessage: "<killedName> was slain by <killer>"
 
     spawnWorlds:
@@ -232,8 +232,8 @@ Bosses:
     displayName: "Edna"
     displayNameColor: "#682294"
     showDisplayNameAlways: true
-    DamageModifier: 1.0
-    health: 50
+    DamageModifier: 2.0
+    health: 150
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
@@ -249,9 +249,10 @@ Bosses:
     disableVanillaDrops: true
 
     onHitEvents:
-      potionEffects:  #syntax:  'Potiontype:amplifier:duration:chance'     duration in seconds, chance (1 = 100%)
-        - Increase_Damage:2:20:0.2
-        - Speed:1:10:0.1
+      potionEffects: #syntax:  'Potiontype:amplifier:duration:chance'     duration in seconds, chance (1 = 100%)
+        - Increase_Damage:5:20:0.2
+        - Speed:3:10:0.15
+        - Invisibility:1:5:0.1
 
       teleportBehindPlayer:
         enabled: true
@@ -267,11 +268,6 @@ Bosses:
 
     spawnNaturally: true
 
-    worldsLocationsTimer:
-
-    enableBossBars: true
-    bossBarColor: blue
-
   ######################################################################################################################
 
   ZombieBoss:
@@ -280,7 +276,7 @@ Bosses:
     displayNameColor: "#249400"
     showDisplayNameAlways: true
     DamageModifier: 1.0
-    health: 50
+    health: 65
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
@@ -307,11 +303,6 @@ Bosses:
 
     spawnNaturally: true
 
-    worldsLocationsTimer:
-
-    enableBossBars: true
-    bossBarColor: blue
-
   ######################################################################################################################
 
   Zombified_PiglinBoss:
@@ -320,7 +311,7 @@ Bosses:
     displayNameColor: "#850000"
     showDisplayNameAlways: true
     DamageModifier: 1.0
-    health: 50
+    health: 100
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
@@ -337,11 +328,6 @@ Bosses:
 
     spawnNaturally: true
 
-    worldsLocationsTimer:
-
-    enableBossBars: true
-    bossBarColor: blue
-
   ######################################################################################################################
 
   WitchBoss:
@@ -349,7 +335,7 @@ Bosses:
     displayName: "Margeret"
     displayNameColor: "#440D8A"
     showDisplayNameAlways: true
-    health: 45
+    health: 125
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
@@ -418,7 +404,7 @@ Bosses:
     displayNameColor: "#4AD502"
     showDisplayNameAlways: true
     DamageModifier: 1.0
-    health: 45
+    health: 200
     spawnChance: 0.005
     killedMessage: "<killedName> was slain by <killer>"
 
@@ -486,7 +472,6 @@ Bosses:
 
     droppedItems:
       - "{\"materialName\":\"MAGMA_CREAM\",\"minAmount\":\"2\",\"maxAmount\":\"12\"}"
-      - MAGMA_CREAM:2:12:66
 
     droppedXP: 50
 
@@ -497,7 +482,7 @@ Bosses:
     onHitEvents:
       BurningAir: # makes an area around the boss burn entities
         enabled: true
-        chance: 15 # in %
+        chance: 0.15 # in %
         range: 8 #range of this ability in blocks
         time: 10  #how long the entities within the range stay on fire for in seconds
 
@@ -523,9 +508,8 @@ Items:
 
 
   cloakOfInvisibility:
-    enableDropping: true
     itemMaterial: Chainmail_Chestplate
-    chance: 5
+    chance: 0.1
     enableSpawnCommand: true
     #keep this next one at or above 3 seconds!
     delayBetweenChecks: 5  #in seconds, tells the plugin how often to check if a player is wearing an invisibility cloak. If you are experiencing lag spikes, try increasing this number.
@@ -552,9 +536,8 @@ Items:
 
   Slingshot:
     itemMaterial: Wooden_Hoe  # Must be a damageable item (weapon or tool. (Armor works too))
-    enableDropping: true
     enableSpawnCommand: true
-    chance: 15
+    chance: 0.15
     thrustMultiplier: 1.5
     enableBoostSound: true
     boostSoundVolume: 1       #keep low, or earrape
@@ -577,7 +560,6 @@ Items:
       - C:Cobweb
 
   Skeletor:
-    enableSpawnCommand: true
     dropChance: 0.2
     enableCraftingRecipe: true
     Lore:
@@ -624,9 +606,8 @@ Items:
       - Has a Chance to blind enemies!
 
   SlimeBoots:
-    enableSpawnCommand: true
     itemMaterial: Leather_Boots
-    dropChance: 5   #in %
+    dropChance: 0.1
     enableCraftingRecipe: true
     Lore:
 
@@ -642,17 +623,14 @@ Items:
     # allowed multipliers: {0,1,2,3,....}
 
   BouncySlime: # The Resource needed to craft the slime boots. drops from boss slimes.
-    enableSpawnCommand: true
-    dropChance: 75   #per possible drop, in % (roughly this % of the maxDropped will drop on average)
-    maxDropped: 2
+    DroppedPerKill: 2
     Lore:
       - "Bouncy :P"
 
 
   Blazer:
-    enableSpawnCommand: true
     Chestplate: Leather_Chestplate  #define the type of chestplate to be used for the item!
-    dropChance: 10 #drops from the Blaze Boss!
+    dropChance: 0.1 #drops from the Blaze Boss!
     enableCraftingRecipe: true
     chanceToCombust: 0.333  # in %
     ticksOfFire: 140 # 20 ticks = 1 second, defines how long the attacker will be set on fire for
@@ -679,19 +657,16 @@ Items:
       - Right-click to use
 
     Level1:   #dropped by the magmacube boss
-      dropChance: 50
       maxDropped: 3
       radius: 4
       burnTime: 3 #in seconds
 
     Level2:
-      dropChance: 25
       maxDropped: 2
       radius: 6
       burnTime: 5
 
     Level3:
-      dropChance: 10
       maxDropped: 1
       radius: 8
       burnTime: 7
