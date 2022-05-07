@@ -3,12 +3,17 @@ package me.shreb.vanillabosses.items;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
+import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -330,7 +335,8 @@ public class BossEggs extends VBItem {
             }
 
             try {
-                bossData.instance.makeBoss(loc);
+                LivingEntity entity = bossData.instance.makeBoss(loc);
+                new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.YELLOW, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
             } catch (BossCreationException ex) {
                 new VBLogger(getClass().getName(), Level.WARNING, "An error occurred while spawning a boss from an egg. Error:\n" + ex).logToFile();
                 event.getPlayer().sendMessage("An error occurred! Error written to log file!");
