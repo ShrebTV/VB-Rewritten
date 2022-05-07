@@ -4,6 +4,7 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.ConfigVerification;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,7 +24,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class WitherBoss extends VBBoss {
+public class WitherBoss extends VBBoss implements ConfigVerification {
 
     public static WitherBoss instance = new WitherBoss();
 
@@ -185,4 +186,32 @@ public class WitherBoss extends VBBoss {
         }
     }
 
+    @Override
+    public boolean verifyConfig() {
+        String fullConfig = "Bosses." + CONFIGSECTION + ".";
+
+        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
+
+        if (!verifyBoolean(fullConfig + "enabled")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyString(config.getString(fullConfig + "displayName"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
+            logger.logToFile();
+        }
+
+        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        return true;
+    }
 }

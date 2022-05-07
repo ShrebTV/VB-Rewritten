@@ -4,6 +4,7 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.Utility;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -18,10 +19,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Random;
 import java.util.logging.Level;
 
-public class MagmacubeBoss extends VBBoss {
+public class MagmacubeBoss extends VBBoss implements ConfigVerification {
 
     public static MagmacubeBoss instance = new MagmacubeBoss();
 
@@ -128,11 +128,10 @@ public class MagmacubeBoss extends VBBoss {
         int radius = config.getInt("Bosses.Magma_cubeBoss.onHitEvents.BurningAir.range");
         int time = config.getInt("Bosses.Magma_cubeBoss.onHitEvents.BurningAir.time");
 
-        double random = new Random().nextDouble();
         double chance = config.getInt("Bosses.Magma_cubeBoss.onHitEvents.BurningAir.chance");
 
         if (config.getBoolean("Bosses.Magma_cubeBoss.onHitEvents.BurningAir.enabled")
-                && random < chance
+                && Utility.roll(chance)
                 && magma.getHealth() > 0) {
 
             Utility.spawnParticles(Particle.FIREWORKS_SPARK, magma.getWorld(), magmaLoc, radius, radius, radius, 150, 3);
@@ -150,5 +149,34 @@ public class MagmacubeBoss extends VBBoss {
 
             }, 60L);
         }
+    }
+
+    @Override
+    public boolean verifyConfig() {
+        String fullConfig = "Bosses." + CONFIGSECTION + ".";
+
+        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
+
+        if (!verifyBoolean(fullConfig + "enabled")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyString(config.getString(fullConfig + "displayName"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
+            logger.logToFile();
+        }
+
+        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        return true;
     }
 }

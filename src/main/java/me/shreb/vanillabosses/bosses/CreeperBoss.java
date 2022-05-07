@@ -7,6 +7,7 @@ import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.Utility;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -31,7 +32,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class CreeperBoss extends VBBoss {
+public class CreeperBoss extends VBBoss implements ConfigVerification {
 
     public static CreeperBoss instance = new CreeperBoss();
 
@@ -312,5 +313,34 @@ public class CreeperBoss extends VBBoss {
         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) {
             event.setCancelled(true);
         }
+    }
+
+    @Override
+    public boolean verifyConfig() {
+        String fullConfig = "Bosses." + CONFIGSECTION + ".";
+
+        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
+
+        if (!verifyBoolean(fullConfig + "enabled")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyString(config.getString(fullConfig + "displayName"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
+            logger.logToFile();
+        }
+
+        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        return true;
     }
 }

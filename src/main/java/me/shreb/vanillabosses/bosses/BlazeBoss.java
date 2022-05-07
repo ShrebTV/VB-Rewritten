@@ -4,6 +4,7 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.ConfigVerification;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,6 +18,7 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -25,7 +27,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.logging.Level;
 
-public class BlazeBoss extends VBBoss {
+public class BlazeBoss extends VBBoss implements ConfigVerification {
 
     public static BlazeBoss instance = new BlazeBoss();
 
@@ -131,13 +133,17 @@ public class BlazeBoss extends VBBoss {
     @EventHandler
     public void blazeAbility(ProjectileLaunchEvent event) {
 
-        if (!checkForBlazeBoss(event.getEntity())) return;
+        if (!checkForBlazeBoss(event.getEntity().getShooter())) return;
+
+        System.out.println("isBlazeBoss");
 
         Vector v = null;
         Entity projectile = event.getEntity();
         World w = event.getEntity().getWorld();
 
         if (bossBlazeTargetMap.containsKey(((Entity) event.getEntity().getShooter()).getEntityId())) {
+
+            System.out.println("containsKey");
 
             v = Objects.requireNonNull(Vanillabosses.getInstance().getServer()
                             .getPlayer(bossBlazeTargetMap.get(((Entity) event.getEntity().getShooter()).getEntityId())))
@@ -153,7 +159,9 @@ public class BlazeBoss extends VBBoss {
         double chanceLarge = config.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.largeFireBall");
 
         double currentChance = chanceWither;
-        if (currentChance < random) {
+        if (currentChance > random) {
+
+            System.out.println("wither");
 
             WitherSkull entity = (WitherSkull) w.spawnEntity(event.getEntity().getLocation(), EntityType.WITHER_SKULL);
 
@@ -167,7 +175,9 @@ public class BlazeBoss extends VBBoss {
                 }, 15 * i);
             }
 
-        } else if ((currentChance += chanceEnder) < random) {
+        } else if ((currentChance += chanceEnder) > random) {
+
+            System.out.println("dragon");
 
             DragonFireball entity = (DragonFireball) w.spawnEntity(event.getEntity().getLocation(), EntityType.DRAGON_FIREBALL);
 
@@ -181,7 +191,9 @@ public class BlazeBoss extends VBBoss {
                 }, 15 * i);
             }
 
-        } else if ((currentChance + chanceLarge) < random) {
+        } else if ((currentChance + chanceLarge) > random) {
+
+            System.out.println("fireball");
 
             Fireball entity = (Fireball) w.spawnEntity(event.getEntity().getLocation(), EntityType.FIREBALL);
 
@@ -214,10 +226,10 @@ public class BlazeBoss extends VBBoss {
 
     }
 
-    private boolean checkForBlazeBoss(Entity entity) {
+    private boolean checkForBlazeBoss(ProjectileSource entity) {
         return entity instanceof Blaze
-                && entity.getScoreboardTags().contains(BlazeBoss.SCOREBOARDTAG)
-                && entity.getScoreboardTags().contains(VBBoss.BOSSTAG);
+                && ((Blaze) entity).getScoreboardTags().contains(BlazeBoss.SCOREBOARDTAG)
+                && ((Blaze) entity).getScoreboardTags().contains(VBBoss.BOSSTAG);
     }
 
     @EventHandler
@@ -233,5 +245,33 @@ public class BlazeBoss extends VBBoss {
             event.setDamage(event.getDamage() * config.getDouble("Bosses.BlazeBoss.onHitEvents.spectralArrowDamageMultiplier"));
         }
     }
-}
 
+    @Override
+    public boolean verifyConfig() {
+        String fullConfig = "Bosses." + CONFIGSECTION + ".";
+
+        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
+
+        if (!verifyBoolean(fullConfig + "enabled")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyString(config.getString(fullConfig + "displayName"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
+            logger.logToFile();
+        }
+
+        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        return true;
+    }
+}

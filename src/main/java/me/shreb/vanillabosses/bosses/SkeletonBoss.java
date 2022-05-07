@@ -5,7 +5,9 @@ import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.items.Skeletor;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
+import me.shreb.vanillabosses.listeners.SpawnEvent;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.ConfigVerification;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -23,7 +25,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Level;
 
-public class SkeletonBoss extends VBBoss{
+public class SkeletonBoss extends VBBoss implements ConfigVerification {
 
     public static SkeletonBoss instance = new SkeletonBoss();
 
@@ -248,6 +250,7 @@ public class SkeletonBoss extends VBBoss{
                         }
                     }
                 }
+                SpawnEvent.spawn = false;
 
                 Entity tempEnt = w.spawnEntity(w.getBlockAt(x + 1, y, z).getLocation(), EntityType.SKELETON);
                 minions.add(tempEnt);
@@ -257,6 +260,8 @@ public class SkeletonBoss extends VBBoss{
                 minions.add(tempEnt);
                 tempEnt = w.spawnEntity(w.getBlockAt(x, y, z - 1).getLocation(), EntityType.SKELETON);
                 minions.add(tempEnt);
+
+                SpawnEvent.spawn = true;
 
                 for (Entity e : minions
                 ) {
@@ -276,5 +281,34 @@ public class SkeletonBoss extends VBBoss{
                 }
             }
         }
+    }
+
+    @Override
+    public boolean verifyConfig() {
+        String fullConfig = "Bosses." + CONFIGSECTION + ".";
+
+        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
+
+        if (!verifyBoolean(fullConfig + "enabled")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyString(config.getString(fullConfig + "displayName"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
+            logger.logToFile();
+        }
+
+        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        return true;
     }
 }

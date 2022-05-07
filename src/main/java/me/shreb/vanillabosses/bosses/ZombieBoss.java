@@ -7,6 +7,7 @@ import me.shreb.vanillabosses.items.BaseballBat;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.listeners.SpawnEvent;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.ConfigVerification;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,7 +28,7 @@ import org.bukkit.util.Vector;
 import java.util.Objects;
 import java.util.logging.Level;
 
-public class ZombieBoss extends VBBoss {
+public class ZombieBoss extends VBBoss implements ConfigVerification {
 
     public static ZombieBoss instance = new ZombieBoss();
 
@@ -208,7 +209,7 @@ public class ZombieBoss extends VBBoss {
         int zombiesAround;
 
         double maxDamageMultiplier = config.getDouble("Bosses.ZombieBoss.zombieAbility.maxDamageModifier");
-        double maxArmorMultiplier = config.getDouble("Bosses.ZombieBoss.zombieAbility.maxDamageTakenModifier");
+        double maxArmorMultiplier = config.getDouble("Bosses.ZombieBoss.zombieAbility.maxArmorModifier");
 
         double bossMultiplier = config.getDouble("Bosses.ZombieBoss.zombieAbility.modifierPerZombie");
 
@@ -216,7 +217,9 @@ public class ZombieBoss extends VBBoss {
             //damageMultiplier apply
 
             //Get the zombies around the damaged boss
-            zombiesAround = damager.getWorld().getNearbyEntities(damager.getLocation(), 8, 5, 8, n -> n instanceof Zombie).size();
+            zombiesAround = damager.getWorld().getNearbyEntities(damager.getLocation(), 8, 5, 8, n -> n instanceof Zombie).size() - 1;
+
+            if (zombiesAround < 1) return;
 
             //multiplier is 1 + the multiplier per zombie * zombies
             double actualMultiplier = 1 + zombiesAround * bossMultiplier;
@@ -229,16 +232,50 @@ public class ZombieBoss extends VBBoss {
         if (damagedEntity.getScoreboardTags().contains(SCOREBOARDTAG)) {
             //damage taken multiplier apply
 
-            zombiesAround = damagedEntity.getWorld().getNearbyEntities(damagedEntity.getLocation(), 8, 5, 8, n -> n instanceof Zombie).size();
+            zombiesAround = damagedEntity.getWorld().getNearbyEntities(damagedEntity.getLocation(), 8, 5, 8, n -> n instanceof Zombie).size() - 1;
             //multiplier is 1 + the multiplier per zombie * zombies
+
+            if (zombiesAround < 1) return;
+
             double actualMultiplier = 1 + zombiesAround * bossMultiplier;
             //Apply max multiplier
             if (actualMultiplier > maxArmorMultiplier) actualMultiplier = maxArmorMultiplier;
 
+            if (actualMultiplier == 0) actualMultiplier = 1;
+
             //get a value between 0 and 1 indirectly proportional to the actualMultiplier
-            double modifier = 1/actualMultiplier;
+            double modifier = 1 / actualMultiplier;
 
             event.setDamage(event.getDamage() * modifier);
         }
+    }
+
+    @Override
+    public boolean verifyConfig() {
+        String fullConfig = "Bosses." + CONFIGSECTION + ".";
+
+        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
+
+        if (!verifyBoolean(fullConfig + "enabled")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyString(config.getString(fullConfig + "displayName"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
+            logger.logToFile();
+        }
+
+        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        return true;
     }
 }

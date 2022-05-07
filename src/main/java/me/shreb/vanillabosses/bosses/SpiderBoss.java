@@ -4,6 +4,7 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.ConfigVerification;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 
-public class SpiderBoss extends VBBoss {
+public class SpiderBoss extends VBBoss implements ConfigVerification {
 
     public static SpiderBoss instance = new SpiderBoss();
 
@@ -121,7 +122,7 @@ public class SpiderBoss extends VBBoss {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
-        if (event.getEntity().getScoreboardTags().contains("BossSpider") && event.getEntityType() == EntityType.SPIDER) {
+        if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.SPIDER) {
 
             if (!(event.getDamager() instanceof Player)) return;
 
@@ -135,10 +136,10 @@ public class SpiderBoss extends VBBoss {
 
             double rn = new Random().nextDouble();
 
-            chanceInvisibility = config.getInt("Bosses.SpiderBoss.onHitEvents.invisibility.chance");
-            chanceLeap = config.getInt("Bosses.SpiderBoss.onHitEvents.leap.chance");
+            chanceInvisibility = config.getDouble("Bosses.SpiderBoss.onHitEvents.invisibility.chance");
+            chanceLeap = config.getDouble("Bosses.SpiderBoss.onHitEvents.leap.chance");
 
-            int currentChance = 0;
+            double currentChance = 0;
 
             currentChance += chanceInvisibility;
 
@@ -218,5 +219,34 @@ public class SpiderBoss extends VBBoss {
                 }, 20L * randomInt);
             }
         }
+    }
+
+    @Override
+    public boolean verifyConfig() {
+        String fullConfig = "Bosses." + CONFIGSECTION + ".";
+
+        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
+
+        if (!verifyBoolean(fullConfig + "enabled")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyString(config.getString(fullConfig + "displayName"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
+            logger.logToFile();
+        }
+
+        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        return true;
     }
 }

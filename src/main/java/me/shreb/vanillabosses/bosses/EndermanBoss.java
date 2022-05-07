@@ -4,6 +4,8 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.ConfigVerification;
+import me.shreb.vanillabosses.utility.Utility;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,7 +23,7 @@ import org.bukkit.util.Vector;
 import java.util.Random;
 import java.util.logging.Level;
 
-public class EndermanBoss extends VBBoss {
+public class EndermanBoss extends VBBoss implements ConfigVerification {
 
     public static EndermanBoss instance = new EndermanBoss();
 
@@ -171,7 +173,7 @@ public class EndermanBoss extends VBBoss {
                 String[] strings = s.split(":");
                 PotionEffectType type = PotionEffectType.getByName(strings[0].toUpperCase());
 
-                if (type != null && new Random().nextDouble() < Integer.parseInt(strings[3])) {
+                if (type != null && Utility.roll(Double.parseDouble(strings[3]))) {
                     enderman.addPotionEffect(new PotionEffect(type, Integer.parseInt(strings[2]) * 20, Integer.parseInt(strings[1])));
                 }
             }
@@ -202,5 +204,34 @@ public class EndermanBoss extends VBBoss {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean verifyConfig() {
+        String fullConfig = "Bosses." + CONFIGSECTION + ".";
+
+        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
+
+        if (!verifyBoolean(fullConfig + "enabled")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyString(config.getString(fullConfig + "displayName"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
+            logger.logToFile();
+        }
+
+        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        return true;
     }
 }
