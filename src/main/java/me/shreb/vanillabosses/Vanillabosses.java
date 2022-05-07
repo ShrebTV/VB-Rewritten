@@ -79,6 +79,8 @@ public final class Vanillabosses extends JavaPlugin {
     @Override
     public void onDisable() {
 
+        // Plugin shutdown logic
+
         VBLogger.exitLogger();
 
         //remove all Entities in all worlds on the server which have the Scoreboard tag which marks the entity for removal on disable of the plugin
@@ -88,7 +90,6 @@ public final class Vanillabosses extends JavaPlugin {
                         .filter(n -> n.getScoreboardTags().contains(VBBoss.REMOVE_ON_DISABLE_TAG))
                         .forEach(Entity::remove));
 
-        // Plugin shutdown logic
 
         for (VBBossBar bar : VBBossBar.bossBarMap.values()) {
             bar.bossBar.removeAll();
