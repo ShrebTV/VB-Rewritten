@@ -94,6 +94,11 @@ public class VBItemRecipe {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
+        if (!config.getBoolean(this.itemEnum.configSection + ".enableCraftingRecipe")) {
+            new VBLogger(getClass().getName(), Level.INFO, itemEnum.name() + " Recipe disabled or does not exist!").logToFile();
+            return;
+        }
+
         ArrayList<String> ingredients = (ArrayList<String>) config.getStringList(itemEnum.configSection + ".recipeIngredients");
 
         ShapedRecipe recipe;
