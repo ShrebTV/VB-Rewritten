@@ -11,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -59,7 +58,7 @@ public class SlimeBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
 
         // checking wether the entity passed in is a Slime. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Slime)) {

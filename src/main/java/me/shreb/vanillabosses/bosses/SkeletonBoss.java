@@ -57,7 +57,7 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
 
         if (!(entity instanceof Skeleton)) {
             new VBLogger(getClass().getName(), Level.WARNING, "Attempted to make a Skeleton boss out of an Entity.\n" +

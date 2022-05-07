@@ -61,7 +61,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
 
         // checking wether the entity passed in is a Witch. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Witch)) {

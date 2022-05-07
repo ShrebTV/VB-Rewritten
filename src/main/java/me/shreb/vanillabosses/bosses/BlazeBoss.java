@@ -64,6 +64,8 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
+        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
+
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
         // checking wether the entity passed in is a Blaze. Logging as a warning and throwing an exception if not.

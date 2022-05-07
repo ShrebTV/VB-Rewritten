@@ -16,7 +16,6 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityCombustEvent;
@@ -71,7 +70,7 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
 
         // checking whether the entity passed in is a Creeper. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Creeper)) {

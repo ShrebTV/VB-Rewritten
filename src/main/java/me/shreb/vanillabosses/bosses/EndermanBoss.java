@@ -10,7 +10,6 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -58,7 +57,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
 
         // checking wether the entity passed in is a Enderman. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Enderman)) {
