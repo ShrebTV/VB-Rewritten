@@ -152,7 +152,9 @@ public class VBBossBar implements Listener {
      */
     @EventHandler
     public void onBossDeath(EntityDeathEvent event) {
-        bossBarMap.get(event.getEntity().getUniqueId()).killBossBar();
+        if (bossBarMap.get(event.getEntity().getUniqueId()) != null) {
+            bossBarMap.get(event.getEntity().getUniqueId()).killBossBar();
+        }
     }
 
     /**
@@ -160,7 +162,9 @@ public class VBBossBar implements Listener {
      */
     private void killBossBar() {
         this.bossBar.removeAll();
-        bossBarMap.remove(this.assignedEntity.getUniqueId());
+        if (bossBarMap.get(this.assignedEntity.getUniqueId()) != null) {
+            bossBarMap.remove(this.assignedEntity.getUniqueId());
+        }
     }
 
     /**
@@ -171,7 +175,7 @@ public class VBBossBar implements Listener {
 
         Bukkit.getScheduler().runTaskTimer(Vanillabosses.getInstance(), () -> {
 
-            for (VBBossBar bar : bossBarMap.values()) {
+            for (VBBossBar bar : new ArrayList<>(bossBarMap.values())) {
 
                 if (bar.assignedEntity.isDead()) {
                     bar.killBossBar();
