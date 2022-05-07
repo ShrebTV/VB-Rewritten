@@ -5,6 +5,7 @@ import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.ConfigVerification;
+import me.shreb.vanillabosses.utility.Utility;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,6 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -61,7 +63,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
-        // checking wether the entity passed in is a Wither. Logging as a warning and throwing an exception if not.
+        // checking wether the entity passed in is a Witch. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Witch)) {
             new VBLogger(getClass().getName(), Level.WARNING, "Attempted to make a Witch boss out of an Entity.\n" +
                     "Entity passed in: " + entity.getType() + "\n" +
@@ -118,7 +120,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
         return null;
     }
 
-    String path = "Bosses.WitchBoss.customThrownPotions";
+    String path = "Bosses.WitchBoss.customThrownPotions.";
     FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
     /**
@@ -210,13 +212,13 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
         if (!(event.getEntity().getShooter() instanceof LivingEntity)) return;
 
         //Don't want entities which don't have the witch boss scoreboard tag
-        if (!event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) return;
+        if (!((LivingEntity) event.getEntity().getShooter()).getScoreboardTags().contains(SCOREBOARDTAG)) return;
 
         //Don't want any living entity which isn't a witch
-        if (!((LivingEntity) event.getEntity().getShooter()).getType().equals(EntityType.WITCH)) return;
+        if (((LivingEntity) event.getEntity().getShooter()).getType() != EntityType.WITCH) return;
 
         //Don't want a projectile which isn't a splash potion
-        if (!event.getEntity().getType().equals(EntityType.SPLASH_POTION)) return;
+        if (event.getEntity().getType() != EntityType.SPLASH_POTION) return;
 
         Vector v = event.getEntity().getVelocity();
         Location loc = event.getLocation();
@@ -238,6 +240,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
 
         currentChance += poisonChance;
         if (random < currentChance) {
+
             event.getEntity().remove();
 
             ThrownPotion e = (ThrownPotion) event.getEntity().getWorld().spawnEntity(loc, EntityType.SPLASH_POTION);
@@ -250,6 +253,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
 
         currentChance += blindChance;
         if (random < currentChance) {
+
             event.getEntity().remove();
 
             ThrownPotion e = (ThrownPotion) event.getEntity().getWorld().spawnEntity(loc, EntityType.SPLASH_POTION);
@@ -262,6 +266,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
 
         currentChance += witherChance;
         if (random < currentChance) {
+
             event.getEntity().remove();
 
             ThrownPotion e = (ThrownPotion) event.getEntity().getWorld().spawnEntity(loc, EntityType.SPLASH_POTION);
@@ -274,6 +279,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
 
         currentChance += hungerChance;
         if (random < currentChance) {
+
             event.getEntity().remove();
 
             ThrownPotion e = (ThrownPotion) event.getEntity().getWorld().spawnEntity(loc, EntityType.SPLASH_POTION);
@@ -376,6 +382,38 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
             }
         }
     }
+
+    static ArrayList<ItemStack> stacksForDropping = new ArrayList<>();
+
+    /**
+     * Adds the special drops from the WitchBoss to the EntityDeathEvent passed in
+     * This method does not check whether the items should be dropped, it only adds the drops
+     *
+     * @param event the event to add the drops to
+     */
+    @EventHandler
+    public void dropOnDeath(EntityDeathEvent event) {
+
+        if (event.getEntityType() == EntityType.WITCH && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) {
+
+            stacksForDropping.add(makeDamagePot());
+            stacksForDropping.add(makePoisonPot());
+            stacksForDropping.add(makeBlindnessPot());
+            stacksForDropping.add(makeWitherPot());
+            stacksForDropping.add(makeHungerPot());
+
+            ArrayList<Double> chancesList = new ArrayList<>(Vanillabosses.getInstance().getConfig().getDoubleList("Bosses.WitchBoss.dropCustomPotionsChances"));
+
+            for (ItemStack stack : stacksForDropping) {
+                int i = stacksForDropping.indexOf(stack);
+
+                if (Utility.roll(chancesList.get(i))) {
+                    event.getDrops().add(stack);
+                }
+            }
+        }
+    }
+
 
     @Override
     public boolean verifyConfig() {
