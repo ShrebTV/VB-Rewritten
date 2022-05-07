@@ -23,6 +23,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 public class SkeletonBoss extends VBBoss implements ConfigVerification {
@@ -86,6 +87,10 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
 
         String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
 
+        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        if (speedMultiplier < 0.0001) speedMultiplier = 1;
+        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
+
         //setting the Attributes. Logging to file if it fails at any point.
         try {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
@@ -119,16 +124,57 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
     private boolean putOnEquipment(Skeleton skeleton) {
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
-        ItemStack[] armor = new ItemStack[]{
-                new ItemStack(Material.IRON_BOOTS),
-                new ItemStack(Material.IRON_LEGGINGS),
-                new ItemStack(Material.IRON_CHESTPLATE),
-                new ItemStack(Material.IRON_HELMET)
-        };
+        ItemStack[] armor = new ItemStack[4];
+
+        String armorType = config.getString("Bosses.SkeletonBoss.ArmorMaterial");
+
+        if (armorType == null) armorType = "Iron";
+
+        switch (armorType) {
+
+            case "Leather":
+                armor[0] = new ItemStack(Material.LEATHER_BOOTS);
+                armor[1] = new ItemStack(Material.LEATHER_LEGGINGS);
+                armor[2] = new ItemStack(Material.LEATHER_CHESTPLATE);
+                armor[3] = new ItemStack(Material.LEATHER_HELMET);
+                break;
+
+            case "Gold":
+                armor[0] = new ItemStack(Material.GOLDEN_BOOTS);
+                armor[1] = new ItemStack(Material.GOLDEN_LEGGINGS);
+                armor[2] = new ItemStack(Material.GOLDEN_CHESTPLATE);
+                armor[3] = new ItemStack(Material.GOLDEN_HELMET);
+                break;
+
+            case "Diamond":
+                armor[0] = new ItemStack(Material.DIAMOND_BOOTS);
+                armor[1] = new ItemStack(Material.DIAMOND_LEGGINGS);
+                armor[2] = new ItemStack(Material.DIAMOND_CHESTPLATE);
+                armor[3] = new ItemStack(Material.DIAMOND_HELMET);
+                break;
+
+            case "Netherite":
+                armor[0] = new ItemStack(Material.NETHERITE_BOOTS);
+                armor[1] = new ItemStack(Material.NETHERITE_LEGGINGS);
+                armor[2] = new ItemStack(Material.NETHERITE_CHESTPLATE);
+                armor[3] = new ItemStack(Material.NETHERITE_HELMET);
+                break;
+
+            //In any other case, including "Iron", give the boss Iron
+            default:
+                armor[0] = new ItemStack(Material.IRON_BOOTS);
+                armor[1] = new ItemStack(Material.IRON_LEGGINGS);
+                armor[2] = new ItemStack(Material.IRON_CHESTPLATE);
+                armor[3] = new ItemStack(Material.IRON_HELMET);
+        }
+
+        int protMin = config.getInt("Bosses.SkeletonBoss.ProtectionMin");
+        int protMax = config.getInt("Bosses.SkeletonBoss.ProtectionMax");
 
         for (ItemStack itemStack : armor) {
+            int protLevel = ThreadLocalRandom.current().nextInt(protMin, protMax + 1);
             itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
-            itemStack.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+            itemStack.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, protLevel);
         }
 
         try {
@@ -144,10 +190,29 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
         skeleton.getEquipment().setBootsDropChance(0);
 
         try {
-            skeleton.getEquipment().setItemInMainHand(Skeletor.instance.makeItem());
+
+            int powerMin = config.getInt("Bosses.SkeletonBoss.BowEnchants.Power.min");
+            int powerMax = config.getInt("Bosses.SkeletonBoss.BowEnchants.Power.max");
+
+            int punchMin = config.getInt("Bosses.SkeletonBoss.BowEnchants.Punch.min");
+            int punchMax = config.getInt("Bosses.SkeletonBoss.BowEnchants.Punch.max");
+
+            int unbreakingMin = config.getInt("Bosses.SkeletonBoss.BowEnchants.Unbreaking.min");
+            int unbreakingMax = config.getInt("Bosses.SkeletonBoss.BowEnchants.Unbreaking.max");
+
+            int flameMin = config.getInt("Bosses.SkeletonBoss.BowEnchants.Flame.min");
+            int flameMax = config.getInt("Bosses.SkeletonBoss.BowEnchants.Flame.max");
+
+            ItemStack weapon = Skeletor.instance.makeItem();
+
+            weapon.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, ThreadLocalRandom.current().nextInt(powerMin, powerMax + 1));
+            weapon.addUnsafeEnchantment(Enchantment.ARROW_KNOCKBACK, ThreadLocalRandom.current().nextInt(punchMin, punchMax + 1));
+            weapon.addUnsafeEnchantment(Enchantment.DURABILITY, ThreadLocalRandom.current().nextInt(unbreakingMin, unbreakingMax + 1));
+            weapon.addUnsafeEnchantment(Enchantment.ARROW_FIRE, ThreadLocalRandom.current().nextInt(flameMin, flameMax + 1));
+
+            skeleton.getEquipment().setItemInMainHand(weapon);
         } catch (ItemCreationException e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not create Weapon for Skeleton boss. Exception: " + e).logToFile();
-
         }
         skeleton.getEquipment().setItemInMainHandDropChance((float) config.getDouble("Items.Skeletor.dropChance"));
 
@@ -155,7 +220,7 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
     }
 
     @EventHandler
-    public void onHitAbility(EntityDamageByEntityEvent event){
+    public void onHitAbility(EntityDamageByEntityEvent event) {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 

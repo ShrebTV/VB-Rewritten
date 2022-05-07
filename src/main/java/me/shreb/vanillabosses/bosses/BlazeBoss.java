@@ -95,6 +95,10 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
             }
         }
 
+        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        if (speedMultiplier < 0.0001) speedMultiplier = 1;
+        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
+
         String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
 
         //setting the entity Attributes. Logging failure as Warning.

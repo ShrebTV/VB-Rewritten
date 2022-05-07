@@ -89,6 +89,10 @@ public class ZombieBoss extends VBBoss implements ConfigVerification {
 
         String name = config.getString("Bosses.ZombieBoss.displayName");
 
+        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        if (speedMultiplier < 0.0001) speedMultiplier = 1;
+        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
+
         //setting the Attributes. Logging to file if it fails at any point.
         try {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
