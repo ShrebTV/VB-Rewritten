@@ -1,8 +1,5 @@
 Bosses:
 
-  configVersion: 1.7.0  # This is important to check for an outdated config file. do not change or remove it. to update your config, please consider saving your current config file and using the "resetConfig" Option below.
-  # after this you can paste your original values at the appropriate positions if you wish to. (Alternatively to reset the config you can delete the entire config file instead of using the reset option)
-
   PluginLanguage: EN  # Currently implemented Languages: EN (English), GER (German), CN (Chinese)
   #In case the entered language is not implemented. it will default to English
 
