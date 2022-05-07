@@ -421,8 +421,6 @@ public class BossCommand implements Listener {
             MostDamagePHReplacer replacer = damagePHReplacerHashMap.get(bossUUID);
             Map.Entry<UUID, Double> entry = null;
 
-            Vanillabosses.getInstance().getServer().getConsoleSender().sendMessage(String.valueOf(replacer.playerDamageMap));
-
             for (Map.Entry<UUID, Double> tmpEntry : replacer.playerDamageMap.entrySet()) {
                 if (entry == null || entry.getValue() < tmpEntry.getValue()) {
                     entry = tmpEntry;
