@@ -173,6 +173,7 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
 
             entity.setVelocity(Objects.requireNonNullElseGet(v, projectile::getVelocity));
             event.getEntity().remove();
+            entity.setShooter(event.getEntity().getShooter());
 
             Vector finalV = v;
             for (int i = 0; i < 6; i++) {
@@ -189,6 +190,7 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
 
             entity.setVelocity(Objects.requireNonNullElseGet(v, projectile::getVelocity));
             event.getEntity().remove();
+            entity.setShooter(event.getEntity().getShooter());
 
             Vector finalV = v;
             for (int i = 0; i < 6; i++) {
@@ -205,6 +207,7 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
 
             entity.setVelocity(Objects.requireNonNullElseGet(v, projectile::getVelocity));
             event.getEntity().remove();
+            entity.setShooter(event.getEntity().getShooter());
 
             Vector finalV = v;
 
