@@ -98,7 +98,10 @@ The commands have certain Placeholders, such as:\
  - Invisibility Cloak (gives the wearer the Invisibility Potion effect. This damages the cloak slowly. Dropped by the Enderman boss)
  - Skeletor (when arrows hit an entity TNT spawns at the location of the hit. When TNT is carried in the off hand while shooting the arrow is replaced by a flying block of lit TNT. Dropped by the skeleton boss)
  - Slime Boots (Reduces Fall Damage significantly. Dropped by the Slime boss)
- - Slingshot (Launches the player in the direction they are looking. right click while crouching to activate. Dropped by the Spider boss)
+ - Slingshot (Launches the player in the direction they are looking. right click while crouching to activate. Dropped by
+   the Spider boss)
+ - Wither egg (When placed on an anvil it will transform into a Pet wither which will not move but it will shoot arrows(
+   for now) at hostile mobs in a configurable area)
 
 ### Commands
 A ? in front of a parameter means that this one is optional
