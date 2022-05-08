@@ -1,7 +1,7 @@
 # Vanilla Bosses Plugin
 Spawns bosses naturally
 
-## Contents:\
+## Contents:
  - ### Description
  - ### Important information
  - ### Users' Guide
