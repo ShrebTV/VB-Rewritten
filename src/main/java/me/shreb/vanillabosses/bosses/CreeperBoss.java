@@ -323,25 +323,67 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
     @Override
     public boolean verifyConfig() {
 
-        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
+        String name = getClass().getName();
 
-        if (!verifyBoolean("enabled")) {
-            logger.setStringToLog("Creeper Boss: Config Error at enabled, has to be true or false");
+        VBLogger logger = new VBLogger(name, Level.WARNING, "");
+
+        if (!verifyBoolean(instance.configuration.getString("enabled"), name + ".enabled")) {
+            logger.setStringToLog(name + ": Config Error at enabled, has to be true or false");
             logger.logToFile();
         }
 
-        if (!verifyString(instance.configuration.getString("displayName"))) {
-            logger.setStringToLog("Creeper Boss: Config Error at displayName, cannot be empty");
+        if (!verifyString(instance.configuration.getString("displayName"), name + ".displayName")) {
+            logger.setStringToLog(name + ": Config Error at displayName, cannot be empty");
             logger.logToFile();
         }
 
-        if (!verifyColorCode(instance.configuration.getString("displayNameColor"))) {
-            logger.setStringToLog("Creeper Boss: Config Error at displayNameColor, has to be a hexCode");
+        if (!verifyColorCode(instance.configuration.getString("displayNameColor"), name + ".displayNameColor")) {
+            logger.setStringToLog(name + ": Config Error at displayNameColor, has to be a hexCode");
             logger.logToFile();
         }
 
-        if (!verifyBoolean("showDisplayNameAlways")) {
-            logger.setStringToLog("Creeper Boss: Config Error at showDisplayNameAlways, has to be true or false");
+        if (!verifyBoolean(instance.configuration.getString("showDisplayNameAlways"), name + ".showDisplayNameAlways")) {
+            logger.setStringToLog(name + ": Config Error at showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyDouble(instance.configuration.getString("DamageModifier"), name + ".DamageModifier", 0.001, 100)) {
+            logger.setStringToLog(name + ": Config Warning/Error at DamageModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
+            logger.logToFile();
+        }
+
+        if (!verifyDouble(instance.configuration.getString("SpeedModifier"), name + ".SpeedModifier", 0.001, 100)) {
+            logger.setStringToLog(name + ": Config Warning/Error at SpeedModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
+            logger.logToFile();
+        }
+
+        if (!verifyInt(instance.configuration.getString("health"), name + ".health", 0, Integer.MAX_VALUE)) {
+            logger.setStringToLog(name + ": Config Warning/Error at health, has to be a value above 0, cannot be more than 2147483647, has to be a number");
+            logger.logToFile();
+        }
+
+        if (!verifyDouble(instance.configuration.getString("spawnChance"), name + ".spawnChance", 0.0, 1.0)) {
+            logger.setStringToLog(name + ": Config Warning/Error at spawnChance, has to be a value between 0 and 1, has to be a number");
+            logger.logToFile();
+        }
+
+        if (!verifyString(instance.configuration.getString("killedMessage"), name + ".killedMessage")) {
+            logger.setStringToLog(name + ": Config Error at killedMessage, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifySpawnWorlds((ArrayList<String>) instance.configuration.getStringList("spawnWorlds"))) {
+            logger.setStringToLog(name + ": Config Error at killedMessage, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyDrops(EntityType.BLAZE)) {
+            logger.setStringToLog(name + ": Could not verify boss drops.");
+            logger.logToFile();
+        }
+
+        if (!verifyInt(instance.configuration.getString("droppedXP"), name + ".droppedXP", 0, Integer.MAX_VALUE)) {
+            logger.setStringToLog(name + ": Config Warning/Error at droppedXP, has to be a value above 0, cannot be more than 2147483647, has to be a number");
             logger.logToFile();
         }
 
