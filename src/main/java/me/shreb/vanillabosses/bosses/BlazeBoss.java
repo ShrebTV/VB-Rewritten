@@ -21,10 +21,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class BlazeBoss extends VBBoss implements ConfigVerification {
@@ -259,48 +256,63 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
 
         VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
 
-        if (!verifyBoolean("enabled")) {
+        if (!verifyBoolean(instance.configuration.getString("enabled"), "BlazeBoss.enabled")) {
             logger.setStringToLog("Blaze Boss: Config Error at enabled, has to be true or false");
             logger.logToFile();
         }
 
-        if (!verifyString(instance.configuration.getString("displayName"))) {
+        if (!verifyString(instance.configuration.getString("displayName"), "BlazeBoss.displayName")) {
             logger.setStringToLog("Blaze Boss: Config Error at displayName, cannot be empty");
             logger.logToFile();
         }
 
-        if (!verifyColorCode(instance.configuration.getString("displayNameColor"))) {
+        if (!verifyColorCode(instance.configuration.getString("displayNameColor"), "BlazeBoss.displayNameColor")) {
             logger.setStringToLog("Blaze Boss: Config Error at displayNameColor, has to be a hexCode");
             logger.logToFile();
         }
 
-        if (!verifyBoolean("showDisplayNameAlways")) {
+        if (!verifyBoolean(instance.configuration.getString("showDisplayNameAlways"), "BlazeBoss.showDisplayNameAlways")) {
             logger.setStringToLog("Blaze Boss: Config Error at showDisplayNameAlways, has to be true or false");
             logger.logToFile();
         }
 
-        if (!verifyDouble("DamageModifier", 0.001, 100)) {
+        if (!verifyDouble(instance.configuration.getString("DamageModifier"), "BlazeBoss.DamageModifier", 0.001, 100)) {
             logger.setStringToLog("Blaze Boss: Config Warning/Error at DamageModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
             logger.logToFile();
         }
 
-        if (!verifyDouble("SpeedModifier", 0.001, 100)) {
+        if (!verifyDouble(instance.configuration.getString("SpeedModifier"), "BlazeBoss.SpeedModifier", 0.001, 100)) {
             logger.setStringToLog("Blaze Boss: Config Warning/Error at SpeedModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
             logger.logToFile();
         }
 
-        if (!verifyInt("health", 0, Integer.MAX_VALUE)) {
+        if (!verifyInt(instance.configuration.getString("health"), "BlazeBoss.health", 0, Integer.MAX_VALUE)) {
             logger.setStringToLog("Blaze Boss: Config Warning/Error at health, has to be a value above 0, cannot be more than 2147483647, has to be a number");
             logger.logToFile();
         }
 
-        if (!verifyDouble("spawnChance", 0.0, 1.0)) {
+        if (!verifyDouble(instance.configuration.getString("spawnChance"), "BlazeBoss.spawnChance", 0.0, 1.0)) {
             logger.setStringToLog("Blaze Boss: Config Warning/Error at spawnChance, has to be a value between 0 and 1, has to be a number");
             logger.logToFile();
         }
 
-        if (!verifyString("killedMessage")) {
+        if (!verifyString(instance.configuration.getString("killedMessage"), "BlazeBoss.killedMessage")) {
             logger.setStringToLog("Blaze Boss: Config Error at killedMessage, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifySpawnWorlds((ArrayList<String>) instance.configuration.getStringList("spawnWorlds"))) {
+            logger.setStringToLog("Blaze Boss: Config Error at killedMessage, cannot be empty");
+            logger.logToFile();
+        }
+
+        if (!verifyDrops(EntityType.BLAZE)) {
+            logger.setStringToLog("Blaze Boss: Could not verify Blaze boss drops.");
+            logger.logToFile();
+        }
+
+        if (!verifyInt(instance.configuration.getString("droppedXP"), "BlazeBoss.droppedXP", 0, Integer.MAX_VALUE)) {
+            logger.setStringToLog("Blaze Boss: Config Warning/Error at droppedXP, has to be a value above 0, cannot be more than 2147483647, has to be a number");
             logger.logToFile();
         }
 
