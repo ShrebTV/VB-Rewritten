@@ -13,7 +13,6 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -35,10 +34,8 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "SkeletonBoss";
     public static final String SCOREBOARDTAG = "BossSkeleton";
 
-    public static FileConfiguration skeletonBossConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.skeletonBossPath, skeletonBossConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.skeletonBossPath, configuration);
     }
 
     @Override

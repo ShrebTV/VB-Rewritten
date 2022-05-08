@@ -1,67 +1,66 @@
-SkeletonBoss:
-  enabled: true
-  displayName: "The Skeleton King"  # To remove the name, replace with "" and set 'showDisplayNameAlways' to 'false'
-  displayNameColor: "#7B7B7B" #Hex color codes, use a website with a Hex Color code picker or similar programs to get this code from the wanted color.
-  showDisplayNameAlways: true
-  health: 80
-  DamageModifier: 1.0
-  SpeedModifier: 1.0
-  spawnChance: 0.005        # Chance of a Skeleton which was spawned into the world becoming a boss skeleton. 1 = 100%, 0.005 = 0.5% => every 200th skeleton will be a boss
-  dropArmorChance: 0.0  # recommended to keep at 0 or at least pretty low since the armor is pretty op.
-  dropOffHandChance: 0.3  # 0.1 = 10% chance of dropping the item. 1 = 100% chance of dropping it.
-  ArmorMaterial: Iron # Possible accepted values: Leather; Gold; Iron; Diamond; Netherite
-  ProtectionMin: 3      # Armor Protection Enchantment level
-  ProtectionMax: 6     # ^^
+enabled: true
+displayName: "The Skeleton King"  # To remove the name, replace with "" and set 'showDisplayNameAlways' to 'false'
+displayNameColor: "#7B7B7B" #Hex color codes, use a website with a Hex Color code picker or similar programs to get this code from the wanted color.
+showDisplayNameAlways: true
+health: 80
+DamageModifier: 1.0
+SpeedModifier: 1.0
+spawnChance: 0.005        # Chance of a Skeleton which was spawned into the world becoming a boss skeleton. 1 = 100%, 0.005 = 0.5% => every 200th skeleton will be a boss
+dropArmorChance: 0.0  # recommended to keep at 0 or at least pretty low since the armor is pretty op.
+dropOffHandChance: 0.3  # 0.1 = 10% chance of dropping the item. 1 = 100% chance of dropping it.
+ArmorMaterial: Iron # Possible accepted values: Leather; Gold; Iron; Diamond; Netherite
+ProtectionMin: 3      # Armor Protection Enchantment level
+ProtectionMax: 6     # ^^
 
-  BowEnchants:
-    Power:
-      min: 3
-      max: 5
-    Punch:
-      min: 1
-      max: 3
-    Unbreaking:
-      min: 3
-      max: 5
-    Flame:
-      min: 1
-      max: 3
+BowEnchants:
+  Power:
+    min: 3
+    max: 5
+  Punch:
+    min: 1
+    max: 3
+  Unbreaking:
+    min: 3
+    max: 5
+  Flame:
+    min: 1
+    max: 3
 
-  killedMessage: "<killedName> was slain by <killer>" #<killedName> is replaced by the name of the killed Entity
-  #<killer> is replaced by the name of the killer
+killedMessage: "<killedName> was slain by <killer>" #<killedName> is replaced by the name of the killed Entity
+#<killer> is replaced by the name of the killer
 
-  spawnWorlds:
-  #  - world
-  #  - world2
-  #List all world names which you want this boss to spawn in. list none to enable spawning in all worlds.
-  # disable the "spawnNaturally" setting to disable natural spawning.
-
-
-  # materialName: the item you wish the entity to drop upon death. If you're not sure what the Item you want it to drop is called, search for the item here:
-  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
-  # minAmount: this is the minimum amount of items the boss will drop upon death.
-  # maxAmount: this is the maximum amount of items the boss can drop upon death.
-
-  droppedItems:
-    - "{\"materialName\":\"BONE\",\"minAmount\":\"5\",\"maxAmount\":\"10\"}"
-    - "{\"materialName\":\"DIAMOND\",\"minAmount\":\"0\",\"maxAmount\":\"2\"}"
-
-  droppedXP: 125    #sets the amount of experience points dropped on death of the boss
-
-  summonedTNTDoesBlockDamage: false # If this setting is set to true, the tnt summoned by the Skeletor will blow up blocks and items.
-
-  CommandToBeExecutedOnDeath: 0 #insert the commands you want executed whenever a naturally spawned boss is killed. remember that the numbers start at 0!
-
-  onHitEvents: #Chances in % on each hit. only one of these events can be activated each hit.
-    invulnerability:
-      chance: 0.03
-      durationInSeconds: 7
-    spawnMinions:
-      chance: 0.02
-      abilityRemovesBlocks: true     #This ability will not remove following blocks under any circumstance: Obsidian, Bedrock, Beacon
-    reflectDamage:
-      chance: 0.07
-      damageMultiplier: 0.5
+spawnWorlds:
+#  - world
+#  - world2
+#List all world names which you want this boss to spawn in. list none to enable spawning in all worlds.
+# disable the "spawnNaturally" setting to disable natural spawning.
 
 
-  spawnNaturally: true    #if set to false, specify worlds and locations below or leave the list empty.
+# materialName: the item you wish the entity to drop upon death. If you're not sure what the Item you want it to drop is called, search for the item here:
+# https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+# minAmount: this is the minimum amount of items the boss will drop upon death.
+# maxAmount: this is the maximum amount of items the boss can drop upon death.
+
+droppedItems:
+  - "{\"materialName\":\"BONE\",\"minAmount\":\"5\",\"maxAmount\":\"10\"}"
+  - "{\"materialName\":\"DIAMOND\",\"minAmount\":\"0\",\"maxAmount\":\"2\"}"
+
+droppedXP: 125    #sets the amount of experience points dropped on death of the boss
+
+summonedTNTDoesBlockDamage: false # If this setting is set to true, the tnt summoned by the Skeletor will blow up blocks and items.
+
+CommandToBeExecutedOnDeath: 0 #insert the commands you want executed whenever a naturally spawned boss is killed. remember that the numbers start at 0!
+
+onHitEvents: #Chances in % on each hit. only one of these events can be activated each hit.
+  invulnerability:
+    chance: 0.03
+    durationInSeconds: 7
+  spawnMinions:
+    chance: 0.02
+    abilityRemovesBlocks: true     #This ability will not remove following blocks under any circumstance: Obsidian, Bedrock, Beacon
+  reflectDamage:
+    chance: 0.07
+    damageMultiplier: 0.5
+
+
+spawnNaturally: true    #if set to false, specify worlds and locations below or leave the list empty.

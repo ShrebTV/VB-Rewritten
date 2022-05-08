@@ -8,8 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,10 +29,8 @@ public class InvisibilityCloak extends VBItem {
 
     public static InvisibilityCloak instance = new InvisibilityCloak();
 
-    public static FileConfiguration invisibilityCloakConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.invisibilityCloakPath, invisibilityCloakConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.invisibilityCloakPath, configuration);
     }
 
     public InvisibilityCloak() {

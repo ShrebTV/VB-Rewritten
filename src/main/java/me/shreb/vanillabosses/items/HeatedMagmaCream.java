@@ -6,8 +6,6 @@ import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.Utility;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -27,10 +25,8 @@ public class HeatedMagmaCream extends VBItem {
 
     public static HeatedMagmaCream instance = new HeatedMagmaCream();
 
-    public static FileConfiguration hmcConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.hmcPath, hmcConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.hmcPath, configuration);
     }
 
     public int level;

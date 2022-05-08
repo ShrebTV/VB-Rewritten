@@ -1,0 +1,4 @@
+# The Resource needed to craft the slime boots. drops from boss slimes.
+DroppedPerKill: 2
+Lore:
+  - "Bouncy :P"

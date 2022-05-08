@@ -15,7 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -36,10 +35,8 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "Zombified_PiglinBoss";
     public static final String SCOREBOARDTAG = "BossZombified_Piglin";
 
-    public static FileConfiguration zombifiedPiglinBossConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.zombified_PiglinBossPath, zombifiedPiglinBossConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.zombified_PiglinBossPath, configuration);
     }
 
     @Override

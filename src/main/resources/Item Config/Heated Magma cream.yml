@@ -1,21 +1,20 @@
-HeatedMagmaCream: #3 levels of this item
-  enableImproving: true #craft the better version of the item by combining 3 of the same level (level 1 or 2)
-  #result is a heated Magmacream of a level one higher than the ingredients
-  #to improve the level you have to fill out the top line of a crafting table with 3 heatedMagmaCream of level 1 or 2.
-  lore:
-    - Right-click to use
+enableImproving: true #craft the better version of the item by combining 3 of the same level (level 1 or 2)
+#result is a heated Magmacream of a level one higher than the ingredients
+#to improve the level you have to fill out the top line of a crafting table with 3 heatedMagmaCream of level 1 or 2.
+lore:
+  - Right-click to use
 
-  Level1: #dropped by the magmacube boss
-    maxDropped: 3
-    radius: 4
-    burnTime: 3 #in seconds
+Level1: #dropped by the magmacube boss
+  maxDropped: 3
+  radius: 4
+  burnTime: 3 #in seconds
 
-  Level2:
-    maxDropped: 2
-    radius: 6
-    burnTime: 5
+Level2:
+  maxDropped: 2
+  radius: 6
+  burnTime: 5
 
-  Level3:
-    maxDropped: 1
-    radius: 8
-    burnTime: 7
+Level3:
+  maxDropped: 1
+  radius: 8
+  burnTime: 7

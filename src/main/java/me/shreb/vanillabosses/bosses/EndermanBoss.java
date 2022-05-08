@@ -11,8 +11,6 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -22,7 +20,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.Random;
 import java.util.logging.Level;
 
 public class EndermanBoss extends VBBoss implements ConfigVerification {
@@ -32,10 +29,8 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "EndermanBoss";
     public static final String SCOREBOARDTAG = "BossEnderman";
 
-    public static FileConfiguration endermanConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.endermanBossPath, endermanConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.endermanBossPath, instance.configuration);
     }
 
     @Override
@@ -66,7 +61,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
+        if (!instance.configuration.getBoolean("enabled")) return entity;
 
         // checking wether the entity passed in is a Enderman. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Enderman)) {
@@ -78,8 +73,8 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = config.getDouble("Bosses." + CONFIGSECTION + ".health");
-        String nameColorString = config.getString("Bosses." + CONFIGSECTION + ".displayNameColor");
+        double health = instance.configuration.getDouble("health");
+        String nameColorString = instance.configuration.getString("displayNameColor");
 
         ChatColor nameColor;
 
@@ -95,9 +90,9 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
+        String name = instance.configuration.getString("displayName");
 
-        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        double speedMultiplier = instance.configuration.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
@@ -106,7 +101,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("Bosses." + CONFIGSECTION + ".showDisplayNameAlways"));
+            entity.setCustomNameVisible(instance.configuration.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Enderman Boss\n" +
@@ -138,9 +133,9 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
 
         if (event.getEntity().getType().equals(EntityType.ENDERMAN) && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) {
 
-            int amount = Vanillabosses.getInstance().getConfig().getInt("Bosses.EndermanBoss.onHitEvents.endermiteSpawnOnTeleport.amount");
+            int amount = instance.configuration.getInt("onHitEvents.endermiteSpawnOnTeleport.amount");
 
-            if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.EndermanBoss.onHitEvents.endermiteSpawnOnTeleport.enabled")) {
+            if (instance.configuration.getBoolean("onHitEvents.endermiteSpawnOnTeleport.enabled")) {
                 for (int i = 0; i <= amount; i++) {
                     event.getEntity().getWorld().spawnEntity(event.getEntity().getLocation(), EntityType.ENDERMITE);
                 }
@@ -181,7 +176,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
 
             Enderman enderman = (Enderman) event.getEntity();
 
-            for (String s : config.getStringList("Bosses.EndermanBoss.onHitEvents.potionEffects")) {
+            for (String s : instance.configuration.getStringList("onHitEvents.potionEffects")) {
                 String[] strings = s.split(":");
                 PotionEffectType type = PotionEffectType.getByName(strings[0].toUpperCase());
 
@@ -190,7 +185,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
                 }
             }
 
-            if (new Random().nextDouble() < config.getDouble("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.chance") && config.getBoolean("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.enabled")) {
+            if (Utility.roll(instance.configuration.getDouble("onHitEvents.teleportBehindPlayer.chance")) && instance.configuration.getBoolean("onHitEvents.teleportBehindPlayer.enabled")) {
                 int x = event.getDamager().getLocation().getBlockX() - enderman.getLocation().getBlockX();
                 int y = event.getDamager().getLocation().getBlockY() - enderman.getLocation().getBlockY();
                 int z = event.getDamager().getLocation().getBlockZ() - enderman.getLocation().getBlockZ();
@@ -204,15 +199,13 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
 
                 enderman.teleport(newLoc);
 
-                if (config.getBoolean("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.teleportBackToOldLocation")) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
-                        enderman.teleport(originalLoc);
-                    }, 20L * config.getInt("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.teleportBackDelay"));
+                if (instance.configuration.getBoolean("onHitEvents.teleportBehindPlayer.teleportBackToOldLocation")) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> enderman.teleport(originalLoc), 20L * instance.configuration.getInt("onHitEvents.teleportBehindPlayer.teleportBackDelay"));
 
                 }
 
-                if (config.getBoolean("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.invisibility")) {
-                    enderman.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, config.getInt("Bosses.EndermanBoss.onHitEvents.teleportBehindPlayer.invisibilityDuration") * 20, 3));
+                if (instance.configuration.getBoolean("onHitEvents.teleportBehindPlayer.invisibility")) {
+                    enderman.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, instance.configuration.getInt("onHitEvents.teleportBehindPlayer.invisibilityDuration") * 20, 3));
                 }
             }
         }
@@ -220,11 +213,10 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
 
     @Override
     public boolean verifyConfig() {
-        String fullConfig = "Bosses." + CONFIGSECTION + ".";
 
         VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
 
-        if (!verifyBoolean(fullConfig + "enabled")) {
+        if (!verifyBoolean("enabled")) {
             logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
             logger.logToFile();
         }

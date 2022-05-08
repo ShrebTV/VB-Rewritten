@@ -16,10 +16,12 @@ public abstract class VBBoss implements Listener {
 
     public static final String BOSSTAG = "VB-Boss";
     public static final String REMOVE_ON_DISABLE_TAG = "Vanilla Bosses - Remove on Disable";
-    public FileConfiguration config = Vanillabosses.getInstance().getConfig();
+
+    public FileConfiguration configuration;
 
     /**
      * creates a completely new Entity and makes it into a boss
+     *
      * @param location the location at which the boss should be spawned
      * @return the resulting boss
      * @throws BossCreationException if there is a problem creating the boss

@@ -1,8 +1,7 @@
-ButchersAxe:
-  itemMaterial: Iron_Axe
-  dropChance: 0.2
-  ChanceToApplySlowness: 0.1   #in %
-  SlownessDuration: 4  # in seconds
-  enableSpawnCommand: true
-  Lore:
-    -has a chance to bind hit entites to their current position
+itemMaterial: Iron_Axe
+dropChance: 0.2
+ChanceToApplySlowness: 0.1   #in %
+SlownessDuration: 4  # in seconds
+enableSpawnCommand: true
+Lore:
+  -has a chance to bind hit entites to their current position

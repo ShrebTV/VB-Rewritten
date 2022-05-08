@@ -10,7 +10,6 @@ import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -35,10 +34,8 @@ public class WitherEgg extends VBItem {
 
     public static NamespacedKey PASSIVE_WITHER_PDC_KEY = new NamespacedKey(Vanillabosses.getInstance(), "PassiveWither");
 
-    public static FileConfiguration witherEggConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.witherEggPath, witherEggConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.witherEggPath, configuration);
     }
 
     public WitherEgg() {

@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -33,10 +32,8 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "SpiderBoss";
     public static final String SCOREBOARDTAG = "BossSpider";
 
-    public static FileConfiguration spiderBossConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.spiderBossPath, spiderBossConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.spiderBossPath, configuration);
     }
 
     @Override

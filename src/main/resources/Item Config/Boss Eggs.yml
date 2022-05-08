@@ -1,3 +1,2 @@
-BossEggs:
-  lore:
-    - "Spawns a boss"
+lore:
+  - "Spawns a boss"

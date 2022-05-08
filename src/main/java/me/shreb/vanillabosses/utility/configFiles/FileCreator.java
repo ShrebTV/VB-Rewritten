@@ -23,6 +23,7 @@ public class FileCreator {
     public static Path slimeBootsPath = Path.of(String.valueOf(folderPath), "Item Config" + File.separator + "Slime Boots.yml");
     public static Path slingshotPath = Path.of(String.valueOf(folderPath), "Item Config" + File.separator + "Slingshot.yml");
     public static Path witherEggPath = Path.of(String.valueOf(folderPath), "Item Config" + File.separator + "Wither Egg.yml");
+    public static Path bouncySlimePath = Path.of(String.valueOf(folderPath), "Item Config" + File.separator + "Bouncy Slime.yml");
 
     // Bosses
     public static Path blazeBossPath = Path.of(String.valueOf(folderPath), "Boss Config" + File.separator + "Blaze Boss.yml");

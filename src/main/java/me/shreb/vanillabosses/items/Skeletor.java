@@ -6,8 +6,6 @@ import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,10 +25,8 @@ public class Skeletor extends VBItem {
 
     public static Skeletor instance = new Skeletor();
 
-    public static FileConfiguration skeletorConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.skeletorPath, skeletorConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.skeletorPath, configuration);
     }
 
     public Skeletor() {

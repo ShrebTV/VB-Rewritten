@@ -12,8 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -35,10 +33,8 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "WitchBoss";
     public static final String SCOREBOARDTAG = "BossWitch";
 
-    public static FileConfiguration witchBossConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.witchBossPath, witchBossConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.witchBossPath, configuration);
     }
 
     @Override
@@ -133,7 +129,6 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
     }
 
     String path = "Bosses.WitchBoss.customThrownPotions.";
-    FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
     /**
      * A method to make a custom potion for the witch to throw and drop

@@ -1,6 +1,5 @@
 package me.shreb.vanillabosses.bosses.bossRepresentation;
 
-import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.logging.VBLogger;
@@ -29,8 +28,8 @@ public class NormalBoss extends Boss {
      */
     private void setCommands() {
 
-        String commandPath = "Bosses." + this.retriever.CONFIGSECTION + ".CommandToBeExecutedOnDeath";
-        String commandIndexes = Vanillabosses.getInstance().getConfig().getString(commandPath);
+        String commandPath = "CommandToBeExecutedOnDeath";
+        String commandIndexes = this.retriever.instance.configuration.getString(commandPath);
 
         if (commandIndexes == null || commandIndexes.equals("")) {
             this.commandIndexes = new int[0];

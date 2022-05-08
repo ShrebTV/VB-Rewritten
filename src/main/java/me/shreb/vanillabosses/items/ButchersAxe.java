@@ -10,8 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -30,10 +28,8 @@ public class ButchersAxe extends VBItem {
 
     public static ButchersAxe instance = new ButchersAxe();
 
-    public static FileConfiguration butchersAxeConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.butchersAxePath, butchersAxeConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.butchersAxePath, configuration);
     }
 
     public ButchersAxe() {
@@ -102,7 +98,6 @@ public class ButchersAxe extends VBItem {
     }
 
     /**
-     *
      * Effect of this item: Slowness, "Bind II"
      *
      * @param entity The entity to apply the effect of the Butchers axe to
@@ -124,9 +119,9 @@ public class ButchersAxe extends VBItem {
                 && ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand().hasItemMeta()
                 && ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.STRING);
 
-        if(hasPluginItemInHand){
+        if (hasPluginItemInHand) {
             ItemStack stack = ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand();
-            try{
+            try {
                 new ItemDataRetriever(stack);
             } catch (ItemCreationException itemCreationException) {
                 new VBLogger(getClass().getName(), Level.WARNING, "An Error has occurred. The item Butchers Axe was identified by PDC. But didn't match any Item materials. \n" +

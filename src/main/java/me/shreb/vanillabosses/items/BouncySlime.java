@@ -4,6 +4,7 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.items.utility.ItemAbilityNotFoundException;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,6 +20,10 @@ import java.util.logging.Level;
 public class BouncySlime extends VBItem {
 
     public static BouncySlime instance = new BouncySlime();
+
+    {
+        FileCreator.createAndLoad(FileCreator.butchersAxePath, configuration);
+    }
 
     public BouncySlime() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "BouncySlime");

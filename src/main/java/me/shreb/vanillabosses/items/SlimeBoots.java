@@ -5,8 +5,6 @@ import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,10 +23,8 @@ public class SlimeBoots extends VBItem {
 
     public static SlimeBoots instance = new SlimeBoots();
 
-    public static FileConfiguration slimeBootsConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.slimeBootsPath, slimeBootsConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.slimeBootsPath, configuration);
     }
 
     public SlimeBoots() {

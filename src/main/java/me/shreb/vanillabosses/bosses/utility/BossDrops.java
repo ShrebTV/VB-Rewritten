@@ -2,7 +2,6 @@ package me.shreb.vanillabosses.bosses.utility;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,7 +26,7 @@ public class BossDrops {
      * @param retriever A DataRetriever in order to make sure the things specified have a config section and so the Config section is readily available and correct
      */
     public BossDrops(BossDataRetriever retriever) {
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        FileConfiguration config = retriever.instance.configuration;
         //a String containing the full config path to get the StringList from
         String fullSection = "Bosses." + retriever.CONFIGSECTION + ".droppedItems";
         //Making a new list of Strings with the values of the StringList in the config

@@ -10,8 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -31,17 +29,15 @@ public class BaseballBat extends VBItem implements Listener {
 
     public static BaseballBat instance = new BaseballBat();
 
-    public static FileConfiguration baseballBatConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.baseballBatPath, baseballBatConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.baseballBatPath, configuration);
     }
 
     public BaseballBat() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "BaseballBat");
         this.configSection = "BaseballBat";
         this.itemMaterial = Material.WOODEN_SWORD;
-        this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.lore = (ArrayList<String>) configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemBaseballBatName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBaseballBatGivenMessage;
     }
@@ -112,8 +108,8 @@ public class BaseballBat extends VBItem implements Listener {
      */
     @Override
     public void itemAbility(LivingEntity entity) {
-        if (Utility.roll(config.getDouble("Items.BaseballBat.chanceToConcuss"))) {
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * config.getInt("Items.BaseballBat.concussionDuration"), 2));
+        if (Utility.roll(configuration.getDouble("chanceToConcuss"))) {
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * configuration.getInt("concussionDuration"), 2));
             Utility.spawnParticles(Particle.FIREWORKS_SPARK, entity.getWorld(), entity.getLocation(), 1, 1, 1, 20, 3);
         }
     }

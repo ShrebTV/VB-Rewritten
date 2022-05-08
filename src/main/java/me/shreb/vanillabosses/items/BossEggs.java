@@ -15,8 +15,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -35,10 +33,8 @@ public class BossEggs extends VBItem {
 
     public EntityType type;
 
-    public static FileConfiguration bossEggConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.bossEggsPath, bossEggConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.bossEggsPath, configuration);
     }
 
     private BossEggs() {

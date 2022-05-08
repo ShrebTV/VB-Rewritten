@@ -1,21 +1,15 @@
-SlimeBoots:
-  itemMaterial: Leather_Boots
-  dropChance: 0.1
-  enableCraftingRecipe: true
-  Lore:
+itemMaterial: Leather_Boots
+dropChance: 0.1
+enableCraftingRecipe: true
+Lore:
 
-  recipeShape:
-    - "   "
-    - "B B"
-    - "B B"
-  recipeIngredients:
-    - B:BouncySlime
+recipeShape:
+  - "   "
+  - "B B"
+  - "B B"
+recipeIngredients:
+  - B:BouncySlime
 
-  fallDamageMultiplier: 0.2 #has to be between 0 and 1, the multiplier for how much damage the player will take
-  damageOnUseMultiplier: 3    #the damage the slime boots take depends on how much damage the wearer would take without them. This multiplier makes the boots take more or less damage.
-  # allowed multipliers: {0,1,2,3,....}
-
-BouncySlime: # The Resource needed to craft the slime boots. drops from boss slimes.
-  DroppedPerKill: 2
-  Lore:
-    - "Bouncy :P"
+fallDamageMultiplier: 0.2 #has to be between 0 and 1, the multiplier for how much damage the player will take
+damageOnUseMultiplier: 3    #the damage the slime boots take depends on how much damage the wearer would take without them. This multiplier makes the boots take more or less damage.
+# allowed multipliers: {0,1,2,3,....}

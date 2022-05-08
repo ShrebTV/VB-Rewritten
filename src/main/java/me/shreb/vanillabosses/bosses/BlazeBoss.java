@@ -11,8 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -37,10 +35,8 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
     public static final String SCOREBOARDTAG = "BossBlaze";
     Random abilityRandom = new Random();
 
-    public static FileConfiguration blazeBossConfig = new YamlConfiguration();
-
     static {
-        FileCreator.createAndLoad(FileCreator.blazeBossPath, blazeBossConfig);
+        FileCreator.createAndLoad(FileCreator.blazeBossPath, instance.configuration);
     }
 
     @Override
@@ -71,9 +67,7 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
-
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        if (!instance.configuration.getBoolean("enabled")) return entity;
 
         // checking wether the entity passed in is a Blaze. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Blaze)) {
@@ -85,8 +79,8 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = config.getDouble("Bosses." + CONFIGSECTION + ".health");
-        String nameColorString = config.getString("Bosses." + CONFIGSECTION + ".displayNameColor");
+        double health = instance.configuration.getDouble("health");
+        String nameColorString = instance.configuration.getString("displayNameColor");
 
         ChatColor nameColor;
 
@@ -102,18 +96,18 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        double speedMultiplier = instance.configuration.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
-        String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
+        String name = instance.configuration.getString("displayName");
 
         //setting the entity Attributes. Logging failure as Warning.
         try {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("Bosses." + CONFIGSECTION + ".showDisplayNameAlways"));
+            entity.setCustomNameVisible(instance.configuration.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Blaze Boss\n" +
@@ -167,9 +161,9 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
 
         double random = abilityRandom.nextDouble();
 
-        double chanceWither = config.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.witherSkull");
-        double chanceEnder = config.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.enderDragonFireBall");
-        double chanceLarge = config.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.largeFireBall");
+        double chanceWither = instance.configuration.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.witherSkull");
+        double chanceEnder = instance.configuration.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.enderDragonFireBall");
+        double chanceLarge = instance.configuration.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.largeFireBall");
 
         double currentChance = chanceWither;
         if (currentChance > random) {
@@ -251,65 +245,62 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
     @EventHandler
     public void onHitEvent(EntityDamageByEntityEvent event) {
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
-
         boolean useDamageModifier = event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)
                 && event.getEntityType() == EntityType.BLAZE
                 && event.getDamager().getType().equals(EntityType.SPECTRAL_ARROW);
 
         if (useDamageModifier) {
-            event.setDamage(event.getDamage() * config.getDouble("Bosses.BlazeBoss.onHitEvents.spectralArrowDamageMultiplier"));
+            event.setDamage(event.getDamage() * instance.configuration.getDouble("onHitEvents.spectralArrowDamageMultiplier"));
         }
     }
 
     @Override
     public boolean verifyConfig() {
-        String fullConfig = "Bosses." + CONFIGSECTION + ".";
 
         VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
 
-        if (!verifyBoolean(fullConfig + "enabled")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
+        if (!verifyBoolean("enabled")) {
+            logger.setStringToLog("Blaze Boss: Config Error at enabled, has to be true or false");
             logger.logToFile();
         }
 
-        if (!verifyString(config.getString(fullConfig + "displayName"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
+        if (!verifyString(instance.configuration.getString("displayName"))) {
+            logger.setStringToLog("Blaze Boss: Config Error at displayName, cannot be empty");
             logger.logToFile();
         }
 
-        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
+        if (!verifyColorCode(instance.configuration.getString("displayNameColor"))) {
+            logger.setStringToLog("Blaze Boss: Config Error at displayNameColor, has to be a hexCode");
             logger.logToFile();
         }
 
-        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+        if (!verifyBoolean("showDisplayNameAlways")) {
+            logger.setStringToLog("Blaze Boss: Config Error at showDisplayNameAlways, has to be true or false");
             logger.logToFile();
         }
 
-        if (!verifyDouble(fullConfig + "DamageModifier", 0.001, 100)) {
-            logger.setStringToLog("Config Warning/Error at '" + fullConfig + "DamageModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
+        if (!verifyDouble("DamageModifier", 0.001, 100)) {
+            logger.setStringToLog("Blaze Boss: Config Warning/Error at DamageModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
             logger.logToFile();
         }
 
-        if (!verifyDouble(fullConfig + "SpeedModifier", 0.001, 100)) {
-            logger.setStringToLog("Config Warning/Error at '" + fullConfig + "SpeedModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
+        if (!verifyDouble("SpeedModifier", 0.001, 100)) {
+            logger.setStringToLog("Blaze Boss: Config Warning/Error at SpeedModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
             logger.logToFile();
         }
 
-        if (!verifyInt(fullConfig + "health", 0, Integer.MAX_VALUE)) {
-            logger.setStringToLog("Config Warning/Error at '" + fullConfig + "health, has to be a value above 0, cannot be more than 2147483647, has to be a number");
+        if (!verifyInt("health", 0, Integer.MAX_VALUE)) {
+            logger.setStringToLog("Blaze Boss: Config Warning/Error at health, has to be a value above 0, cannot be more than 2147483647, has to be a number");
             logger.logToFile();
         }
 
-        if (!verifyDouble(fullConfig + "spawnChance", 0.0, 1.0)) {
-            logger.setStringToLog("Config Warning/Error at '" + fullConfig + "spawnChance, has to be a value between 0 and 1, has to be a number");
+        if (!verifyDouble("spawnChance", 0.0, 1.0)) {
+            logger.setStringToLog("Blaze Boss: Config Warning/Error at spawnChance, has to be a value between 0 and 1, has to be a number");
             logger.logToFile();
         }
 
-        if (!verifyString(fullConfig + "killedMessage")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "killedMessage, cannot be empty");
+        if (!verifyString("killedMessage")) {
+            logger.setStringToLog("Blaze Boss: Config Error at killedMessage, cannot be empty");
             logger.logToFile();
         }
 

@@ -14,7 +14,6 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -30,10 +29,8 @@ public class MagmacubeBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "Magma_cubeBoss";
     public static final String SCOREBOARDTAG = "BossMagmacube";
 
-    public static FileConfiguration magmacubeBossConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.magmacubeBossPath, magmacubeBossConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.magmacubeBossPath, configuration);
     }
 
     @Override

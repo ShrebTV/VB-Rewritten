@@ -14,7 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -37,10 +36,8 @@ public class ZombieBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "ZombieBoss";
     public static final String SCOREBOARDTAG = "BossZombie";
 
-    public static FileConfiguration zombieBossConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.zombieBossPath, zombieBossConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.zombieBossPath, configuration);
     }
 
     @Override

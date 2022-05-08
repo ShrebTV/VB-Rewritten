@@ -1,11 +1,9 @@
 package me.shreb.vanillabosses.bosses.utility;
 
-import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.*;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.DataRetriever;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 
@@ -120,17 +118,16 @@ public class BossDataRetriever extends DataRetriever {
             default:
                 throw new IllegalArgumentException("Type specified was not a type of boss.");
         }
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
-        this.health = config.getDouble("Bosses." + this.CONFIGSECTION + ".health");
-        this.damageModifier = config.getDouble("Bosses." + this.CONFIGSECTION + ".DamageModifier");
-        this.spawnChance = config.getDouble("Bosses." + this.CONFIGSECTION + ".spawnChance");
-        this.droppedXP = config.getInt("Bosses." + this.CONFIGSECTION + ".droppedXP");
-        this.bossKilledMessage = config.getString("Bosses." + this.CONFIGSECTION + ".killedMessage");
-        this.droppedItems = (ArrayList<String>) config.getStringList("Bosses." + this.CONFIGSECTION + ".droppedItems");
-        this.spawnNaturally = config.getBoolean("Bosses." + this.CONFIGSECTION + ".spawnNaturally");
+        this.health = this.instance.configuration.getDouble("health");
+        this.damageModifier = this.instance.configuration.getDouble("DamageModifier");
+        this.spawnChance = this.instance.configuration.getDouble("spawnChance");
+        this.droppedXP = this.instance.configuration.getInt("droppedXP");
+        this.bossKilledMessage = this.instance.configuration.getString("killedMessage");
+        this.droppedItems = (ArrayList<String>) this.instance.configuration.getStringList("droppedItems");
+        this.spawnNaturally = this.instance.configuration.getBoolean("spawnNaturally");
 
-        String indexString = config.getString("Bosses." + this.CONFIGSECTION + ".CommandToBeExecutedOnDeath");
+        String indexString = this.instance.configuration.getString("CommandToBeExecutedOnDeath");
 
         if (indexString != null) {
             String[] strings = indexString.split(";");
@@ -236,17 +233,15 @@ public class BossDataRetriever extends DataRetriever {
 
         }
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        this.health = this.instance.configuration.getDouble("health");
+        this.damageModifier = this.instance.configuration.getDouble("DamageModifier");
+        this.spawnChance = this.instance.configuration.getDouble("spawnChance");
+        this.droppedXP = this.instance.configuration.getInt("droppedXP");
+        this.bossKilledMessage = this.instance.configuration.getString("killedMessage");
+        this.droppedItems = (ArrayList<String>) this.instance.configuration.getStringList("droppedItems");
+        this.spawnNaturally = this.instance.configuration.getBoolean("spawnNaturally");
 
-        this.health = config.getDouble("Bosses." + this.CONFIGSECTION + ".health");
-        this.damageModifier = config.getDouble("Bosses." + this.CONFIGSECTION + ".DamageModifier");
-        this.spawnChance = config.getDouble("Bosses." + this.CONFIGSECTION + ".spawnChance");
-        this.droppedXP = config.getInt("Bosses." + this.CONFIGSECTION + ".droppedXP");
-        this.bossKilledMessage = config.getString("Bosses." + this.CONFIGSECTION + ".killedMessage");
-        this.droppedItems = (ArrayList<String>) config.getStringList("Bosses." + this.CONFIGSECTION + ".droppedItems");
-        this.spawnNaturally = config.getBoolean("Bosses." + this.CONFIGSECTION + ".spawnNaturally");
-
-        String indexString = config.getString("Bosses." + this.CONFIGSECTION + ".CommandToBeExecutedOnDeath");
+        String indexString = this.instance.configuration.getString("CommandToBeExecutedOnDeath");
 
         if (indexString != null) {
             String[] strings = indexString.split(";");

@@ -1,23 +1,22 @@
-Zombified_PiglinBoss:
-  enabled: true
-  displayName: "The Butcher"
-  displayNameColor: "#850000"
-  showDisplayNameAlways: true
-  DamageModifier: 1.0
-  SpeedModifier: 1.0
-  health: 100
-  spawnChance: 0.005
-  killedMessage: "<killedName> was slain by <killer>"
+enabled: true
+displayName: "The Butcher"
+displayNameColor: "#850000"
+showDisplayNameAlways: true
+DamageModifier: 1.0
+SpeedModifier: 1.0
+health: 100
+spawnChance: 0.005
+killedMessage: "<killedName> was slain by <killer>"
 
-  spawnWorlds:
+spawnWorlds:
 
-  droppedItems:
-    - "{\"materialName\":\"GOLD_INGOT\",\"minAmount\":\"2\",\"maxAmount\":\"4\"}"
+droppedItems:
+  - "{\"materialName\":\"GOLD_INGOT\",\"minAmount\":\"2\",\"maxAmount\":\"4\"}"
 
-  droppedXP: 50
+droppedXP: 50
 
-  CommandToBeExecutedOnDeath: 0
+CommandToBeExecutedOnDeath: 0
 
-  disableVanillaDrops: true
+disableVanillaDrops: true
 
-  spawnNaturally: true
+spawnNaturally: true

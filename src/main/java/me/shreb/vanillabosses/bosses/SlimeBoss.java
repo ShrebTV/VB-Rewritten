@@ -12,8 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -33,10 +31,8 @@ public class SlimeBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "SlimeBoss";
     public static final String SCOREBOARDTAG = "BossSlime";
 
-    public static FileConfiguration slimeBossConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.slimeBossPath, slimeBossConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.slimeBossPath, configuration);
     }
 
     @Override

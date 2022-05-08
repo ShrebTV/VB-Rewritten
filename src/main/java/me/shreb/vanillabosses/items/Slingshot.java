@@ -9,8 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,10 +33,8 @@ public class Slingshot extends VBItem {
     public static HashMap<UUID, Long> fallDamageTags = new HashMap<>();
     public static long FALL_DAMAGE_TAG_TIMEOUT = config.getInt("Items.Slingshot.antiFallDamageTime");
 
-    public static FileConfiguration slingshotConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.slingshotPath, slingshotConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.slingshotPath, configuration);
     }
 
     public Slingshot() {

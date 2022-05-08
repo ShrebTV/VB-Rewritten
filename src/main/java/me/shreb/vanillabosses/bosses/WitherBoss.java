@@ -11,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Wither;
@@ -33,10 +32,8 @@ public class WitherBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "WitherBoss";
     public static final String SCOREBOARDTAG = "BossWither";
 
-    public static FileConfiguration witherBossConfig = new YamlConfiguration();
-
-    static {
-        FileCreator.createAndLoad(FileCreator.witherBossPath, witherBossConfig);
+    {
+        FileCreator.createAndLoad(FileCreator.witherBossPath, configuration);
     }
 
     @Override

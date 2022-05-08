@@ -50,9 +50,9 @@ public class RespawningBoss extends Boss {
     boolean enableBoss;
 
     // put the commands from the command list and their indexes into the commandMap in order to easily execute them later
-    static {
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
-        List<String> bossJsonList = new ArrayList<>(config.getStringList("Bosses.RespawningBosses"));
+    {
+        FileConfiguration config = new BossDataRetriever(this.type).instance.configuration;
+        List<String> bossJsonList = new ArrayList<>(config.getStringList("RespawningBosses"));
 
         for (String string : bossJsonList) {
             try {

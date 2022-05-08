@@ -1,7 +1,6 @@
-BaseballBat:
-  dropChance: 0.2
-  chanceToConcuss: 0.15  # in %, applies Blindness
-  concussionDuration: 3 #in seconds
-  enableSpawnCommand: true
-  Lore:
-    - Has a Chance to blind enemies!
+dropChance: 0.2
+chanceToConcuss: 0.15  # in %, applies Blindness
+concussionDuration: 3 #in seconds
+enableSpawnCommand: true
+Lore:
+  - Has a Chance to blind enemies!
