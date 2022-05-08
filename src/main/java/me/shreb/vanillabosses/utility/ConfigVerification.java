@@ -17,33 +17,30 @@ public interface ConfigVerification {
 
     boolean verifyConfig();
 
-    default boolean verifyString(String configPath) {
-
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+    default boolean verifyString(String toCheck, String configPath) {
 
         VBLogger logger = new VBLogger(getClass().getName(), Level.WARNING, "");
 
-        if (config.getString(configPath).equalsIgnoreCase("")) {
-            logger.setStringToLog("Could not read config value for " + configPath + " Unexpected value: " + config.getString(configPath) + " @ " + configPath);
+        if (toCheck.equalsIgnoreCase("")) {
+            logger.setStringToLog("Could not read config value for " + configPath + " Unexpected value: " + toCheck + " @ " + configPath);
             logger.logToFile();
             return false;
         }
         return true;
     }
 
-    default boolean verifyColorCode(String configPath) {
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+    default boolean verifyColorCode(String toCheck, String configPath) {
 
         VBLogger logger = new VBLogger(getClass().getName(), Level.WARNING, "");
 
-        if (!verifyString(configPath)) {
+        if (!verifyString(toCheck, configPath)) {
             return false;
         }
 
         try {
-            ChatColor.of(config.getString(configPath));
+            ChatColor.of(toCheck);
         } catch (IllegalArgumentException ignored) {
-            logger.setStringToLog("Color code invalid! " + config.getString(configPath) + " @ " + configPath);
+            logger.setStringToLog("Color code invalid! " + toCheck + " @ " + configPath);
             logger.logToFile();
             return false;
         }
@@ -51,15 +48,14 @@ public interface ConfigVerification {
         return true;
     }
 
-    default boolean verifyBoolean(String configPath) {
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+    default boolean verifyBoolean(String toCheck, String configPath) {
 
         VBLogger logger = new VBLogger(getClass().getName(), Level.WARNING, "");
 
-        if (config.getString(configPath) == null
-                || (!config.getString(configPath).equalsIgnoreCase("true")
-                && !config.getString(configPath).equalsIgnoreCase("false"))) {
-            logger.setStringToLog("Could not read config value for " + configPath + ". Unexpected value: " + config.getString(configPath));
+        if (toCheck == null
+                || (!toCheck.equalsIgnoreCase("true")
+                && !toCheck.equalsIgnoreCase("false"))) {
+            logger.setStringToLog("Could not read config value for " + configPath + ". Unexpected value: " + toCheck);
             logger.logToFile();
             return false;
         }
@@ -98,7 +94,7 @@ public interface ConfigVerification {
         return true;
     }
 
-    default boolean verifyInt(String configPath, int min, int max) {
+    default boolean verifyInt(String toCheck, String configPath, int min, int max) {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
@@ -109,7 +105,7 @@ public interface ConfigVerification {
 
         try {
 
-            if ((s = config.getString(configPath)) == null) {
+            if ((s = toCheck) == null) {
                 logger.setStringToLog("Could not read config value for " + configPath + " Null value: @ " + configPath);
                 logger.logToFile();
                 return false;
@@ -117,13 +113,13 @@ public interface ConfigVerification {
 
             i = Integer.parseInt(s);
         } catch (NumberFormatException ignored) {
-            logger.setStringToLog("Could not read config value for " + configPath + " Unexpected value: " + config.getString(configPath) + " @ " + configPath);
+            logger.setStringToLog("Could not read config value for " + configPath + " Unexpected value: " + toCheck + " @ " + configPath);
             logger.logToFile();
             return false;
         }
 
         if (i > max || i < min) {
-            logger.setStringToLog("Could not read config value for " + configPath + " Has to be greater than " + min + " and less than " + max + ". Was actually " + config.getInt(configPath) + " @ " + configPath);
+            logger.setStringToLog("Could not read config value for " + configPath + " Has to be greater than " + min + " and less than " + max + ". Was actually " + toCheck + " @ " + configPath);
             logger.logToFile();
             return false;
         }
@@ -139,9 +135,7 @@ public interface ConfigVerification {
      * @return true if the value gotten from config is a valid double value inside the specified bounds, false otherwise
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    default boolean verifyDouble(String configPath, double min, double max) {
-
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+    default boolean verifyDouble(String toCheck, String configPath, double min, double max) {
 
         VBLogger logger = new VBLogger(getClass().getName(), Level.WARNING, "");
 
@@ -149,7 +143,7 @@ public interface ConfigVerification {
         double d;
 
         try {
-            if ((s = config.getString(configPath)) == null) {
+            if ((s = toCheck) == null) {
                 logger.setStringToLog("Could not read config value for " + configPath + " Null value: @ " + configPath);
                 logger.logToFile();
                 return false;
@@ -157,13 +151,13 @@ public interface ConfigVerification {
 
             d = Double.parseDouble(s);
         } catch (NumberFormatException ignored) {
-            logger.setStringToLog("Could not read config value for " + configPath + " Unexpected value: " + config.getString(configPath) + " @ " + configPath);
+            logger.setStringToLog("Could not read config value for " + configPath + " Unexpected value: " + toCheck + " @ " + configPath);
             logger.logToFile();
             return false;
         }
 
         if (d > max || d < min) {
-            logger.setStringToLog("Could not read config value for " + configPath + " Has to be greater than " + min + " and less than " + max + ". Was actually " + config.getInt(configPath) + " @ " + configPath);
+            logger.setStringToLog("Could not read config value for " + configPath + " Has to be greater than " + min + " and less than " + max + ". Was actually " + toCheck + " @ " + configPath);
             logger.logToFile();
             return false;
         }
