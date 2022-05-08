@@ -2,13 +2,13 @@
 Spawns bosses naturally
 
 ## Contents:\
- - # Description
- - # Important information
- - # Users' Guide
- - # Config guide
- - # Available Bosses
- - # Available Items
- - # Commands
+ - ### Description
+ - ### Important information
+ - ### Users' Guide
+ - ### Config guide
+ - ### Available Bosses
+ - ### Available Items
+ - ### Commands
 
 
 
