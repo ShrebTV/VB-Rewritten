@@ -1,6 +1,17 @@
 # Vanilla Bosses Plugin
 Spawns bosses naturally
 
+## Contents:\
+ - # Description
+ - # Important information
+ - # Users' Guide
+ - # Config guide
+ - # Available Bosses
+ - # Available Items
+ - # Commands
+
+
+
 ### Description:
 This plugin adds many types of bosses to the game. The bosses are edited Vanilla mobs.\
 These bosses have special abilities and some wear armor and/or carry weapons\
