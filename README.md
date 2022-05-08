@@ -27,13 +27,13 @@ I still do this, but reserve my right to stop doing so at any point. (In the nea
 abandoning this project)
 
 I provide support on my discord server. Join [here](https://discord.gg/stAd5ccDZT) \
-The plugin is downloadable via Spigot. Get it [here](https://www.spigotmc.org/resources/vanilla-bosses.95205/)
-You can find the config file [here](https://github.com/ShrebTV/VB-Rewritten/blob/master/src/main/resources/config.yml)
+The plugin is downloadable via Spigot. Get it [here](https://www.spigotmc.org/resources/vanilla-bosses.95205/)\
+You can find the config file [here](https://github.com/ShrebTV/VB-Rewritten/blob/master/src/main/resources/config.yml)\
 For help on the config file you may look [here](#Inside-the-config-file) or message me on discord on the above linked server
 
 ## How to use this plugin
-If you have used an old version I recommend saving your config to a different place and deleting the old config in the folder.
-I say this because I had to change how some values worked so a chance of 10 in the old plugin which was 10% is 100% in this version of the plugin.
+If you have used an old version I recommend saving your config to a different place and deleting the old config in the folder.\
+I say this because I had to change how some values worked so a chance of 10 in the old plugin which was 10% is 100% in this version of the plugin.\
 I changed chances to be values between 0 and 1.
 
 In case you have never installed a plugin on your spigot server:
