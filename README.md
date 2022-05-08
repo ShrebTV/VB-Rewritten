@@ -4,12 +4,12 @@ Spawns bosses naturally
 ## Contents:
 
 - [Description](#Description)
-- [Important information](#Important-information:)
-- [Users' Guide](#How-to-use-this-plugin:)
-- [Config guide](#Inside-the-config-file:)
-- [Available Bosses](#Available-Bosses:)
-- [Available Items](#Available-Items:)
-- [Commands](#Commands:)
+- [Information](#Important-information)
+- [Users' Guide](#How-to-use-this-plugin)
+- [Config guide](#Inside-the-config-file)
+- [Available Bosses](#Available-Bosses)
+- [Available Items](#Available-Items)
+- [Commands](#Commands)
 
 
 ### Description
@@ -18,8 +18,7 @@ This plugin adds many types of bosses to the game. The bosses are edited Vanilla
 These bosses have special abilities and some wear armor and/or carry weapons\
 This plugin also adds a bunch of new Items which have special abilities of their own!
 
-
-### Important information:
+### Important information
 
 My code is protected by German copyright.\
 Do not republish my code without permission.\
@@ -30,7 +29,7 @@ abandoning this project)
 I provide support on my discord server. Join [here](https://discord.gg/stAd5ccDZT) \
 The plugin is downloadable via Spigot. Get it [here](https://www.spigotmc.org/resources/vanilla-bosses.95205/)
 
-## How to use this plugin:
+## How to use this plugin
 If you have used an old version I recommend saving your config to a different place and deleting the old config in the folder.
 I say this because I had to change how some values worked so a chance of 10 in the old plugin which was 10% is 100% in this version of the plugin.
 I changed chances to be values between 0 and 1.
@@ -40,7 +39,7 @@ In case you have never installed a plugin on your spigot server:
  - open the plugins folder in your server folder
  - put the plugin.jar in the plugins folder
 
-### Inside the config file:
+### Inside the config file
  - CommandsExecutedOnBossDeath: // Copy and paste the standard values directly below the others in order to make a new command. In this new command you can now edit the command and the delay for the command to take effect. To edit the delay you just have to change the number behind the 'DELAY:' to the delay you want. If you want no delay you may leave out the 'DELAY:5' or put 'DELAY:0'.\
 The first command is an empty command by default and has the key '0'. After this you can begin counting up. the first non-empty command (so the second actual command) has the key '1'\
 Please ignore the "" inside the <> for placeholders, .md does not show the contents otherwise\
@@ -75,7 +74,7 @@ The commands have certain Placeholders, such as:\
    cloakOfInvisibility to Netherite_boots for example
  - dropChance: //Specifies the chance with which the item is dropped when the corresponding boss dies
 
-### Available Bosses:
+### Available Bosses
 
 - Blaze (Shoots projectiles different from a normal blaze)
 - Creeper (does not die when it explodes, shoots tnt in every direction when doing so)
@@ -90,7 +89,7 @@ The commands have certain Placeholders, such as:\
  - Zombie (A Zombie with armor on and a Baseball bat in its hand. see below for Baseball bat)
  - Zombified Piglin (A Zombie pigman with armor on and a Butchers axe in its hand. see below for Butchers axe)
 
-### Available Items:
+### Available Items
  - Baseball bat (Has a chance to "concuss" (blind) hit enemies. Dropped by the Zombie boss)
  - Blazer (When the wearer is hit the attacker has a chance to be set on fire. Dropped by the Blaze boss)
  - Boss eggs (spawns the boss specified by the egg. Not currently dropped)
@@ -101,7 +100,7 @@ The commands have certain Placeholders, such as:\
  - Slime Boots (Reduces Fall Damage significantly. Dropped by the Slime boss)
  - Slingshot (Launches the player in the direction they are looking. right click while crouching to activate. Dropped by the Spider boss)
 
-### Commands:
+### Commands
 A ? in front of a parameter means that this one is optional
  - /vbAdmin giveItem itemName/material ?playerName ?amount // gives the sender the specified item, or gives the specified player the item. 
  - /vbAdmin specialItem bossegg playerName amount Type // gives the specified player the specified amount of boss eggs for the specified type
