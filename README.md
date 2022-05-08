@@ -28,6 +28,8 @@ abandoning this project)
 
 I provide support on my discord server. Join [here](https://discord.gg/stAd5ccDZT) \
 The plugin is downloadable via Spigot. Get it [here](https://www.spigotmc.org/resources/vanilla-bosses.95205/)
+You can find the config file [here](https://github.com/ShrebTV/VB-Rewritten/blob/master/src/main/resources/config.yml)
+For help on the config file you may look [here](#Inside-the-config-file) or message me on discord on the above linked server
 
 ## How to use this plugin
 If you have used an old version I recommend saving your config to a different place and deleting the old config in the folder.
