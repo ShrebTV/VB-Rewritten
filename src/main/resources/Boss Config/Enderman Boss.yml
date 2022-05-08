@@ -1,0 +1,41 @@
+EndermanBoss:
+  enabled: true
+  displayName: "Edna"
+  displayNameColor: "#682294"
+  showDisplayNameAlways: true
+  DamageModifier: 2.0
+  SpeedModifier: 1.0
+  health: 150
+  spawnChance: 0.005
+  killedMessage: "<killedName> was slain by <killer>"
+
+  spawnWorlds:
+
+  droppedItems:
+    - "{\"materialName\":\"ENDER_PEARL\",\"minAmount\":\"3\",\"maxAmount\":\"8\"}"
+
+  droppedXP: 50
+
+  CommandToBeExecutedOnDeath: 0
+
+  disableVanillaDrops: true
+
+  onHitEvents:
+    potionEffects: #syntax:  'Potiontype:amplifier:duration:chance'     duration in seconds, chance (1 = 100%)
+      - Increase_Damage:5:20:0.2
+      - Speed:3:10:0.15
+      - Invisibility:1:5:0.1
+
+    teleportBehindPlayer:
+      enabled: true
+      teleportBackToOldLocation: true
+      teleportBackDelay: 4  #in seconds
+      chance: 0.05   # 1 = 100%, 0.05 = 5%
+      invisibility: true
+      invisibilityDuration: 3
+
+    endermiteSpawnOnTeleport:
+      enabled: true
+      amount: 2
+
+  spawnNaturally: true

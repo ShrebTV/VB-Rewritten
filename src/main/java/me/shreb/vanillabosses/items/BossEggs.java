@@ -6,6 +6,7 @@ import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,6 +15,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -31,6 +34,12 @@ public class BossEggs extends VBItem {
     public static BossEggs instance = new BossEggs();
 
     public EntityType type;
+
+    public static FileConfiguration bossEggConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.bossEggsPath, bossEggConfig);
+    }
 
     private BossEggs() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "BossEgg");

@@ -6,9 +6,11 @@ import me.shreb.vanillabosses.bosses.utility.BossDrops;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 public interface ConfigVerification {
@@ -128,6 +130,15 @@ public interface ConfigVerification {
         return true;
     }
 
+    /**
+     * Verifies whether the config section in question is a double value within the bounds specified
+     *
+     * @param configPath the path towards the value
+     * @param min        lower bound, inclusive
+     * @param max        upper bound, inclusive
+     * @return true if the value gotten from config is a valid double value inside the specified bounds, false otherwise
+     */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     default boolean verifyDouble(String configPath, double min, double max) {
 
         FileConfiguration config = Vanillabosses.getInstance().getConfig();
@@ -156,6 +167,27 @@ public interface ConfigVerification {
             logger.logToFile();
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Checks the ArrayList for invalid world names
+     *
+     * @param worldList the list of world names
+     * @return true if the list is empty or all the worlds specified by the names in the list exist. false if any do not exist.
+     */
+    default boolean verifySpawnWorlds(ArrayList<String> worldList) {
+
+        if (worldList.isEmpty()) return true;
+
+        for (String s : worldList) {
+            World world = Vanillabosses.getInstance().getServer().getWorld(s);
+            if (world == null) {
+                new VBLogger(getClass().getName(), Level.SEVERE, "Could not find Boss Spawn world: " + s).logToFile();
+                return false;
+            }
+        }
+
         return true;
     }
 }

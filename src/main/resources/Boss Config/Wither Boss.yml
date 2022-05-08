@@ -1,0 +1,21 @@
+WitherBoss:
+  enabled: true
+  removeNetheriteBlockOnSpawn: true
+  displayName: "X AE A-12"
+  displayNameColor: "#1B1D19"
+  showDisplayNameAlways: true
+  DamageModifier: 1.0
+  SpeedModifier: 1.0
+  Health: 750  #standard health of the boss is 750 (pretty hard without spectral arrows)
+  killedMessage: "<killedName> was slain by <killer>"
+
+  droppedItems:
+    - "{\"materialName\":\"NETHERITE_INGOT\",\"minAmount\":\"0\",\"maxAmount\":\"6\"}"
+    - "{\"materialName\":\"NETHER_STAR\",\"minAmount\":\"1\",\"maxAmount\":\"2\"}"
+
+  droppedXP: 250
+
+  CommandToBeExecutedOnDeath: 0
+
+  onHitEvents:
+    spectralArrowDamageMultiplier: 4

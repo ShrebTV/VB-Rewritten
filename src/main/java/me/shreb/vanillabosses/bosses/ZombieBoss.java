@@ -8,11 +8,13 @@ import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.listeners.SpawnEvent;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.ConfigVerification;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -34,6 +36,12 @@ public class ZombieBoss extends VBBoss implements ConfigVerification {
 
     public static final String CONFIGSECTION = "ZombieBoss";
     public static final String SCOREBOARDTAG = "BossZombie";
+
+    public static FileConfiguration zombieBossConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.zombieBossPath, zombieBossConfig);
+    }
 
     @Override
     public LivingEntity makeBoss(Location location) throws BossCreationException {

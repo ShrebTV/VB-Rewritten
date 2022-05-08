@@ -1,0 +1,8 @@
+WitherEgg:
+  witherBossDropsEgg: true
+  itemMaterial: Dragon_Egg
+  timeToHatch: 10  #in seconds (Don't reload the plugin or the server while this timer is active, spawning won't work properly if you do. Recommended low values so this wont happen.)
+  petWitherHP: 1500
+  enableSpawnCommand: true
+  arrowDamageMultiplier: 0.3 #sets the multiplier for the arrows the pet wither shoots. will only target Monsters.
+  arrowRange: 15

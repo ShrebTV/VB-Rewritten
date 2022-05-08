@@ -1,0 +1,31 @@
+CreeperBoss:
+  enabled: true
+  displayName: "Bomby the Bomber"
+  displayNameColor: "#1DE00C"
+  showDisplayNameAlways: true
+  DamageModifier: 1.0
+  SpeedModifier: 1.0
+  health: 120
+  spawnChance: 0.005
+  thrownTNT:
+    throwTNTEnable: true            #creeper will throw TNT in all directions when it blows up. The creeper will not die to exploding like a normal creeper
+    TNTYield: 4                     #recommended to keep low, especially if you intend to set the TNTDoesNoBlockDamage to false. You have been warned!
+    TNTFuse: 4                      #in seconds
+    TNTSpreadMultiplier: 1.0
+    TNTDoesNoBlockDamage: true # If set to false the TNT the creeper boss throws out will do damage to the environment and items.
+
+  killedMessage: "<killedName> was slain by <killer>"
+
+  spawnWorlds:
+
+  droppedItems:
+    - "{\"materialName\":\"TNT\",\"minAmount\":\"2\",\"maxAmount\":\"4\"}"
+    - "{\"materialName\":\"DIAMOND\",\"minAmount\":\"0\",\"maxAmount\":\"1\"}"
+
+  droppedXP: 50
+
+  CommandToBeExecutedOnDeath: 0
+
+  disableVanillaDrops: false
+
+  spawnNaturally: true

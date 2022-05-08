@@ -4,7 +4,10 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.CreeperBoss;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +26,12 @@ import java.util.logging.Level;
 public class Skeletor extends VBItem {
 
     public static Skeletor instance = new Skeletor();
+
+    public static FileConfiguration skeletorConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.skeletorPath, skeletorConfig);
+    }
 
     public Skeletor() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "Skeletor");

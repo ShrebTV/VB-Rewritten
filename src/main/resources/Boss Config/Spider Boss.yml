@@ -1,0 +1,36 @@
+SpiderBoss:
+  enabled: true
+  displayName: "Dolores"
+  displayNameColor: "#A70FE1"
+  showDisplayNameAlways: true
+  DamageModifier: 3.0
+  SpeedModifier: 1.5
+  health: 150
+  spawnChance: 0.005
+  killedMessage: "<killedName> was slain by <killer>"
+
+  spawnWorlds:
+
+  droppedItems:
+    - "{\"materialName\":\"OBSIDIAN\",\"minAmount\":\"2\",\"maxAmount\":\"4\"}"
+    - "{\"materialName\":\"FERMENTED_SPIDER_EYE\",\"minAmount\":\"2\",\"maxAmount\":\"8\"}"
+
+
+  droppedXP: 90
+
+  CommandToBeExecutedOnDeath: 0
+
+  disableVanillaDrops: true
+
+  onHitEvents:
+    invisibility:
+      chance: 0.2           #1 = 100%
+      duration: 3         # in seconds
+      teleportToPlayer: true
+      teleportBack: true
+
+    leap:
+      chance: 0.3
+      maxDelayAfterHit: 2 #in seconds
+
+  spawnNaturally: true

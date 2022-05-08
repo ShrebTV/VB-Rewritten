@@ -1,0 +1,26 @@
+cloakOfInvisibility:
+  itemMaterial: Chainmail_Chestplate
+  chance: 0.1
+  enableSpawnCommand: true
+  #keep this next one at or above 3 seconds!
+  delayBetweenChecks: 5  #in seconds, tells the plugin how often to check if a player is wearing an invisibility cloak. If you are experiencing lag spikes, try increasing this number.
+  enableChecks: true # if disabled, the cloak of Invisibility will no longer work. Only use this setting for troubleshooting lag causes.
+  enableDamageCloakEachCheck: true  # if enabled, the cloak will take the specified amount of damage per Check. (delayBetweenChecks defines how quickly it will be damaged)
+  damagePerCheckAmount: 1           # will only be done if above 0, this amount of damage will be done to the cloak every check if worn.
+  enableCraftingRecipe: true
+  Lore:
+    - Makes the wearer almost completely invisible!
+
+  recipeShape:
+    - "E E"   #always keep at 3 letters (including space to keep that slot empty). declare all letters you use in this down below in the recipeIngredients
+    - "BDB"   # ^^
+    - "IPI"   # ^^
+  recipeIngredients: # syntax: "Letter:MaterialType"
+    - E:Ender_Eye
+    - B:Enchanted_Book
+    - D:Diamond_Block
+    - I:Iron_Ingot
+    - P:Pot             #pot = invisibility potion.
+    #to include items from this plugin in crafting recipes, use the following words: (BaseballBat, Blazer, ButchersAxe, InvisibilityCloak,
+    #                                                                             Skeletor, Slimeboots, BouncySlime, Slingshot, Pot, HeatedCream1, HeatedCream2, HeatedCream3)
+    # Using one of these words as a materialType in the syntax for recipeIngredients will make the recipe require the specified special Item at the specified slot.

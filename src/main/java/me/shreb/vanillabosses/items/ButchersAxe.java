@@ -5,10 +5,13 @@ import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.items.utility.ItemDataRetriever;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.Utility;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -26,6 +29,12 @@ import java.util.logging.Level;
 public class ButchersAxe extends VBItem {
 
     public static ButchersAxe instance = new ButchersAxe();
+
+    public static FileConfiguration butchersAxeConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.butchersAxePath, butchersAxeConfig);
+    }
 
     public ButchersAxe() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "ButchersAxe");

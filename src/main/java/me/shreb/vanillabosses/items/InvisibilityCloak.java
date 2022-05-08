@@ -3,10 +3,13 @@ package me.shreb.vanillabosses.items;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,6 +30,12 @@ import java.util.stream.Collectors;
 public class InvisibilityCloak extends VBItem {
 
     public static InvisibilityCloak instance = new InvisibilityCloak();
+
+    public static FileConfiguration invisibilityCloakConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.invisibilityCloakPath, invisibilityCloakConfig);
+    }
 
     public InvisibilityCloak() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "cloakOfInvisibility");

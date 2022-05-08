@@ -4,10 +4,13 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.Utility;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -24,6 +27,12 @@ import java.util.logging.Level;
 public class Blazer extends VBItem {
 
     public static Blazer instance = new Blazer();
+
+    public static FileConfiguration blazerConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.blazerPath, blazerConfig);
+    }
 
     public Blazer() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "Blazer");

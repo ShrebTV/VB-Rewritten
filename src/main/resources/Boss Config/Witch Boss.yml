@@ -1,0 +1,60 @@
+WitchBoss:
+  enabled: true
+  displayName: "Margeret"
+  displayNameColor: "#440D8A"
+  showDisplayNameAlways: true
+  health: 125
+  SpeedModifier: 1.0
+  spawnChance: 0.005
+  killedMessage: "<killedName> was slain by <killer>"
+
+  spawnWorlds:
+
+  droppedItems:
+    - "{\"materialName\":\"NETHER_WART\",\"minAmount\":\"0\",\"maxAmount\":\"1\"}"
+    - "{\"materialName\":\"GLOWSTONE_DUST\",\"minAmount\":\"2\",\"maxAmount\":\"5\"}"
+    - "{\"materialName\":\"BLAZE_POWDER\",\"minAmount\":\"0\",\"maxAmount\":\"3\"}"
+
+  droppedXP: 50
+
+  CommandToBeExecutedOnDeath: 0
+
+  disableVanillaDrops: true
+
+  onHitEvents:
+    PlayersSwitchPlaces:
+      enabled: true
+      chance: 0.1
+      applyNausea: true
+      cooldown: 10  # This is the minimum number of hits a boss Witch will take between activating this ability
+      canSwitchWithOtherEntities: true  # leave this enabled if youre alone, or this ability will not work at all.
+
+
+  dropCustomPotionsChances: #each of the following will be dropped with the set chance. Dropping is not exclusive, so theoretically all of them can drop at once.
+    - 0.15    # Potion of harming
+    - 0.1    # Potion of poison
+    - 0.15    # Potion of blindness
+    - 0.05     # Potion of wither
+    - 0.1    # Potion of hunger
+
+  customThrownPotions:
+    Harm: # The types of Potions cannot currently be edited, only the values of each one can. IMPORTANT: The values you type in will be used in the drops too!
+      amplifier: 3
+      chance: 0.2    #chances have to add up to 1 or be less than 1. if the sum of chances is less than 1, vanilla potions will be thrown sometimes.
+    Poison: # if the sum of chances is over 1, chances will not be applied properly
+      amplifier: 4
+      duration: 10 #in seconds
+      chance: 0.1
+    Blindness:
+      duration: 20
+      chance: 0.2
+    Wither:
+      amplifier: 4
+      duration: 5
+      chance: 0.1
+    Hunger:
+      amplifier: 5
+      duration: 4
+      chance: 0.2
+
+  spawnNaturally: true

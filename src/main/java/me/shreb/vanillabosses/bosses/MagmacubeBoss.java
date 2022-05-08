@@ -6,6 +6,7 @@ import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.Utility;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,6 +14,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -27,6 +29,12 @@ public class MagmacubeBoss extends VBBoss implements ConfigVerification {
 
     public static final String CONFIGSECTION = "Magma_cubeBoss";
     public static final String SCOREBOARDTAG = "BossMagmacube";
+
+    public static FileConfiguration magmacubeBossConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.magmacubeBossPath, magmacubeBossConfig);
+    }
 
     @Override
     public LivingEntity makeBoss(Location location) throws BossCreationException {

@@ -1,0 +1,33 @@
+ZombieBoss:
+  enabled: true
+  displayName: "Bob"
+  displayNameColor: "#249400"
+  showDisplayNameAlways: true
+  DamageModifier: 1.0
+  SpeedModifier: 1.0
+  health: 65
+  spawnChance: 0.005
+  killedMessage: "<killedName> was slain by <killer>"
+
+  spawnWorlds:
+
+  droppedItems:
+    - "{\"materialName\":\"IRON_INGOT\",\"minAmount\":\"3\",\"maxAmount\":\"8\"}"
+
+  zombieHorde:
+    amount: 8
+    radius: 4
+
+  zombieAbility:
+    maxArmorModifier: 2.5 # boss takes a minimum of 1/2.5 times the normal damage
+    maxDamageModifier: 2.0 # can do max 2x normal damage
+    modifierPerZombie: 0.3 #modifier is multiplied with the amount of zombies around the boss and added to the normal values.
+    # 4 zombies around the boss with standard values: 4*0.3 = 1.2 -> damage is 2x normal damage; Damage taken is 1/2.2 the normal damage taken
+
+  droppedXP: 50
+
+  CommandToBeExecutedOnDeath: 0
+
+  disableVanillaDrops: true
+
+  spawnNaturally: true

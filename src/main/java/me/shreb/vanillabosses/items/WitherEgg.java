@@ -5,10 +5,12 @@ import me.shreb.vanillabosses.bosses.VBBoss;
 import me.shreb.vanillabosses.items.utility.ItemAbilityNotFoundException;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -32,6 +34,12 @@ public class WitherEgg extends VBItem {
     public static List<UUID> passiveWitherList = new ArrayList<>();
 
     public static NamespacedKey PASSIVE_WITHER_PDC_KEY = new NamespacedKey(Vanillabosses.getInstance(), "PassiveWither");
+
+    public static FileConfiguration witherEggConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.witherEggPath, witherEggConfig);
+    }
 
     public WitherEgg() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "WitherEgg");

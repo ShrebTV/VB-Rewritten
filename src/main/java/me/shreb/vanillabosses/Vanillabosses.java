@@ -13,6 +13,7 @@ import me.shreb.vanillabosses.items.utility.VBItemRecipe;
 import me.shreb.vanillabosses.listeners.VBListeners;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.Languages;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -104,6 +105,8 @@ public final class Vanillabosses extends JavaPlugin {
 
     private void createConfigFile() {
 
+        FileCreator.makeConfigFolders();
+
         configF = new File(getDataFolder(), "config.yml");
 
         if (!configF.exists()) {
@@ -123,7 +126,6 @@ public final class Vanillabosses extends JavaPlugin {
         logFile = new File(getDataFolder(), "log.txt");
 
         if (logFile.exists()) logFile.delete();
-
 
         if (!logFile.exists()) {
             try {

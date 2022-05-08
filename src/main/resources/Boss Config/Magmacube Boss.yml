@@ -1,0 +1,30 @@
+Magma_cubeBoss:
+  enabled: true
+  displayName: "Chesters' younger brother"
+  displayNameColor: "#FF0000"
+  showDisplayNameAlways: true
+  DamageModifier: 1.0
+  SpeedModifier: 1.0
+  health: 90
+  spawnChance: 0.01
+  killedMessage: "<killedName> was slain by <killer>"
+
+  spawnWorlds:
+
+  droppedItems:
+    - "{\"materialName\":\"MAGMA_CREAM\",\"minAmount\":\"2\",\"maxAmount\":\"12\"}"
+
+  droppedXP: 50
+
+  CommandToBeExecutedOnDeath: 0
+
+  disableVanillaDrops: false
+
+  onHitEvents:
+    BurningAir: # makes an area around the boss burn entities
+      enabled: true
+      chance: 0.15 # in %
+      range: 8 #range of this ability in blocks
+      time: 10  #how long the entities within the range stay on fire for in seconds
+
+  spawnNaturally: true

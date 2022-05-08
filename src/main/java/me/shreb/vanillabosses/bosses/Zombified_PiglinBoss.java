@@ -7,6 +7,7 @@ import me.shreb.vanillabosses.items.ButchersAxe;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.ConfigVerification;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -14,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +35,12 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
 
     public static final String CONFIGSECTION = "Zombified_PiglinBoss";
     public static final String SCOREBOARDTAG = "BossZombified_Piglin";
+
+    public static FileConfiguration zombifiedPiglinBossConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.zombified_PiglinBossPath, zombifiedPiglinBossConfig);
+    }
 
     @Override
     public LivingEntity makeBoss(Location location) throws BossCreationException {
@@ -180,7 +188,8 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
 
 
     /**
-     *
+     * Runs a timer in order to make all registered Zombie piglin bosses agressive to players without being hit
+     * This method should only be run once after startup of the plugin
      */
     public static void aggressionTimer() {
 

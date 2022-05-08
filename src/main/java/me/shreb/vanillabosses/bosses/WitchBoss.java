@@ -6,12 +6,14 @@ import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.Utility;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -32,6 +34,12 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
 
     public static final String CONFIGSECTION = "WitchBoss";
     public static final String SCOREBOARDTAG = "BossWitch";
+
+    public static FileConfiguration witchBossConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.witchBossPath, witchBossConfig);
+    }
 
     @Override
     public LivingEntity makeBoss(Location location) throws BossCreationException {

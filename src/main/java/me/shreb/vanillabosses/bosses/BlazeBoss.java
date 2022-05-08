@@ -5,12 +5,14 @@ import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.ConfigVerification;
+import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -33,8 +35,13 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
 
     public static final String CONFIGSECTION = "BlazeBoss";
     public static final String SCOREBOARDTAG = "BossBlaze";
-
     Random abilityRandom = new Random();
+
+    public static FileConfiguration blazeBossConfig = new YamlConfiguration();
+
+    static {
+        FileCreator.createAndLoad(FileCreator.blazeBossPath, blazeBossConfig);
+    }
 
     @Override
     public LivingEntity makeBoss(Location location) throws BossCreationException {
@@ -278,6 +285,31 @@ public class BlazeBoss extends VBBoss implements ConfigVerification {
 
         if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
             logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
+            logger.logToFile();
+        }
+
+        if (!verifyDouble(fullConfig + "DamageModifier", 0.001, 100)) {
+            logger.setStringToLog("Config Warning/Error at '" + fullConfig + "DamageModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
+            logger.logToFile();
+        }
+
+        if (!verifyDouble(fullConfig + "SpeedModifier", 0.001, 100)) {
+            logger.setStringToLog("Config Warning/Error at '" + fullConfig + "SpeedModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
+            logger.logToFile();
+        }
+
+        if (!verifyInt(fullConfig + "health", 0, Integer.MAX_VALUE)) {
+            logger.setStringToLog("Config Warning/Error at '" + fullConfig + "health, has to be a value above 0, cannot be more than 2147483647, has to be a number");
+            logger.logToFile();
+        }
+
+        if (!verifyDouble(fullConfig + "spawnChance", 0.0, 1.0)) {
+            logger.setStringToLog("Config Warning/Error at '" + fullConfig + "spawnChance, has to be a value between 0 and 1, has to be a number");
+            logger.logToFile();
+        }
+
+        if (!verifyString(fullConfig + "killedMessage")) {
+            logger.setStringToLog("Config Error at '" + fullConfig + "killedMessage, cannot be empty");
             logger.logToFile();
         }
 

@@ -1,0 +1,31 @@
+BlazeBoss:
+  enabled: true
+  displayName: "Blaze Warden"
+  displayNameColor: "#FF7501"
+  showDisplayNameAlways: true
+  DamageModifier: 2.0
+  SpeedModifier: 1.0
+  health: 100
+  spawnChance: 0.01
+  killedMessage: "<killedName> was slain by <killer>"
+
+  spawnWorlds:
+
+  droppedItems:
+    - "{\"materialName\":\"BLAZE_ROD\",\"minAmount\":\"2\",\"maxAmount\":\"4\"}"
+
+  droppedXP: 50
+
+  CommandToBeExecutedOnDeath: 0
+
+  disableVanillaDrops: true
+
+  onHitEvents:
+    spectralArrowDamageMultiplier: 2
+
+  blazeShootEventsChances:
+    witherSkull: 0.2
+    enderDragonFireBall: 0.05
+    largeFireBall: 0.2
+
+  spawnNaturally: true

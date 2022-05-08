@@ -1,0 +1,28 @@
+Skeletor:
+  dropChance: 0.05
+  enableCraftingRecipe: true
+  Lore:
+    - The favorite bow of the Skeleton King
+    - -Shoots TNT-
+
+  recipeShape:
+    - "GNG"
+    - "DBD"
+    - "GNG"
+  recipeIngredients:
+    - G:Gold_Ingot
+    - N:Netherite_Ingot
+    - B:Bow
+    - D:Diamond_Block
+
+  TNTOnArrowHit:
+    enable: true
+    TNTTimer: 40 # in ticks. 1 second is equal to 20 ticks. 40 ticks = 2 seconds
+    TNTYield: 3
+    TNTDoesNoBlockDamage: true
+
+  ShootTNTFromOffHand:
+    enabled: true
+    TNTTimer: 160 # in ticks. 1 second is equal to 20 ticks. 40 ticks = 2 seconds
+    TNTYield: 5
+    TNTDoesNoBlockDamage: true
