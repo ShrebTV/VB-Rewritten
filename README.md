@@ -4,11 +4,11 @@ Spawns bosses naturally
 ## Contents:
 
 - ### [Description](#Description)
-- ### [Important information](#Important information:)
-- ### [Users' Guide](#How to use this plugin:)
-- ### [Config guide](#Inside the config file:)
-- ### [Available Bosses](#Available Bosses:)
-- ### [Available Items](#Available Items:)
+- ### [Important information](#Important-information:)
+- ### [Users' Guide](#How-to-use-this-plugin:)
+- ### [Config guide](#Inside-the-config file:)
+- ### [Available Bosses](#Available-Bosses:)
+- ### [Available Items](#Available-Items:)
 - ### [Commands](#Commands:)
 
 <a name="description"></a>
