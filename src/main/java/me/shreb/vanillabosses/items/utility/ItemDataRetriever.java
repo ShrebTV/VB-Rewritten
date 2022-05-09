@@ -71,6 +71,7 @@ public class ItemDataRetriever extends DataRetriever {
     /**
      * Use this to check whether an ItemStack is actually a plugin item.
      * Will retrieve the data for the corresponding plugin item in case there is one
+     *
      * @param itemStack the itemStack to check for plugin item characteristics
      * @throws ItemCreationException if the itemStack passed in was null or the item Material was not registered as a plugin item material
      */
@@ -144,9 +145,8 @@ public class ItemDataRetriever extends DataRetriever {
             }
         }
 
-        if (helperInstance == null) {
-            this.instance = retriever.instance;
-        }
+        this.instance = retriever.instance;
+
         this.CONFIGSECTION = retriever.CONFIGSECTION;
     }
 
