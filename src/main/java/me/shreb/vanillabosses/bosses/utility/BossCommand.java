@@ -76,7 +76,9 @@ public class BossCommand implements Listener {
     //Gets the intended delay for this command from this.command and sets it. sets this.command to only have the things before 'DELAY:'
     private void setDelay() {
 
-        if(!this.command.contains("DELAY:")) {
+        if (this.command == null) return;
+
+        if (!this.command.contains("DELAY:")) {
             delay = 0;
             return;
         }

@@ -4,7 +4,8 @@ displayNameColor: "#FF0000"
 showDisplayNameAlways: true
 DamageModifier: 1.0
 SpeedModifier: 1.0
-health: 90
+Size: 5
+health: 150
 spawnChance: 0.01
 killedMessage: "<killedName> was slain by <killer>"
 

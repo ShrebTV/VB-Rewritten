@@ -15,7 +15,6 @@ import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -50,9 +49,8 @@ public class RespawningBoss extends Boss {
     boolean enableBoss;
 
     // put the commands from the command list and their indexes into the commandMap in order to easily execute them later
-    {
-        FileConfiguration config = new BossDataRetriever(this.type).instance.config;
-        List<String> bossJsonList = new ArrayList<>(config.getStringList("RespawningBosses"));
+    static {
+        List<String> bossJsonList = new ArrayList<>(Vanillabosses.getInstance().getConfig().getStringList("Bosses.RespawningBosses"));
 
         for (String string : bossJsonList) {
             try {

@@ -5,7 +5,6 @@ import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Listener;
@@ -18,7 +17,7 @@ public abstract class VBBoss implements Listener {
     public static final String BOSSTAG = "VB-Boss";
     public static final String REMOVE_ON_DISABLE_TAG = "Vanilla Bosses - Remove on Disable";
 
-    public YamlConfiguration config;
+    public YamlConfiguration config = new YamlConfiguration();
 
     /**
      * creates a completely new Entity and makes it into a boss

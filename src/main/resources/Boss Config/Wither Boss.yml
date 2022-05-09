@@ -3,9 +3,10 @@ removeNetheriteBlockOnSpawn: true
 displayName: "X AE A-12"
 displayNameColor: "#1B1D19"
 showDisplayNameAlways: true
+spawnChance: 0.0 #this does nothing except prevent errors in the log file
 DamageModifier: 1.0
 SpeedModifier: 1.0
-Health: 750  #standard health of the boss is 750 (pretty hard without spectral arrows)
+health: 750  #standard health of the boss is 750 (pretty hard without spectral arrows)
 killedMessage: "<killedName> was slain by <killer>"
 
 droppedItems:

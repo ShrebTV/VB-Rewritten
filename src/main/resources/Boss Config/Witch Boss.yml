@@ -4,6 +4,7 @@ displayNameColor: "#440D8A"
 showDisplayNameAlways: true
 health: 125
 SpeedModifier: 1.0
+DamageModifier: 1.0 #this does nothing except prevent errors in the log file
 spawnChance: 0.005
 killedMessage: "<killedName> was slain by <killer>"
 

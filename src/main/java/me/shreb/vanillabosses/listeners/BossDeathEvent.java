@@ -1,6 +1,5 @@
 package me.shreb.vanillabosses.listeners;
 
-import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.*;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
@@ -103,14 +102,19 @@ public class BossDeathEvent implements Listener {
         }
 
         if (event.getEntity() instanceof Slime && event.getEntity().getScoreboardTags().contains(SlimeBoss.SCOREBOARDTAG)) {
-            if (Utility.roll(SlimeBoots.instance.configuration.getDouble("dropChance"))) {
-                try {
-                    event.getDrops().add(SlimeBoots.instance.makeItem());
-                    event.getDrops().add(BouncySlime.instance.makeItem(BouncySlime.instance.configuration.getInt("DroppedPerKill")));
+            try {
 
-                } catch (ItemCreationException e) {
-                    new VBLogger(getClass().getName(), Level.WARNING, "Could not make Slime boots for Boss Drops." + e).logToFile();
+                int toDrop = ThreadLocalRandom.current().
+                        nextInt(BouncySlime.instance.configuration.getInt("MinDropped"), BouncySlime.instance.configuration.getInt("MaxDropped") + 1);
+
+                event.getDrops().add(BouncySlime.instance.makeItem(toDrop));
+                if (Utility.roll(SlimeBoots.instance.configuration.getDouble("dropChance"))) {
+
+                    event.getDrops().add(SlimeBoots.instance.makeItem());
+
                 }
+            } catch (ItemCreationException e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not make Slime boots for Boss Drops." + e).logToFile();
             }
         }
 

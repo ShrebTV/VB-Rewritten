@@ -27,10 +27,8 @@ public class BossDrops {
      */
     public BossDrops(BossDataRetriever retriever) {
         FileConfiguration config = retriever.instance.config;
-        //a String containing the full config path to get the StringList from
-        String fullSection = "Bosses." + retriever.CONFIGSECTION + ".droppedItems";
         //Making a new list of Strings with the values of the StringList in the config
-        ArrayList<String> dropStrings = (ArrayList<String>) config.getStringList(fullSection);
+        ArrayList<String> dropStrings = (ArrayList<String>) config.getStringList("droppedItems");
 
         //new empty list of drops
         this.drops = new ArrayList<>();
