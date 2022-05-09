@@ -1,9 +1,11 @@
 package me.shreb.vanillabosses.items;
 
+import jdk.jshell.execution.Util;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.CreeperBoss;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.Utility;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -231,6 +233,8 @@ public class Skeletor extends VBItem {
                 } else {
                     tnt.setYield((float) tntYield);
                 }
+
+                Utility.spawnParticles(Particle.FLAME, event.getEntity().getWorld(), event.getEntity().getLocation(), 5, 5, 5, 20, 2);
 
                 if (cancelTNT) {
                     tnt.getScoreboardTags().add(CANCEL_TNT_EXPLOSION);
