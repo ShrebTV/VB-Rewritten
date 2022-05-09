@@ -15,6 +15,18 @@ droppedItems:
 
 droppedXP: 50
 
+onHitAbilities:
+  Jump:
+    Chance: 0.3
+    JumpStrengthMultiplier: 1.0
+  Pull:
+    Chance: 0.1
+    PullStrengthMultiplier: 1.0
+  Push:
+    Chance: 0.1
+    PushStrengthMultiplier: 1.0
+
+
 CommandToBeExecutedOnDeath: 0
 
 disableVanillaDrops: true
