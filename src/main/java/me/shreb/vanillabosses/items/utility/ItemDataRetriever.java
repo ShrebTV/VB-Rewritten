@@ -71,7 +71,6 @@ public class ItemDataRetriever extends DataRetriever {
     /**
      * Use this to check whether an ItemStack is actually a plugin item.
      * Will retrieve the data for the corresponding plugin item in case there is one
-     *
      * @param itemStack the itemStack to check for plugin item characteristics
      * @throws ItemCreationException if the itemStack passed in was null or the item Material was not registered as a plugin item material
      */
@@ -80,8 +79,6 @@ public class ItemDataRetriever extends DataRetriever {
         if (itemStack == null) throw new ItemCreationException("Item passed to Data Retriever was null");
 
         ItemDataRetriever retriever;
-
-        VBItem helperInstance = null;
 
         if (!itemStack.getItemMeta().getPersistentDataContainer().has(VBItem.VBItemKey, PersistentDataType.STRING)) {
             return;
@@ -135,17 +132,14 @@ public class ItemDataRetriever extends DataRetriever {
             try {
                 retriever = new ItemDataRetriever(mat);
 
-                if (helperInstance != null) {
-                    retriever.instance = helperInstance;
-                }
-
             } catch (ItemCreationException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Bad Item input had a VB tag. Please let the author know about this and whether there are Vanilla Bosses extension plugins installed.").logToFile();
                 return;
             }
         }
 
-        this.instance = retriever.instance;
+
+            this.instance = retriever.instance;
 
         this.CONFIGSECTION = retriever.CONFIGSECTION;
     }
