@@ -234,7 +234,7 @@ public class Skeletor extends VBItem {
                     tnt.setYield((float) tntYield);
                 }
 
-                Utility.spawnParticles(Particle.FLAME, event.getEntity().getWorld(), event.getEntity().getLocation(), 5, 5, 5, 20, 2);
+                Utility.spawnParticles(Particle.FLAME, event.getEntity().getWorld(), event.getEntity().getLocation(), 2, 1, 2, 5, 2);
 
                 if (cancelTNT) {
                     tnt.getScoreboardTags().add(CANCEL_TNT_EXPLOSION);
