@@ -4,7 +4,6 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
-import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.Utility;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
@@ -20,18 +19,17 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class EndermanBoss extends VBBoss implements ConfigVerification {
+public class EndermanBoss extends VBBoss {
 
     public static EndermanBoss instance = new EndermanBoss();
 
     public static final String CONFIGSECTION = "EndermanBoss";
     public static final String SCOREBOARDTAG = "BossEnderman";
 
-    {
-        FileCreator.createAndLoad(FileCreator.endermanBossPath, instance.configuration);
+    public EndermanBoss() {
+        new FileCreator().createAndLoad(FileCreator.endermanBossPath, this.config);
     }
 
     @Override
@@ -62,7 +60,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!instance.configuration.getBoolean("enabled")) return entity;
+        if (!instance.config.getBoolean("enabled")) return entity;
 
         // checking wether the entity passed in is a Enderman. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Enderman)) {
@@ -74,8 +72,8 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = instance.configuration.getDouble("health");
-        String nameColorString = instance.configuration.getString("displayNameColor");
+        double health = instance.config.getDouble("health");
+        String nameColorString = instance.config.getString("displayNameColor");
 
         ChatColor nameColor;
 
@@ -91,9 +89,9 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        String name = instance.configuration.getString("displayName");
+        String name = instance.config.getString("displayName");
 
-        double speedMultiplier = instance.configuration.getDouble("SpeedModifier");
+        double speedMultiplier = instance.config.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
@@ -102,7 +100,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(instance.configuration.getBoolean("showDisplayNameAlways"));
+            entity.setCustomNameVisible(instance.config.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Enderman Boss\n" +
@@ -127,6 +125,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
     /**
      * This is what will happen once the enderman teleports.
      * It spawns a certain amount of endermites if enabled in the config
+     *
      * @param event the event to check for enderman bosses in
      */
     @EventHandler
@@ -134,9 +133,9 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
 
         if (event.getEntity().getType().equals(EntityType.ENDERMAN) && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) {
 
-            int amount = instance.configuration.getInt("onHitEvents.endermiteSpawnOnTeleport.amount");
+            int amount = instance.config.getInt("onHitEvents.endermiteSpawnOnTeleport.amount");
 
-            if (instance.configuration.getBoolean("onHitEvents.endermiteSpawnOnTeleport.enabled")) {
+            if (instance.config.getBoolean("onHitEvents.endermiteSpawnOnTeleport.enabled")) {
                 for (int i = 0; i <= amount; i++) {
                     event.getEntity().getWorld().spawnEntity(event.getEntity().getLocation(), EntityType.ENDERMITE);
                 }
@@ -147,28 +146,29 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
     /**
      * This is what will happen once an enderman boss tries to target an endermite.
      * It will not let the enderman boss target endermites.
+     *
      * @param event
      */
     @EventHandler
     public void onEndermanTargetMite(EntityTargetEvent event) {
 
-        if(event.getTarget() == null) return;
+        if (event.getTarget() == null) return;
 
-        if(event.getEntity().getScoreboardTags().contains("BossEnderman")){
+        if (event.getEntity().getScoreboardTags().contains("BossEnderman")) {
 
-            if(event.getTarget().getType() == EntityType.ENDERMITE){
+            if (event.getTarget().getType() == EntityType.ENDERMITE) {
                 event.setCancelled(true);
                 return;
             }
         }
 
-        if(event.getEntityType() == EntityType.ENDERMITE && event.getTarget().getScoreboardTags().contains("BossEnderman")){
+        if (event.getEntityType() == EntityType.ENDERMITE && event.getTarget().getScoreboardTags().contains("BossEnderman")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onHitEvent(EntityDamageByEntityEvent event){
+    public void onHitEvent(EntityDamageByEntityEvent event) {
 
         if (event.getEntity().getScoreboardTags().contains("BossEnderman") && event.getEntityType() == EntityType.ENDERMAN) {
 
@@ -176,7 +176,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
 
             Enderman enderman = (Enderman) event.getEntity();
 
-            for (String s : instance.configuration.getStringList("onHitEvents.potionEffects")) {
+            for (String s : instance.config.getStringList("onHitEvents.potionEffects")) {
                 String[] strings = s.split(":");
                 PotionEffectType type = PotionEffectType.getByName(strings[0].toUpperCase());
 
@@ -185,7 +185,7 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
                 }
             }
 
-            if (Utility.roll(instance.configuration.getDouble("onHitEvents.teleportBehindPlayer.chance")) && instance.configuration.getBoolean("onHitEvents.teleportBehindPlayer.enabled")) {
+            if (Utility.roll(instance.config.getDouble("onHitEvents.teleportBehindPlayer.chance")) && instance.config.getBoolean("onHitEvents.teleportBehindPlayer.enabled")) {
                 int x = event.getDamager().getLocation().getBlockX() - enderman.getLocation().getBlockX();
                 int y = event.getDamager().getLocation().getBlockY() - enderman.getLocation().getBlockY();
                 int z = event.getDamager().getLocation().getBlockZ() - enderman.getLocation().getBlockZ();
@@ -199,85 +199,15 @@ public class EndermanBoss extends VBBoss implements ConfigVerification {
 
                 enderman.teleport(newLoc);
 
-                if (instance.configuration.getBoolean("onHitEvents.teleportBehindPlayer.teleportBackToOldLocation")) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> enderman.teleport(originalLoc), 20L * instance.configuration.getInt("onHitEvents.teleportBehindPlayer.teleportBackDelay"));
+                if (instance.config.getBoolean("onHitEvents.teleportBehindPlayer.teleportBackToOldLocation")) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> enderman.teleport(originalLoc), 20L * instance.config.getInt("onHitEvents.teleportBehindPlayer.teleportBackDelay"));
 
                 }
 
-                if (instance.configuration.getBoolean("onHitEvents.teleportBehindPlayer.invisibility")) {
-                    enderman.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, instance.configuration.getInt("onHitEvents.teleportBehindPlayer.invisibilityDuration") * 20, 3));
+                if (instance.config.getBoolean("onHitEvents.teleportBehindPlayer.invisibility")) {
+                    enderman.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, instance.config.getInt("onHitEvents.teleportBehindPlayer.invisibilityDuration") * 20, 3));
                 }
             }
         }
-    }
-
-    @Override
-    public boolean verifyConfig() {
-
-        String name = getClass().getName();
-
-        VBLogger logger = new VBLogger(name, Level.WARNING, "");
-
-        if (!verifyBoolean(instance.configuration.getString("enabled"), name + ".enabled")) {
-            logger.setStringToLog(name + ": Config Error at enabled, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyString(instance.configuration.getString("displayName"), name + ".displayName")) {
-            logger.setStringToLog(name + ": Config Error at displayName, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyColorCode(instance.configuration.getString("displayNameColor"), name + ".displayNameColor")) {
-            logger.setStringToLog(name + ": Config Error at displayNameColor, has to be a hexCode");
-            logger.logToFile();
-        }
-
-        if (!verifyBoolean(instance.configuration.getString("showDisplayNameAlways"), name + ".showDisplayNameAlways")) {
-            logger.setStringToLog(name + ": Config Error at showDisplayNameAlways, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyDouble(instance.configuration.getString("DamageModifier"), name + ".DamageModifier", 0.001, 100)) {
-            logger.setStringToLog(name + ": Config Warning/Error at DamageModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyDouble(instance.configuration.getString("SpeedModifier"), name + ".SpeedModifier", 0.001, 100)) {
-            logger.setStringToLog(name + ": Config Warning/Error at SpeedModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyInt(instance.configuration.getString("health"), name + ".health", 0, Integer.MAX_VALUE)) {
-            logger.setStringToLog(name + ": Config Warning/Error at health, has to be a value above 0, cannot be more than 2147483647, has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyDouble(instance.configuration.getString("spawnChance"), name + ".spawnChance", 0.0, 1.0)) {
-            logger.setStringToLog(name + ": Config Warning/Error at spawnChance, has to be a value between 0 and 1, has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyString(instance.configuration.getString("killedMessage"), name + ".killedMessage")) {
-            logger.setStringToLog(name + ": Config Error at killedMessage, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifySpawnWorlds((ArrayList<String>) instance.configuration.getStringList("spawnWorlds"))) {
-            logger.setStringToLog(name + ": Config Error at killedMessage, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyDrops(EntityType.BLAZE)) {
-            logger.setStringToLog(name + ": Could not verify boss drops.");
-            logger.logToFile();
-        }
-
-        if (!verifyInt(instance.configuration.getString("droppedXP"), name + ".droppedXP", 0, Integer.MAX_VALUE)) {
-            logger.setStringToLog(name + ": Config Warning/Error at droppedXP, has to be a value above 0, cannot be more than 2147483647, has to be a number");
-            logger.logToFile();
-        }
-
-        return true;
     }
 }

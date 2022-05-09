@@ -28,20 +28,17 @@ public class ButchersAxe extends VBItem {
 
     public static ButchersAxe instance = new ButchersAxe();
 
-    {
-        FileCreator.createAndLoad(FileCreator.butchersAxePath, configuration);
-    }
-
     public ButchersAxe() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "ButchersAxe");
         this.configSection = "ButchersAxe";
+        new FileCreator().createAndLoad(FileCreator.butchersAxePath, this.configuration);
         try {
-            this.itemMaterial = Material.valueOf(config.getString("Items.ButchersAxe.itemMaterial").toUpperCase());
+            this.itemMaterial = Material.valueOf(this.configuration.getString("itemMaterial").toUpperCase());
         } catch (NullPointerException | IllegalArgumentException e) {
-            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Butchers Axe into an actual axe. Found: " + config.getString("Items.ButchersAxe.itemMaterial")).logToFile();
+            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Butchers Axe into an actual axe. Found: " + this.configuration.getString("itemMaterial")).logToFile();
             return;
         }
-        this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemButchersAxeName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemButchersAxeNameGivenMessage;
     }
@@ -62,7 +59,7 @@ public class ButchersAxe extends VBItem {
         ArrayList<String> lore = new ArrayList<>();
         meta.setDisplayName(ChatColor.DARK_RED + Vanillabosses.getCurrentLanguage().itemButchersAxeName);
         lore.add("Bind II");
-        lore.addAll(config.getStringList("Items.ButchersAxe.Lore"));
+        lore.addAll(this.configuration.getStringList("Lore"));
         meta.setLore(lore);
         axe.setItemMeta(meta);
 
@@ -85,7 +82,7 @@ public class ButchersAxe extends VBItem {
         ArrayList<String> lore = new ArrayList<>();
         meta.setDisplayName(ChatColor.DARK_RED + Vanillabosses.getCurrentLanguage().itemButchersAxeName);
         lore.add("Bind II");
-        lore.addAll(config.getStringList("Items.ButchersAxe.Lore"));
+        lore.addAll(this.configuration.getStringList("Lore"));
         meta.setLore(lore);
         axe.setItemMeta(meta);
 
@@ -104,8 +101,8 @@ public class ButchersAxe extends VBItem {
      */
     @Override
     public void itemAbility(LivingEntity entity) {
-        if (Utility.roll(config.getDouble("Items.ButchersAxe.ChanceToApplySlowness"))) {
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * config.getInt("Items.ButchersAxe.SlownessDuration"), 2));
+        if (Utility.roll(this.configuration.getDouble("ChanceToApplySlowness"))) {
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * this.configuration.getInt("SlownessDuration"), 2));
             Utility.spawnParticles(Particle.FLASH, entity.getWorld(), entity.getLocation(), 1, 1, 1, 5, 3);
         }
     }

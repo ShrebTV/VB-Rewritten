@@ -107,7 +107,6 @@ public class ItemDataRetriever extends DataRetriever {
                     break;
                 case "BossEggs":
                     mat = new BossEggs(EntityType.valueOf(bossEggType)).itemMaterial;
-
                     break;
                 case "BouncySlime":
                     mat = BouncySlime.instance.itemMaterial;

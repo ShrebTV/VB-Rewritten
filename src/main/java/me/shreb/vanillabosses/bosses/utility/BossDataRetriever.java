@@ -119,15 +119,15 @@ public class BossDataRetriever extends DataRetriever {
                 throw new IllegalArgumentException("Type specified was not a type of boss.");
         }
 
-        this.health = this.instance.configuration.getDouble("health");
-        this.damageModifier = this.instance.configuration.getDouble("DamageModifier");
-        this.spawnChance = this.instance.configuration.getDouble("spawnChance");
-        this.droppedXP = this.instance.configuration.getInt("droppedXP");
-        this.bossKilledMessage = this.instance.configuration.getString("killedMessage");
-        this.droppedItems = (ArrayList<String>) this.instance.configuration.getStringList("droppedItems");
-        this.spawnNaturally = this.instance.configuration.getBoolean("spawnNaturally");
+        this.health = this.instance.config.getDouble("health");
+        this.damageModifier = this.instance.config.getDouble("DamageModifier");
+        this.spawnChance = this.instance.config.getDouble("spawnChance");
+        this.droppedXP = this.instance.config.getInt("droppedXP");
+        this.bossKilledMessage = this.instance.config.getString("killedMessage");
+        this.droppedItems = (ArrayList<String>) this.instance.config.getStringList("droppedItems");
+        this.spawnNaturally = this.instance.config.getBoolean("spawnNaturally");
 
-        String indexString = this.instance.configuration.getString("CommandToBeExecutedOnDeath");
+        String indexString = this.instance.config.getString("CommandToBeExecutedOnDeath");
 
         if (indexString != null) {
             String[] strings = indexString.split(";");
@@ -233,15 +233,15 @@ public class BossDataRetriever extends DataRetriever {
 
         }
 
-        this.health = this.instance.configuration.getDouble("health");
-        this.damageModifier = this.instance.configuration.getDouble("DamageModifier");
-        this.spawnChance = this.instance.configuration.getDouble("spawnChance");
-        this.droppedXP = this.instance.configuration.getInt("droppedXP");
-        this.bossKilledMessage = this.instance.configuration.getString("killedMessage");
-        this.droppedItems = (ArrayList<String>) this.instance.configuration.getStringList("droppedItems");
-        this.spawnNaturally = this.instance.configuration.getBoolean("spawnNaturally");
+        this.health = this.instance.config.getDouble("health");
+        this.damageModifier = this.instance.config.getDouble("DamageModifier");
+        this.spawnChance = this.instance.config.getDouble("spawnChance");
+        this.droppedXP = this.instance.config.getInt("droppedXP");
+        this.bossKilledMessage = this.instance.config.getString("killedMessage");
+        this.droppedItems = (ArrayList<String>) this.instance.config.getStringList("droppedItems");
+        this.spawnNaturally = this.instance.config.getBoolean("spawnNaturally");
 
-        String indexString = this.instance.configuration.getString("CommandToBeExecutedOnDeath");
+        String indexString = this.instance.config.getString("CommandToBeExecutedOnDeath");
 
         if (indexString != null) {
             String[] strings = indexString.split(";");

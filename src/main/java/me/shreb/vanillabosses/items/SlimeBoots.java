@@ -23,20 +23,18 @@ public class SlimeBoots extends VBItem {
 
     public static SlimeBoots instance = new SlimeBoots();
 
-    {
-        FileCreator.createAndLoad(FileCreator.slimeBootsPath, configuration);
-    }
-
     public SlimeBoots() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "SlimeBoots");
         this.configSection = "SlimeBoots";
+        new FileCreator().createAndLoad(FileCreator.slimeBootsPath, this.configuration);
+
         try {
-            this.itemMaterial = Material.valueOf(config.getString("Items.SlimeBoots.itemMaterial").toUpperCase());
+            this.itemMaterial = Material.valueOf(this.configuration.getString("itemMaterial").toUpperCase());
         } catch (NullPointerException | IllegalArgumentException e) {
-            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Slime boots to actual boots. Found: " + config.getString("Items.SlimeBoots.itemMaterial")).logToFile();
+            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Slime boots to actual boots. Found: " + this.configuration.getString("itemMaterial")).logToFile();
             return;
         }
-        this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemSlimeBootsName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemSlimeBootsGivenMessage;
     }
@@ -105,7 +103,7 @@ public class SlimeBoots extends VBItem {
         if (((Player) event.getEntity()).getEquipment().getBoots() != null) {
             if (((Player) event.getEntity()).getEquipment().getBoots().getItemMeta().getPersistentDataContainer().has(pdcKey, PersistentDataType.STRING)) {
 
-                double fallDamageMultiplier = config.getDouble("Items.SlimeBoots.fallDamageMultiplier");
+                double fallDamageMultiplier = this.configuration.getDouble("fallDamageMultiplier");
 
                 if (fallDamageMultiplier > 1 || fallDamageMultiplier < 0) {
                     new VBLogger(getClass().getName(),
@@ -116,7 +114,7 @@ public class SlimeBoots extends VBItem {
 
                 event.setDamage(event.getFinalDamage() * fallDamageMultiplier);
 
-                int damageOnUse = (int)(event.getDamage() * Vanillabosses.getInstance().getConfig().getInt("Items.SlimeBoots.damageOnUseMultiplier"));
+                int damageOnUse = (int)(event.getDamage() * this.configuration.getInt("damageOnUseMultiplier"));
 
                 ItemMeta meta = ((Player)event.getEntity()).getEquipment().getBoots().getItemMeta();
                 ((Damageable)meta).setDamage(((Damageable)meta).getDamage() + damageOnUse);

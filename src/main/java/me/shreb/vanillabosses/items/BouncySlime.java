@@ -21,15 +21,12 @@ public class BouncySlime extends VBItem {
 
     public static BouncySlime instance = new BouncySlime();
 
-    {
-        FileCreator.createAndLoad(FileCreator.butchersAxePath, configuration);
-    }
-
     public BouncySlime() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "BouncySlime");
         this.configSection = "BouncySlime";
+        new FileCreator().createAndLoad(FileCreator.bouncySlimePath, this.configuration);
         this.itemMaterial = Material.SLIME_BALL;
-        this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemBouncySlimeName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBouncySlimeGivenMessage;
     }

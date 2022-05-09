@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.UUID;
 import java.util.logging.Level;
 
-public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
+public class Zombified_PiglinBoss extends VBBoss {
 
     public static Zombified_PiglinBoss instance = new Zombified_PiglinBoss();
 
@@ -35,8 +35,8 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
     public static final String CONFIGSECTION = "Zombified_PiglinBoss";
     public static final String SCOREBOARDTAG = "BossZombified_Piglin";
 
-    {
-        FileCreator.createAndLoad(FileCreator.zombified_PiglinBossPath, configuration);
+    public Zombified_PiglinBoss(){
+        new FileCreator().createAndLoad(FileCreator.zombified_PiglinBossPath, this.config);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
+        if (!config.getBoolean("enabled")) return entity;
 
         // checking wether the entity passed in is a pig zombie. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof PigZombie)) {
@@ -79,8 +79,8 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = config.getDouble("Bosses." + CONFIGSECTION + ".health");
-        String nameColorString = config.getString("Bosses." + CONFIGSECTION + ".displayNameColor");
+        double health = config.getDouble("health");
+        String nameColorString = config.getString("displayNameColor");
 
         ChatColor nameColor;
 
@@ -96,9 +96,9 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
+        String name = config.getString("displayName");
 
-        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        double speedMultiplier = config.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
@@ -107,7 +107,7 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("Bosses." + CONFIGSECTION + ".showDisplayNameAlways"));
+            entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Zombified Piglin Boss\n" +
@@ -143,7 +143,6 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
      * @return true if successful, false if not successful
      */
     private boolean putOnEquipment(PigZombie pigZombie) {
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
         //Creating a new ItemStack array and filling it with the needed armor.
         ItemStack[] armor = new ItemStack[]{
@@ -178,7 +177,7 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
         } catch (ItemCreationException e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not create Weapon for Zombified Piglin boss. Exception: " + e).logToFile();
         }
-        pigZombie.getEquipment().setItemInMainHandDropChance((float) config.getDouble("Items.ButchersAxe.dropChance"));
+        pigZombie.getEquipment().setItemInMainHandDropChance((float) ButchersAxe.instance.configuration.getDouble("dropChance"));
 
         return true;
     }
@@ -218,35 +217,5 @@ public class Zombified_PiglinBoss extends VBBoss implements ConfigVerification {
                 }
             }
         }, 100, 30);
-    }
-
-
-    @Override
-    public boolean verifyConfig() {
-        String fullConfig = "Bosses." + CONFIGSECTION + ".";
-
-        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
-
-        if (!verifyBoolean(fullConfig + "enabled")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyString(config.getString(fullConfig + "displayName"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
-            logger.logToFile();
-        }
-
-        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
-            logger.logToFile();
-        }
-
-        return true;
     }
 }

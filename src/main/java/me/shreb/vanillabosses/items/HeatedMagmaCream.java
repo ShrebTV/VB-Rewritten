@@ -25,17 +25,14 @@ public class HeatedMagmaCream extends VBItem {
 
     public static HeatedMagmaCream instance = new HeatedMagmaCream();
 
-    {
-        FileCreator.createAndLoad(FileCreator.hmcPath, configuration);
-    }
-
     public int level;
 
     public HeatedMagmaCream() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "HeatedMagmaCream");
         this.configSection = "HeatedMagmaCream";
+        new FileCreator().createAndLoad(FileCreator.hmcPath, this.configuration);
         this.itemMaterial = Material.MAGMA_CREAM;
-        this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemHMCName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemHMCNameGivenMessage;
     }
@@ -151,18 +148,18 @@ public class HeatedMagmaCream extends VBItem {
             switch (level) {
 
                 case 1:
-                    radius = config.getInt("Items.HeatedMagmaCream.Level1.radius");
-                    time = config.getInt("Items.HeatedMagmaCream.Level1.burnTime");
+                    radius = this.configuration.getInt("Level1.radius");
+                    time = this.configuration.getInt("Level1.burnTime");
                     break;
 
                 case 2:
-                    radius = config.getInt("Items.HeatedMagmaCream.Level2.radius");
-                    time = config.getInt("Items.HeatedMagmaCream.Level2.burnTime");
+                    radius = this.configuration.getInt("Level2.radius");
+                    time = this.configuration.getInt("Level2.burnTime");
                     break;
 
                 case 3:
-                    radius = config.getInt("Items.HeatedMagmaCream.Level3.radius");
-                    time = config.getInt("Items.HeatedMagmaCream.Level3.burnTime");
+                    radius = this.configuration.getInt("Level3.radius");
+                    time = this.configuration.getInt("Level3.burnTime");
                     break;
 
                 default:

@@ -30,20 +30,21 @@ public class SpawnEvent implements Listener {
 
         if (!spawn) return;
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
-
         EntityType type = event.getEntityType();
 
         LivingEntity entity = event.getEntity();
 
-        String section;
+        BossDataRetriever retriever;
+
         try {
-            section = new BossDataRetriever(event.getEntity().getType()).CONFIGSECTION;
+            retriever = new BossDataRetriever(event.getEntity().getType());
         } catch (IllegalArgumentException ignored) {
             return;
         }
 
-        String chancePath = "Bosses." + section + ".spawnChance";
+        FileConfiguration config = retriever.instance.config;
+
+        String chancePath = "spawnChance";
         double chance = config.getDouble(chancePath);
 
         if (!spawnWorldChecker(event)) return;
@@ -137,8 +138,8 @@ public class SpawnEvent implements Listener {
                     try {
                         ZombieBoss.instance.makeBoss(entity);
                         ZombieBoss.zombieHorde(
-                                config.getInt("Bosses.ZombieBoss.zombieHorde.radius"),
-                                config.getInt("Bosses.ZombieBoss.zombieHorde.amount"),
+                                config.getInt("zombieHorde.radius"),
+                                config.getInt("zombieHorde.amount"),
                                 event.getLocation()
                         );
                     } catch (BossCreationException e) {
@@ -159,7 +160,7 @@ public class SpawnEvent implements Listener {
                     break;
             }
 
-            if (config.getBoolean("Bosses.AllBossesHaveBossBars")) {
+            if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.AllBossesHaveBossBars")) {
                 new VBBossBar(event.getEntity(), Bukkit.createBossBar(event.getEntity().getName(), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
             }
         }
@@ -176,15 +177,17 @@ public class SpawnEvent implements Listener {
         LivingEntity entity = event.getEntity();
         String section;
 
+        BossDataRetriever retriever;
+
         try { // Attempt to get the section from the entity passed in by the event
-            section = new BossDataRetriever(entity.getType()).CONFIGSECTION; //entity type passed in has a boss version
+            retriever = new BossDataRetriever(entity.getType()); //entity type passed in has a boss version
         } catch (IllegalArgumentException ignored) {
             return false; //Entity type passed in does not have a boss version
         }
 
-        String configPath = "Bosses." + section + ".spawnWorlds"; // making a path out of the section which was just retrieved
+        String configPath = "spawnWorlds"; // making a path out of the section which was just retrieved
 
-        ArrayList<String> worlds = new ArrayList<>(Vanillabosses.getInstance().getConfig().getStringList(configPath)); //a new List with all the values of the config String list corresponding to the entity type
+        ArrayList<String> worlds = new ArrayList<>(retriever.instance.config.getStringList(configPath)); //a new List with all the values of the config String list corresponding to the entity type
 
         if (worlds.isEmpty()) return true; //no worlds specified, returns true
 

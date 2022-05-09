@@ -26,7 +26,7 @@ public class BossDrops {
      * @param retriever A DataRetriever in order to make sure the things specified have a config section and so the Config section is readily available and correct
      */
     public BossDrops(BossDataRetriever retriever) {
-        FileConfiguration config = retriever.instance.configuration;
+        FileConfiguration config = retriever.instance.config;
         //a String containing the full config path to get the StringList from
         String fullSection = "Bosses." + retriever.CONFIGSECTION + ".droppedItems";
         //Making a new list of Strings with the values of the StringList in the config

@@ -22,15 +22,15 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class MagmacubeBoss extends VBBoss implements ConfigVerification {
+public class MagmacubeBoss extends VBBoss {
 
     public static MagmacubeBoss instance = new MagmacubeBoss();
 
     public static final String CONFIGSECTION = "Magma_cubeBoss";
     public static final String SCOREBOARDTAG = "BossMagmacube";
 
-    {
-        FileCreator.createAndLoad(FileCreator.magmacubeBossPath, instance.configuration);
+    public MagmacubeBoss() {
+        new FileCreator().createAndLoad(FileCreator.magmacubeBossPath, this.config);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class MagmacubeBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!instance.configuration.getBoolean("enabled")) return entity;
+        if (!instance.config.getBoolean("enabled")) return entity;
 
         // checking wether the entity passed in is a Magmacube. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof MagmaCube)) {
@@ -73,8 +73,8 @@ public class MagmacubeBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = instance.configuration.getDouble("health");
-        String nameColorString = instance.configuration.getString("displayNameColor");
+        double health = instance.config.getDouble("health");
+        String nameColorString = instance.config.getString("displayNameColor");
 
         ChatColor nameColor;
 
@@ -90,9 +90,9 @@ public class MagmacubeBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        String name = instance.configuration.getString("displayName");
+        String name = instance.config.getString("displayName");
 
-        double speedMultiplier = instance.configuration.getDouble("SpeedModifier");
+        double speedMultiplier = instance.config.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
@@ -101,7 +101,7 @@ public class MagmacubeBoss extends VBBoss implements ConfigVerification {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(instance.configuration.getBoolean("showDisplayNameAlways"));
+            entity.setCustomNameVisible(instance.config.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Magmacube Boss\n" +
@@ -133,12 +133,12 @@ public class MagmacubeBoss extends VBBoss implements ConfigVerification {
         Player player = (Player) event.getDamager();
         MagmaCube magma = (MagmaCube) event.getEntity();
         Location magmaLoc = magma.getLocation();
-        int radius = instance.configuration.getInt("onHitEvents.BurningAir.range");
-        int time = instance.configuration.getInt("onHitEvents.BurningAir.time");
+        int radius = instance.config.getInt("onHitEvents.BurningAir.range");
+        int time = instance.config.getInt("onHitEvents.BurningAir.time");
 
-        double chance = instance.configuration.getDouble("onHitEvents.BurningAir.chance");
+        double chance = instance.config.getDouble("onHitEvents.BurningAir.chance");
 
-        if (instance.configuration.getBoolean("onHitEvents.BurningAir.enabled")
+        if (instance.config.getBoolean("onHitEvents.BurningAir.enabled")
                 && Utility.roll(chance)
                 && magma.getHealth() > 0) {
 
@@ -157,74 +157,5 @@ public class MagmacubeBoss extends VBBoss implements ConfigVerification {
 
             }, 60L);
         }
-    }
-
-    @Override
-    public boolean verifyConfig() {
-        String name = getClass().getName();
-
-        VBLogger logger = new VBLogger(name, Level.WARNING, "");
-
-        if (!verifyBoolean(instance.configuration.getString("enabled"), name + ".enabled")) {
-            logger.setStringToLog(name + ": Config Error at enabled, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyString(instance.configuration.getString("displayName"), name + ".displayName")) {
-            logger.setStringToLog(name + ": Config Error at displayName, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyColorCode(instance.configuration.getString("displayNameColor"), name + ".displayNameColor")) {
-            logger.setStringToLog(name + ": Config Error at displayNameColor, has to be a hexCode");
-            logger.logToFile();
-        }
-
-        if (!verifyBoolean(instance.configuration.getString("showDisplayNameAlways"), name + ".showDisplayNameAlways")) {
-            logger.setStringToLog(name + ": Config Error at showDisplayNameAlways, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyDouble(instance.configuration.getString("DamageModifier"), name + ".DamageModifier", 0.001, 100)) {
-            logger.setStringToLog(name + ": Config Warning/Error at DamageModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyDouble(instance.configuration.getString("SpeedModifier"), name + ".SpeedModifier", 0.001, 100)) {
-            logger.setStringToLog(name + ": Config Warning/Error at SpeedModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyInt(instance.configuration.getString("health"), name + ".health", 0, Integer.MAX_VALUE)) {
-            logger.setStringToLog(name + ": Config Warning/Error at health, has to be a value above 0, cannot be more than 2147483647, has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyDouble(instance.configuration.getString("spawnChance"), name + ".spawnChance", 0.0, 1.0)) {
-            logger.setStringToLog(name + ": Config Warning/Error at spawnChance, has to be a value between 0 and 1, has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyString(instance.configuration.getString("killedMessage"), name + ".killedMessage")) {
-            logger.setStringToLog(name + ": Config Error at killedMessage, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifySpawnWorlds((ArrayList<String>) instance.configuration.getStringList("spawnWorlds"))) {
-            logger.setStringToLog(name + ": Config Error at killedMessage, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyDrops(EntityType.BLAZE)) {
-            logger.setStringToLog(name + ": Could not verify boss drops.");
-            logger.logToFile();
-        }
-
-        if (!verifyInt(instance.configuration.getString("droppedXP"), name + ".droppedXP", 0, Integer.MAX_VALUE)) {
-            logger.setStringToLog(name + ": Config Warning/Error at droppedXP, has to be a value above 0, cannot be more than 2147483647, has to be a number");
-            logger.logToFile();
-        }
-
-        return true;
     }
 }

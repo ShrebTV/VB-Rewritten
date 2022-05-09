@@ -83,7 +83,7 @@ public class BossDeathEvent implements Listener {
         }
 
         if (event.getEntity() instanceof Spider && event.getEntity().getScoreboardTags().contains(SpiderBoss.SCOREBOARDTAG)) {
-            if (Utility.roll(Vanillabosses.getInstance().getConfig().getDouble("Items.Slingshot.chance"))) {
+            if (Utility.roll(Slingshot.instance.configuration.getDouble("chance"))) {
                 try {
                     event.getDrops().add(Slingshot.instance.makeItem());
                 } catch (ItemCreationException e) {
@@ -93,7 +93,7 @@ public class BossDeathEvent implements Listener {
         }
 
         if (event.getEntity() instanceof Enderman && event.getEntity().getScoreboardTags().contains(EndermanBoss.SCOREBOARDTAG)) {
-            if (Utility.roll(Vanillabosses.getInstance().getConfig().getDouble("Items.cloakOfInvisibility.chance"))) {
+            if (Utility.roll(InvisibilityCloak.instance.configuration.getDouble("chance"))) {
                 try {
                     event.getDrops().add(InvisibilityCloak.instance.makeItem());
                 } catch (ItemCreationException e) {
@@ -103,10 +103,10 @@ public class BossDeathEvent implements Listener {
         }
 
         if (event.getEntity() instanceof Slime && event.getEntity().getScoreboardTags().contains(SlimeBoss.SCOREBOARDTAG)) {
-            if (Utility.roll(Vanillabosses.getInstance().getConfig().getDouble("Items.SlimeBoots.dropChance"))) {
+            if (Utility.roll(SlimeBoots.instance.configuration.getDouble("dropChance"))) {
                 try {
                     event.getDrops().add(SlimeBoots.instance.makeItem());
-                    event.getDrops().add(BouncySlime.instance.makeItem(Vanillabosses.getInstance().getConfig().getInt("Items.BouncySlime.DroppedPerKill")));
+                    event.getDrops().add(BouncySlime.instance.makeItem(BouncySlime.instance.configuration.getInt("DroppedPerKill")));
 
                 } catch (ItemCreationException e) {
                     new VBLogger(getClass().getName(), Level.WARNING, "Could not make Slime boots for Boss Drops." + e).logToFile();
@@ -115,7 +115,7 @@ public class BossDeathEvent implements Listener {
         }
 
         if (event.getEntity() instanceof Blaze && event.getEntity().getScoreboardTags().contains(BlazeBoss.SCOREBOARDTAG)) {
-            if (Utility.roll(Vanillabosses.getInstance().getConfig().getDouble("Items.Blazer.dropChance"))) {
+            if (Utility.roll(Blazer.instance.configuration.getDouble("dropChance"))) {
                 try {
                     event.getDrops().add(Blazer.instance.makeItem());
                 } catch (ItemCreationException e) {
@@ -126,9 +126,9 @@ public class BossDeathEvent implements Listener {
 
         if (event.getEntity() instanceof MagmaCube && event.getEntity().getScoreboardTags().contains(MagmacubeBoss.SCOREBOARDTAG)) {
 
-            int drop1 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level1.maxDropped") + 1);
-            int drop2 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level2.maxDropped") + 1);
-            int drop3 = ThreadLocalRandom.current().nextInt(0, Vanillabosses.getInstance().getConfig().getInt("Items.HeatedMagmaCream.Level3.maxDropped") + 1);
+            int drop1 = ThreadLocalRandom.current().nextInt(0, HeatedMagmaCream.instance.configuration.getInt("Level1.maxDropped") + 1);
+            int drop2 = ThreadLocalRandom.current().nextInt(0, HeatedMagmaCream.instance.configuration.getInt("Level2.maxDropped") + 1);
+            int drop3 = ThreadLocalRandom.current().nextInt(0, HeatedMagmaCream.instance.configuration.getInt("Level3.maxDropped") + 1);
 
             try {
                 event.getDrops().add(new HeatedMagmaCream(1).makeItem(drop1));

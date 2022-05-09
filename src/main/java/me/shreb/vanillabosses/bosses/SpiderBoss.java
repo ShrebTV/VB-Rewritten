@@ -25,15 +25,15 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 
-public class SpiderBoss extends VBBoss implements ConfigVerification {
+public class SpiderBoss extends VBBoss {
 
     public static SpiderBoss instance = new SpiderBoss();
 
     public static final String CONFIGSECTION = "SpiderBoss";
     public static final String SCOREBOARDTAG = "BossSpider";
 
-    {
-        FileCreator.createAndLoad(FileCreator.spiderBossPath, configuration);
+    public SpiderBoss(){
+        new FileCreator().createAndLoad(FileCreator.spiderBossPath, this.config);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
+        if (!config.getBoolean("enabled")) return entity;
 
         // checking wether the entity passed in is a Spider. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Spider)) {
@@ -76,8 +76,8 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = config.getDouble("Bosses." + CONFIGSECTION + ".health");
-        String nameColorString = config.getString("Bosses." + CONFIGSECTION + ".displayNameColor");
+        double health = config.getDouble("health");
+        String nameColorString = config.getString("displayNameColor");
 
         ChatColor nameColor;
 
@@ -93,9 +93,9 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
+        String name = config.getString("displayName");
 
-        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        double speedMultiplier = config.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
@@ -104,7 +104,7 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("Bosses." + CONFIGSECTION + ".showDisplayNameAlways"));
+            entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Spider Boss\n" +
@@ -129,8 +129,6 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
     @EventHandler
     public void onHitAbility(EntityDamageByEntityEvent event){
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
-
         if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.SPIDER) {
 
             if (!(event.getDamager() instanceof Player)) return;
@@ -145,8 +143,8 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
 
             double rn = new Random().nextDouble();
 
-            chanceInvisibility = config.getDouble("Bosses.SpiderBoss.onHitEvents.invisibility.chance");
-            chanceLeap = config.getDouble("Bosses.SpiderBoss.onHitEvents.leap.chance");
+            chanceInvisibility = config.getDouble("onHitEvents.invisibility.chance");
+            chanceLeap = config.getDouble("onHitEvents.leap.chance");
 
             double currentChance = 0;
 
@@ -154,11 +152,11 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
 
             if (rn <= currentChance) {
 
-                long duration = 20L * config.getInt("Bosses.SpiderBoss.onHitEvents.invisibility.duration");
+                long duration = 20L * config.getInt("onHitEvents.invisibility.duration");
 
                 ArrayList<PotionEffect> effects = (ArrayList<PotionEffect>) spider.getActivePotionEffects();
 
-                if (config.getBoolean("Bosses.SpiderBoss.onHitEvents.invisibility.teleportToPlayer")) {
+                if (config.getBoolean("onHitEvents.invisibility.teleportToPlayer")) {
 
                     if (spider.getScoreboardTags().contains("isInvis")) return;
                     spider.addScoreboardTag("isInvis");
@@ -170,7 +168,7 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
 
                     spider.teleport(tempLoc);
 
-                    if (config.getBoolean("Bosses.SpiderBoss.onHitEvents.invisibility.teleportBack")) {
+                    if (config.getBoolean("onHitEvents.invisibility.teleportBack")) {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> spider.teleport(originalLoc), 20L * duration);
                     }
                 }
@@ -187,7 +185,7 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
                     spider.addPotionEffects(effects);
 
 
-                }, 20L * config.getInt("Bosses.SpiderBoss.onHitEvents.invisibility.duration"));
+                }, 20L * config.getInt("onHitEvents.invisibility.duration"));
 
                 return;
             }
@@ -200,7 +198,7 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
 
                 spider.addScoreboardTag("preparingToJump");
 
-                int delay = config.getInt("Bosses.SpiderBoss.onHitEvents.leap.maxDelayAfterHit");
+                int delay = config.getInt("onHitEvents.leap.maxDelayAfterHit");
 
                 if(delay < 0) {
 
@@ -228,34 +226,5 @@ public class SpiderBoss extends VBBoss implements ConfigVerification {
                 }, 20L * randomInt);
             }
         }
-    }
-
-    @Override
-    public boolean verifyConfig() {
-        String fullConfig = "Bosses." + CONFIGSECTION + ".";
-
-        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
-
-        if (!verifyBoolean(fullConfig + "enabled")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyString(config.getString(fullConfig + "displayName"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
-            logger.logToFile();
-        }
-
-        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
-            logger.logToFile();
-        }
-
-        return true;
     }
 }

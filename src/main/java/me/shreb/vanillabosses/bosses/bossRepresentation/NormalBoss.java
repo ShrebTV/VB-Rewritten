@@ -29,7 +29,7 @@ public class NormalBoss extends Boss {
     private void setCommands() {
 
         String commandPath = "CommandToBeExecutedOnDeath";
-        String commandIndexes = this.retriever.instance.configuration.getString(commandPath);
+        String commandIndexes = this.retriever.instance.config.getString(commandPath);
 
         if (commandIndexes == null || commandIndexes.equals("")) {
             this.commandIndexes = new int[0];

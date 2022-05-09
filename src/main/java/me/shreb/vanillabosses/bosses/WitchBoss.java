@@ -26,15 +26,15 @@ import org.bukkit.util.Vector;
 import java.util.*;
 import java.util.logging.Level;
 
-public class WitchBoss extends VBBoss implements ConfigVerification {
+public class WitchBoss extends VBBoss {
 
     public static WitchBoss instance = new WitchBoss();
 
     public static final String CONFIGSECTION = "WitchBoss";
     public static final String SCOREBOARDTAG = "BossWitch";
 
-    {
-        FileCreator.createAndLoad(FileCreator.witchBossPath, configuration);
+    public WitchBoss(){
+        new FileCreator().createAndLoad(FileCreator.witchBossPath, this.config);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
+        if (!config.getBoolean("enabled")) return entity;
 
         // checking wether the entity passed in is a Witch. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Witch)) {
@@ -77,8 +77,8 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = config.getDouble("Bosses." + CONFIGSECTION + ".health");
-        String nameColorString = config.getString("Bosses." + CONFIGSECTION + ".displayNameColor");
+        double health = config.getDouble("health");
+        String nameColorString = config.getString("displayNameColor");
 
         ChatColor nameColor;
 
@@ -95,9 +95,9 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
         }
 
 
-        String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
+        String name = config.getString("displayName");
 
-        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        double speedMultiplier = config.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
@@ -106,7 +106,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("Bosses." + CONFIGSECTION + ".showDisplayNameAlways"));
+            entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Witch Boss\n" +
@@ -128,7 +128,7 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
         return null;
     }
 
-    String path = "Bosses.WitchBoss.customThrownPotions.";
+    String path = "customThrownPotions.";
 
     /**
      * A method to make a custom potion for the witch to throw and drop
@@ -419,35 +419,5 @@ public class WitchBoss extends VBBoss implements ConfigVerification {
                 }
             }
         }
-    }
-
-
-    @Override
-    public boolean verifyConfig() {
-        String fullConfig = "Bosses." + CONFIGSECTION + ".";
-
-        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
-
-        if (!verifyBoolean(fullConfig + "enabled")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyString(config.getString(fullConfig + "displayName"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
-            logger.logToFile();
-        }
-
-        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
-            logger.logToFile();
-        }
-
-        return true;
     }
 }

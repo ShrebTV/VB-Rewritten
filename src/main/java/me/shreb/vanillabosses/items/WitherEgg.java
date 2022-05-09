@@ -34,17 +34,14 @@ public class WitherEgg extends VBItem {
 
     public static NamespacedKey PASSIVE_WITHER_PDC_KEY = new NamespacedKey(Vanillabosses.getInstance(), "PassiveWither");
 
-    {
-        FileCreator.createAndLoad(FileCreator.witherEggPath, configuration);
-    }
-
     public WitherEgg() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "WitherEgg");
         this.configSection = "WitherEgg";
+        new FileCreator().createAndLoad(FileCreator.witherEggPath, this.configuration);
         try {
-            this.itemMaterial = Material.valueOf(config.getString("Items." + this.configSection + ".itemMaterial").toUpperCase());
+            this.itemMaterial = Material.valueOf(this.configuration.getString("itemMaterial").toUpperCase());
         } catch (NullPointerException | IllegalArgumentException e) {
-            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Witheregg to a Material. Found: " + config.getString("Items." + this.configSection + ".itemMaterial")).logToFile();
+            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Witheregg to a Material. Found: " + this.configuration.getString("itemMaterial")).logToFile();
             return;
         }
         this.lore = new ArrayList<>();
@@ -127,8 +124,8 @@ public class WitherEgg extends VBItem {
 
                         wither.addScoreboardTag("PassiveWither");
 
-                        wither.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Vanillabosses.getInstance().getConfig().getDouble("Items.WitherEgg.petWitherHP"));
-                        wither.setHealth(Vanillabosses.getInstance().getConfig().getDouble("Items.WitherEgg.petWitherHP"));
+                        wither.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(this.configuration.getDouble("petWitherHP"));
+                        wither.setHealth(this.configuration.getDouble("petWitherHP"));
 
                         eggLoc.getBlock().setType(Material.AIR);
                         anvilLoc.getBlock().setType(Material.AIR);
@@ -161,7 +158,7 @@ public class WitherEgg extends VBItem {
                     }
 
 
-                }, Vanillabosses.getInstance().getConfig().getInt("Items.WitherEgg.timeToHatch") * 20L);
+                }, this.configuration.getInt("timeToHatch") * 20L);
             }
         }
     }
@@ -169,11 +166,9 @@ public class WitherEgg extends VBItem {
 
     public static void passiveWitherTarget(Wither wither) {
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
-
         if (wither.getHealth() < 0.001) return;
 
-        int range = config.getInt("Items.WitherEgg.arrowRange");
+        int range = instance.configuration.getInt("arrowRange");
 
         List<Entity> targetList = wither.getNearbyEntities(range, range, range)
                 .stream()
@@ -198,7 +193,7 @@ public class WitherEgg extends VBItem {
                 5,
                 1
         );
-        arrow.setDamage(config.getDouble("Items.WitherEgg.arrowDamageMultiplier") * arrow.getDamage());
+        arrow.setDamage(instance.configuration.getDouble("arrowDamageMultiplier") * arrow.getDamage());
         arrow.setGravity(false);
         arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
         arrow.getScoreboardTags().add(VBBoss.REMOVE_ON_DISABLE_TAG);

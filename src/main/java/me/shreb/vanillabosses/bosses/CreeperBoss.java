@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class CreeperBoss extends VBBoss implements ConfigVerification {
+public class CreeperBoss extends VBBoss {
 
     public static CreeperBoss instance = new CreeperBoss();
 
@@ -42,8 +42,8 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
     public static final String CANCEL_EXPLOSION = "CancelOnExplode";
     public static final String CANCEL_BLOWUP_ITEMS = "dontBlowUpItems";
 
-    static {
-        FileCreator.createAndLoad(FileCreator.creeperBossPath, instance.configuration);
+    public CreeperBoss(){
+        new FileCreator().createAndLoad(FileCreator.creeperBossPath, this.config);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!instance.configuration.getBoolean("enabled")) return entity;
+        if (!instance.config.getBoolean("enabled")) return entity;
 
         // checking whether the entity passed in is a Creeper. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Creeper)) {
@@ -86,8 +86,8 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = instance.configuration.getDouble("health");
-        String nameColorString = instance.configuration.getString("displayNameColor");
+        double health = instance.config.getDouble("health");
+        String nameColorString = instance.config.getString("displayNameColor");
 
         ChatColor nameColor;
 
@@ -103,9 +103,9 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        String name = instance.configuration.getString("displayName");
+        String name = instance.config.getString("displayName");
 
-        double speedMultiplier = instance.configuration.getDouble("SpeedModifier");
+        double speedMultiplier = instance.config.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
@@ -114,7 +114,7 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(instance.configuration.getBoolean("showDisplayNameAlways"));
+            entity.setCustomNameVisible(instance.config.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Creeper Boss\n" +
@@ -148,7 +148,7 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
 
         if (event.getEntityType().equals(EntityType.CREEPER) && event.getEntity().getScoreboardTags().contains(CreeperBoss.SCOREBOARDTAG)) {
 
-            int fuseTime = instance.configuration.getInt("thrownTNT.TNTFuse");
+            int fuseTime = instance.config.getInt("thrownTNT.TNTFuse");
 
             event.setCancelled(true);
 
@@ -249,7 +249,7 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
                 Creeper finalCreeper1 = (Creeper) creeperNew;
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
                     finalCreeper1.removeScoreboardTag("ExplodingATM");
-                }, 20L * instance.configuration.getInt("thrownTNT.TNTFuse"));
+                }, 20L * instance.config.getInt("thrownTNT.TNTFuse"));
 
                 //always have the same explosion radius
             }
@@ -260,7 +260,7 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
 
             BossCommand.replaceMappedUUIDs(creeper.getUniqueId(), creeperNew.getUniqueId());
 
-            if (instance.configuration.getBoolean("thrownTNT.throwTNTEnable")) {
+            if (instance.config.getBoolean("thrownTNT.throwTNTEnable")) {
 
                 Entity[] TNTArry = {
                         creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
@@ -275,11 +275,11 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
 
                 for (Entity e : TNTArry
                 ) {
-                    ((TNTPrimed) e).setYield(instance.configuration.getInt("thrownTNT.TNTYield"));
-                    ((TNTPrimed) e).setFuseTicks(20 * instance.configuration.getInt("thrownTNT.TNTFuse"));
+                    ((TNTPrimed) e).setYield(instance.config.getInt("thrownTNT.TNTYield"));
+                    ((TNTPrimed) e).setFuseTicks(20 * instance.config.getInt("thrownTNT.TNTFuse"));
                 }
 
-                double multiplier = instance.configuration.getDouble("thrownTNT.TNTSpreadMultiplier");
+                double multiplier = instance.config.getDouble("thrownTNT.TNTSpreadMultiplier");
 
                 TNTArry[0].setVelocity(new Vector(0.25 * multiplier, 0.5, 0));
                 TNTArry[1].setVelocity(new Vector(-0.25 * multiplier, 0.5, 0));
@@ -290,7 +290,7 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
                 TNTArry[6].setVelocity(new Vector(0.25 * multiplier, 0.5, -0.25 * multiplier));
                 TNTArry[7].setVelocity(new Vector(-0.25 * multiplier, 0.5, -0.25 * multiplier));
 
-                if (instance.configuration.getBoolean("thrownTNT.TNTDoesNoBlockDamage")) {
+                if (instance.config.getBoolean("thrownTNT.TNTDoesNoBlockDamage")) {
                     for (Entity e : TNTArry) {
                         e.addScoreboardTag(CANCEL_EXPLOSION);
                         e.getScoreboardTags().add(CANCEL_BLOWUP_ITEMS);
@@ -318,75 +318,5 @@ public class CreeperBoss extends VBBoss implements ConfigVerification {
         if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)) {
             event.setCancelled(true);
         }
-    }
-
-    @Override
-    public boolean verifyConfig() {
-
-        String name = getClass().getName();
-
-        VBLogger logger = new VBLogger(name, Level.WARNING, "");
-
-        if (!verifyBoolean(instance.configuration.getString("enabled"), name + ".enabled")) {
-            logger.setStringToLog(name + ": Config Error at enabled, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyString(instance.configuration.getString("displayName"), name + ".displayName")) {
-            logger.setStringToLog(name + ": Config Error at displayName, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyColorCode(instance.configuration.getString("displayNameColor"), name + ".displayNameColor")) {
-            logger.setStringToLog(name + ": Config Error at displayNameColor, has to be a hexCode");
-            logger.logToFile();
-        }
-
-        if (!verifyBoolean(instance.configuration.getString("showDisplayNameAlways"), name + ".showDisplayNameAlways")) {
-            logger.setStringToLog(name + ": Config Error at showDisplayNameAlways, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyDouble(instance.configuration.getString("DamageModifier"), name + ".DamageModifier", 0.001, 100)) {
-            logger.setStringToLog(name + ": Config Warning/Error at DamageModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyDouble(instance.configuration.getString("SpeedModifier"), name + ".SpeedModifier", 0.001, 100)) {
-            logger.setStringToLog(name + ": Config Warning/Error at SpeedModifier, has to be a value above 0.0, recommended not to put to 100, close to it or even above :P. Has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyInt(instance.configuration.getString("health"), name + ".health", 0, Integer.MAX_VALUE)) {
-            logger.setStringToLog(name + ": Config Warning/Error at health, has to be a value above 0, cannot be more than 2147483647, has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyDouble(instance.configuration.getString("spawnChance"), name + ".spawnChance", 0.0, 1.0)) {
-            logger.setStringToLog(name + ": Config Warning/Error at spawnChance, has to be a value between 0 and 1, has to be a number");
-            logger.logToFile();
-        }
-
-        if (!verifyString(instance.configuration.getString("killedMessage"), name + ".killedMessage")) {
-            logger.setStringToLog(name + ": Config Error at killedMessage, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifySpawnWorlds((ArrayList<String>) instance.configuration.getStringList("spawnWorlds"))) {
-            logger.setStringToLog(name + ": Config Error at killedMessage, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyDrops(EntityType.BLAZE)) {
-            logger.setStringToLog(name + ": Could not verify boss drops.");
-            logger.logToFile();
-        }
-
-        if (!verifyInt(instance.configuration.getString("droppedXP"), name + ".droppedXP", 0, Integer.MAX_VALUE)) {
-            logger.setStringToLog(name + ": Config Warning/Error at droppedXP, has to be a value above 0, cannot be more than 2147483647, has to be a number");
-            logger.logToFile();
-        }
-
-        return true;
     }
 }

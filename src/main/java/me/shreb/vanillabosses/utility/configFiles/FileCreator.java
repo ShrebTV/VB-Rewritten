@@ -38,14 +38,13 @@ public class FileCreator {
     public static Path zombieBossPath = Path.of(String.valueOf(folderPath), "Boss Config" + File.separator + "Zombie Boss.yml");
     public static Path zombified_PiglinBossPath = Path.of(String.valueOf(folderPath), "Boss Config" + File.separator + "Zombified Piglin Boss.yml");
 
-
     /**
      * Creates the specified file if it does not exist and loads it into the specified config file
      *
      * @param filePath      the path to load the file from
      * @param configuration the config file to load the file into
      */
-    public static void createAndLoad(Path filePath, FileConfiguration configuration) {
+    public void createAndLoad(Path filePath, FileConfiguration configuration) {
 
         File file = filePath.toFile();
 

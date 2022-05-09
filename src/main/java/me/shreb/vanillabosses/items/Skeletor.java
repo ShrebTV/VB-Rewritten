@@ -25,15 +25,12 @@ public class Skeletor extends VBItem {
 
     public static Skeletor instance = new Skeletor();
 
-    {
-        FileCreator.createAndLoad(FileCreator.skeletorPath, configuration);
-    }
-
     public Skeletor() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "Skeletor");
         this.configSection = "Skeletor";
+        new FileCreator().createAndLoad(FileCreator.skeletorPath, this.configuration);
         this.itemMaterial = Material.BOW;
-        this.lore = (ArrayList<String>) config.getStringList("Items.Skeletor.Lore");
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemSkeletorName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemSkeletorGivenMessage;
     }
@@ -129,7 +126,7 @@ public class Skeletor extends VBItem {
         @EventHandler
         public void editArrowToTNT(ProjectileLaunchEvent event) {
 
-            if(!config.getBoolean("Items.Skeletor.ShootTNTFromOffHand.enabled")) return;
+            if(!Skeletor.instance.configuration.getBoolean("ShootTNTFromOffHand.enabled")) return;
 
             boolean isArrow = event.getEntity() instanceof Arrow;
 
@@ -157,9 +154,9 @@ public class Skeletor extends VBItem {
                         shooter.getEquipment().getItemInOffHand().setAmount(shooter.getEquipment().getItemInOffHand().getAmount() - 1);
                     }
 
-                    int fuseTicks = config.getInt("Items.Skeletor.ShootTNTFromOffHand.TNTTimer");
-                    double tntYield = config.getInt("Items.Skeletor.ShootTNTFromOffHand.TNTYield");
-                    boolean cancelExplosion = config.getBoolean("Items.Skeletor.ShootTNTFromOffHand.TNTDoesNoBlockDamage");
+                    int fuseTicks = Skeletor.instance.configuration.getInt("ShootTNTFromOffHand.TNTTimer");
+                    double tntYield = Skeletor.instance.configuration.getInt("ShootTNTFromOffHand.TNTYield");
+                    boolean cancelExplosion = Skeletor.instance.configuration.getBoolean("ShootTNTFromOffHand.TNTDoesNoBlockDamage");
 
                     Vector vector = arrow.getVelocity();
 
@@ -198,7 +195,7 @@ public class Skeletor extends VBItem {
         @EventHandler
         public void onExplodingArrowHit(EntityDamageByEntityEvent event) {
 
-            if (!config.getBoolean("Items.Skeletor.TNTOnArrowHit.enable")
+            if (!Skeletor.instance.configuration.getBoolean("TNTOnArrowHit.enable")
                     || !(event.getDamager() instanceof Arrow)) return;
 
             Arrow arrow = (Arrow) event.getDamager();
@@ -219,9 +216,9 @@ public class Skeletor extends VBItem {
 
                 TNTPrimed tnt = (TNTPrimed) location.getWorld().spawnEntity(location, EntityType.PRIMED_TNT);
 
-                int fuseTicks = config.getInt("Items.Skeletor.TNTOnArrowHit.TNTTimer");
-                double tntYield = config.getDouble("Items.Skeletor.TNTOnArrowHit.TNTYield");
-                boolean cancelTNT = config.getBoolean("Items.Skeletor.TNTOnArrowHit.TNTDoesNoBlockDamage");
+                int fuseTicks = Skeletor.instance.configuration.getInt("TNTOnArrowHit.TNTTimer");
+                double tntYield = Skeletor.instance.configuration.getDouble("TNTOnArrowHit.TNTYield");
+                boolean cancelTNT = Skeletor.instance.configuration.getBoolean("TNTOnArrowHit.TNTDoesNoBlockDamage");
 
                 if (fuseTicks < 1) {
                     new VBLogger(getClass().getName(), Level.WARNING, "Skeletor TNT Fuse ticks were set too low. 20 ticks is one second, cannot be less than 1 tick. Ticks: " + fuseTicks).logToFile();

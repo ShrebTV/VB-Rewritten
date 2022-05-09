@@ -27,15 +27,15 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
-public class SkeletonBoss extends VBBoss implements ConfigVerification {
+public class SkeletonBoss extends VBBoss  {
 
     public static SkeletonBoss instance = new SkeletonBoss();
 
     public static final String CONFIGSECTION = "SkeletonBoss";
     public static final String SCOREBOARDTAG = "BossSkeleton";
 
-    {
-        FileCreator.createAndLoad(FileCreator.skeletonBossPath, configuration);
+    public SkeletonBoss() {
+        new FileCreator().createAndLoad(FileCreator.skeletonBossPath, this.config);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
+        if (!instance.config.getBoolean("enabled")) return entity;
 
         if (!(entity instanceof Skeleton)) {
             new VBLogger(getClass().getName(), Level.WARNING, "Attempted to make a Skeleton boss out of an Entity.\n" +
@@ -74,8 +74,8 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = config.getDouble("Bosses." + CONFIGSECTION + ".health");
-        String nameColorString = config.getString("Bosses." + CONFIGSECTION + ".displayNameColor");
+        double health = instance.config.getDouble("health");
+        String nameColorString = instance.config.getString("displayNameColor");
 
         ChatColor nameColor = null;
 
@@ -90,9 +90,9 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
+        String name = instance.config.getString("displayName");
 
-        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        double speedMultiplier = instance.config.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
@@ -101,7 +101,7 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("Bosses." + CONFIGSECTION + ".showDisplayNameAlways"));
+            entity.setCustomNameVisible(instance.config.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Skeleton Boss\n" +
@@ -127,11 +127,10 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
     }
 
     private boolean putOnEquipment(Skeleton skeleton) {
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
         ItemStack[] armor = new ItemStack[4];
 
-        String armorType = config.getString("Bosses.SkeletonBoss.ArmorMaterial");
+        String armorType = config.getString("ArmorMaterial");
 
         if (armorType == null) armorType = "Iron";
 
@@ -173,8 +172,8 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
                 armor[3] = new ItemStack(Material.IRON_HELMET);
         }
 
-        int protMin = config.getInt("Bosses.SkeletonBoss.ProtectionMin");
-        int protMax = config.getInt("Bosses.SkeletonBoss.ProtectionMax");
+        int protMin = config.getInt("ProtectionMin");
+        int protMax = config.getInt("ProtectionMax");
 
         for (ItemStack itemStack : armor) {
             int protLevel = ThreadLocalRandom.current().nextInt(protMin, protMax + 1);
@@ -196,17 +195,17 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
 
         try {
 
-            int powerMin = config.getInt("Bosses.SkeletonBoss.BowEnchants.Power.min");
-            int powerMax = config.getInt("Bosses.SkeletonBoss.BowEnchants.Power.max");
+            int powerMin = config.getInt("BowEnchants.Power.min");
+            int powerMax = config.getInt("BowEnchants.Power.max");
 
-            int punchMin = config.getInt("Bosses.SkeletonBoss.BowEnchants.Punch.min");
-            int punchMax = config.getInt("Bosses.SkeletonBoss.BowEnchants.Punch.max");
+            int punchMin = config.getInt("BowEnchants.Punch.min");
+            int punchMax = config.getInt("BowEnchants.Punch.max");
 
-            int unbreakingMin = config.getInt("Bosses.SkeletonBoss.BowEnchants.Unbreaking.min");
-            int unbreakingMax = config.getInt("Bosses.SkeletonBoss.BowEnchants.Unbreaking.max");
+            int unbreakingMin = config.getInt("BowEnchants.Unbreaking.min");
+            int unbreakingMax = config.getInt("BowEnchants.Unbreaking.max");
 
-            int flameMin = config.getInt("Bosses.SkeletonBoss.BowEnchants.Flame.min");
-            int flameMax = config.getInt("Bosses.SkeletonBoss.BowEnchants.Flame.max");
+            int flameMin = config.getInt("BowEnchants.Flame.min");
+            int flameMax = config.getInt("BowEnchants.Flame.max");
 
             ItemStack weapon = Skeletor.instance.makeItem();
 
@@ -219,15 +218,14 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
         } catch (ItemCreationException e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not create Weapon for Skeleton boss. Exception: " + e).logToFile();
         }
-        skeleton.getEquipment().setItemInMainHandDropChance((float) config.getDouble("Items.Skeletor.dropChance"));
+        skeleton.getEquipment().setItemInMainHandDropChance((float) Skeletor.instance.configuration.getDouble("dropChance"));
 
         return true;
     }
 
     @EventHandler
+    @SuppressWarnings("ConstantConditions")
     public void onHitAbility(EntityDamageByEntityEvent event) {
-
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
 
         if (event.getEntity().getScoreboardTags().contains("BossSkeleton") && event.getEntityType() == EntityType.SKELETON) {
 
@@ -237,9 +235,9 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
 
             double rn = new Random().nextDouble();
 
-            double chanceReflectDamage = config.getDouble("Bosses.SkeletonBoss.onHitEvents.reflectDamage.chance");
-            double chanceSpawnMinions = config.getDouble("Bosses.SkeletonBoss.onHitEvents.spawnMinions.chance");
-            double chanceInvulnerability = config.getDouble("Bosses.SkeletonBoss.onHitEvents.invulnerability.chance");
+            double chanceReflectDamage = config.getDouble("onHitEvents.reflectDamage.chance");
+            double chanceSpawnMinions = config.getDouble("onHitEvents.spawnMinions.chance");
+            double chanceInvulnerability = config.getDouble("onHitEvents.invulnerability.chance");
 
             double currentChance = chanceReflectDamage;
 
@@ -249,7 +247,7 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
 
                 double damage = event.getDamage();
 
-                damage *= config.getDouble("Bosses.SkeletonBoss.onHitEvents.reflectDamage.damageMultiplier");
+                damage *= config.getDouble("onHitEvents.reflectDamage.damageMultiplier");
 
                 ((Player) event.getDamager()).damage(damage);
 
@@ -264,7 +262,7 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
 
                 if (!(entity.isInvulnerable())) {
 
-                    int seconds = config.getInt("Bosses.SkeletonBoss.onHitEvents.invulnerability.durationInSeconds");
+                    int seconds = config.getInt("onHitEvents.invulnerability.durationInSeconds");
 
                     entity.setInvulnerable(true);
                     entity.getWorld().spawnParticle(Particle.FLAME, entity.getLocation(), 25);
@@ -294,7 +292,7 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
 
                 ArrayList<Entity> minions = new ArrayList<>();
 
-                if (config.getBoolean("Bosses.SkeletonBoss.onHitEvents.spawnMinions.abilityRemovesBlocks")) {
+                if (config.getBoolean("onHitEvents.spawnMinions.abilityRemovesBlocks")) {
 
                     Location[] blocks = {
                             w.getBlockAt(x, y, z).getLocation(),
@@ -351,34 +349,5 @@ public class SkeletonBoss extends VBBoss implements ConfigVerification {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean verifyConfig() {
-        String fullConfig = "Bosses." + CONFIGSECTION + ".";
-
-        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
-
-        if (!verifyBoolean(fullConfig + "enabled")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyString(config.getString(fullConfig + "displayName"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
-            logger.logToFile();
-        }
-
-        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
-            logger.logToFile();
-        }
-
-        return true;
     }
 }

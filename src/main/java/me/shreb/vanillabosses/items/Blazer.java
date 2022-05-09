@@ -26,20 +26,17 @@ public class Blazer extends VBItem {
 
     public static Blazer instance = new Blazer();
 
-    {
-        FileCreator.createAndLoad(FileCreator.blazerPath, configuration);
-    }
-
     public Blazer() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "Blazer");
         this.configSection = "Blazer";
+        new FileCreator().createAndLoad(FileCreator.blazerPath, this.configuration);
         try {
-            this.itemMaterial = Material.valueOf(config.getString("Items.Blazer.Chestplate").toUpperCase());
+            this.itemMaterial = Material.valueOf(this.configuration.getString("Chestplate").toUpperCase());
         } catch (NullPointerException | IllegalArgumentException e) {
-            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Blazer chestplate into an actual chestplate. Found: " + config.getString("Items.Blazer.Chestplate")).logToFile();
+            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Blazer chestplate into an actual chestplate. Found: " + this.configuration.getString("Chestplate")).logToFile();
             return;
         }
-        this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemBlazerName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBlazerNameGivenMessage;
     }
@@ -49,7 +46,7 @@ public class Blazer extends VBItem {
 
         ItemStack blazer = new ItemStack(this.itemMaterial);
 
-        if(this.itemMaterial == Material.LEATHER_CHESTPLATE){
+        if (this.itemMaterial == Material.LEATHER_CHESTPLATE) {
             LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) blazer.getItemMeta();
             leatherArmorMeta.setColor(Color.BLUE);
             blazer.setItemMeta(leatherArmorMeta);
@@ -75,7 +72,7 @@ public class Blazer extends VBItem {
 
         ItemStack blazer = new ItemStack(this.itemMaterial, amount);
 
-        if(blazer.getType() == Material.LEATHER_CHESTPLATE){
+        if (blazer.getType() == Material.LEATHER_CHESTPLATE) {
             LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) blazer.getItemMeta();
             leatherArmorMeta.setColor(Color.BLUE);
             blazer.setItemMeta(leatherArmorMeta);
@@ -104,7 +101,7 @@ public class Blazer extends VBItem {
     @Override
     public void itemAbility(LivingEntity entity) {
 
-        entity.setFireTicks(config.getInt("Items.Blazer.ticksOfFire"));
+        entity.setFireTicks(this.configuration.getInt("ticksOfFire"));
 
     }
 
@@ -114,14 +111,14 @@ public class Blazer extends VBItem {
         boolean executeAbility =
                 //check whether the entity is a living entity
                 event.getEntity() instanceof LivingEntity
-                //checking whether the attacked entity is wearing a blazer. could theoretically be set to be any armor
-                && Arrays.stream(((LivingEntity) event.getEntity()).getEquipment().getArmorContents())
+                        //checking whether the attacked entity is wearing a blazer. could theoretically be set to be any armor
+                        && Arrays.stream(((LivingEntity) event.getEntity()).getEquipment().getArmorContents())
                         .filter(n -> n != null && n.getType() != Material.AIR && n.hasItemMeta())
-                .anyMatch(n -> n.getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER))
-                //check whether the chance applies
-                && Utility.roll(config.getDouble("Items.Blazer.chanceToCombust"));
+                        .anyMatch(n -> n.getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER))
+                        //check whether the chance applies
+                        && Utility.roll(this.configuration.getDouble("chanceToCombust"));
 
-        if(executeAbility){
+        if (executeAbility) {
 
             itemAbility((LivingEntity) event.getDamager());
 

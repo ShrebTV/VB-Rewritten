@@ -29,15 +29,12 @@ public class BaseballBat extends VBItem implements Listener {
 
     public static BaseballBat instance = new BaseballBat();
 
-    {
-        FileCreator.createAndLoad(FileCreator.baseballBatPath, configuration);
-    }
-
     public BaseballBat() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "BaseballBat");
+        new FileCreator().createAndLoad(FileCreator.baseballBatPath, this.configuration);
         this.configSection = "BaseballBat";
         this.itemMaterial = Material.WOODEN_SWORD;
-        this.lore = (ArrayList<String>) configuration.getStringList("Lore");
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemBaseballBatName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBaseballBatGivenMessage;
     }

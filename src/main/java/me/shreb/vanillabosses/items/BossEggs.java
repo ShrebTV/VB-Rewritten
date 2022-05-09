@@ -33,14 +33,11 @@ public class BossEggs extends VBItem {
 
     public EntityType type;
 
-    {
-        FileCreator.createAndLoad(FileCreator.bossEggsPath, configuration);
-    }
-
     private BossEggs() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "BossEgg");
         this.configSection = "BossEggs";
-        this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        new FileCreator().createAndLoad(FileCreator.bossEggsPath, this.configuration);
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemBossEggName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemBossEggGivenMessage;
     }
@@ -164,7 +161,7 @@ public class BossEggs extends VBItem {
         name = name + "Boss spawn egg";
 
         BossDataRetriever retriever = new BossDataRetriever(type);
-        String colorString = config.getString("Bosses." + retriever.CONFIGSECTION + ".displayNameColor");
+        String colorString = this.configuration.getString("displayNameColor");
 
         if (colorString == null) {
             new VBLogger(getClass().getName(), Level.WARNING, "Color String could not be resolved for: " + type).logToFile();
@@ -178,7 +175,7 @@ public class BossEggs extends VBItem {
         meta.getPersistentDataContainer().set(pdcKey, PersistentDataType.STRING, this.type.toString());
         meta.getPersistentDataContainer().set(VBItem.VBItemKey, PersistentDataType.STRING, "BossEggs");
 
-        meta.setLore(config.getStringList("Items.BossEggs.lore"));
+        meta.setLore(this.configuration.getStringList("lore"));
 
         stack.setItemMeta(meta);
 
@@ -248,7 +245,7 @@ public class BossEggs extends VBItem {
         name = name + "Boss spawn egg";
 
         BossDataRetriever retriever = new BossDataRetriever(type);
-        String colorString = config.getString("Bosses." + retriever.CONFIGSECTION + ".displayNameColor");
+        String colorString = this.configuration.getString("displayNameColor");
 
         if (colorString == null) {
             new VBLogger(getClass().getName(), Level.WARNING, "Color String could not be resolved for: " + type).logToFile();
@@ -262,7 +259,7 @@ public class BossEggs extends VBItem {
         meta.getPersistentDataContainer().set(pdcKey, PersistentDataType.STRING, this.type.toString());
         meta.getPersistentDataContainer().set(VBItem.VBItemKey, PersistentDataType.STRING, "BossEggs");
 
-        meta.setLore(config.getStringList("Items.BossEggs.lore"));
+        meta.setLore(this.configuration.getStringList("lore"));
 
         stack.setItemMeta(meta);
 

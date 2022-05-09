@@ -24,15 +24,15 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 
-public class SlimeBoss extends VBBoss implements ConfigVerification {
+public class SlimeBoss extends VBBoss {
 
     public static SlimeBoss instance = new SlimeBoss();
 
     public static final String CONFIGSECTION = "SlimeBoss";
     public static final String SCOREBOARDTAG = "BossSlime";
 
-    {
-        FileCreator.createAndLoad(FileCreator.slimeBossPath, configuration);
+    public SlimeBoss() {
+        new FileCreator().createAndLoad(FileCreator.slimeBossPath, this.config);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SlimeBoss extends VBBoss implements ConfigVerification {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
-        if (!config.getBoolean("Bosses." + CONFIGSECTION + ".enabled")) return entity;
+        if (!config.getBoolean("enabled")) return entity;
 
         // checking wether the entity passed in is a Slime. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Slime)) {
@@ -75,8 +75,8 @@ public class SlimeBoss extends VBBoss implements ConfigVerification {
         }
 
         //getting the Boss Attributes from the config file
-        double health = config.getDouble("Bosses." + CONFIGSECTION + ".health");
-        String nameColorString = config.getString("Bosses." + CONFIGSECTION + ".displayNameColor");
+        double health = config.getDouble("health");
+        String nameColorString = config.getString("displayNameColor");
 
         ChatColor nameColor;
 
@@ -92,9 +92,9 @@ public class SlimeBoss extends VBBoss implements ConfigVerification {
             }
         }
 
-        String name = config.getString("Bosses." + CONFIGSECTION + ".displayName");
+        String name = config.getString("displayName");
 
-        double speedMultiplier = config.getDouble("Bosses." + CONFIGSECTION + ".SpeedModifier");
+        double speedMultiplier = config.getDouble("SpeedModifier");
         if (speedMultiplier < 0.0001) speedMultiplier = 1;
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
@@ -103,7 +103,7 @@ public class SlimeBoss extends VBBoss implements ConfigVerification {
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
             entity.setHealth(health);
             entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("Bosses." + CONFIGSECTION + ".showDisplayNameAlways"));
+            entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
 
         } catch (Exception e) {
             new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Slime Boss\n" +
@@ -144,7 +144,7 @@ public class SlimeBoss extends VBBoss implements ConfigVerification {
         if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.SLIME) {
 
             if (!(event.getDamager() instanceof Player)) return;
-            double jumpSlamChance = Vanillabosses.getInstance().getConfig().getDouble("Bosses.SlimeBoss.onHitEvents.JumpSlam.chance");
+            double jumpSlamChance = instance.config.getDouble("onHitEvents.JumpSlam.chance");
 
             if (new Random().nextDouble() < jumpSlamChance) {
 
@@ -190,34 +190,5 @@ public class SlimeBoss extends VBBoss implements ConfigVerification {
                 }, 20);
             }
         }
-    }
-
-    @Override
-    public boolean verifyConfig() {
-        String fullConfig = "Bosses." + CONFIGSECTION + ".";
-
-        VBLogger logger = new VBLogger("BlazeBoss", Level.WARNING, "");
-
-        if (!verifyBoolean(fullConfig + "enabled")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "enabled, has to be true or false");
-            logger.logToFile();
-        }
-
-        if (!verifyString(config.getString(fullConfig + "displayName"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayName, cannot be empty");
-            logger.logToFile();
-        }
-
-        if (!verifyColorCode(config.getString(fullConfig + "displayNameColor"))) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "displayNameColor, has to be a hexCode");
-            logger.logToFile();
-        }
-
-        if (!verifyBoolean(fullConfig + "showDisplayNameAlways")) {
-            logger.setStringToLog("Config Error at '" + fullConfig + "showDisplayNameAlways, has to be true or false");
-            logger.logToFile();
-        }
-
-        return true;
     }
 }

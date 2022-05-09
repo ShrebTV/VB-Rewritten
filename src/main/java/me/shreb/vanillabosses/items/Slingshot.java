@@ -31,22 +31,20 @@ public class Slingshot extends VBItem {
 
     public static Slingshot instance = new Slingshot();
     public static HashMap<UUID, Long> fallDamageTags = new HashMap<>();
-    public static long FALL_DAMAGE_TAG_TIMEOUT = config.getInt("Items.Slingshot.antiFallDamageTime");
-
-    {
-        FileCreator.createAndLoad(FileCreator.slingshotPath, configuration);
-    }
+    public final long FALL_DAMAGE_TAG_TIMEOUT;
 
     public Slingshot() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "Slingshot");
         this.configSection = "Slingshot";
+        new FileCreator().createAndLoad(FileCreator.slingshotPath, this.configuration);
+        this.FALL_DAMAGE_TAG_TIMEOUT = this.configuration.getInt("antiFallDamageTime");
         try {
-            this.itemMaterial = Material.valueOf(config.getString("Items.Slingshot.itemMaterial").toUpperCase());
+            this.itemMaterial = Material.valueOf(this.configuration.getString("itemMaterial").toUpperCase());
         } catch (NullPointerException | IllegalArgumentException e) {
-            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Slingshot to a hoe. Found: " + config.getString("Items.Slingshot.itemMaterial")).logToFile();
+            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Slingshot to a valid item. Found: " + this.configuration.getString("itemMaterial")).logToFile();
             return;
         }
-        this.lore = (ArrayList<String>) config.getStringList("Items." + this.configSection + ".Lore");
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemSlingshotName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemSlingshotGivenMessage;
     }
@@ -108,26 +106,26 @@ public class Slingshot extends VBItem {
             event.getPlayer().getScoreboardTags().add("NoFallDMG");
             fallDamageTags.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
 
-            double multiplier = Vanillabosses.getInstance().getConfig().getDouble("Items.Slingshot.thrustMultiplier");
+            double multiplier = this.configuration.getDouble("thrustMultiplier");
             Vector v = event.getPlayer().getLocation().getDirection();
             double x = v.getX() * multiplier;
             double y = v.getY() * multiplier;
             double z = v.getZ() * multiplier;
             v = new Vector(x, y, z);
             event.getPlayer().setVelocity(v);
-            if (Vanillabosses.getInstance().getConfig().getBoolean("Items.Slingshot.enableBoostSound")) {
-                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PARROT_IMITATE_SPIDER, (float) Vanillabosses.getInstance().getConfig().getDouble("Items.Slingshot.boostSoundVolume"), 0.5F);
+            if (this.configuration.getBoolean("enableBoostSound")) {
+                event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_PARROT_IMITATE_SPIDER, (float) this.configuration.getDouble("boostSoundVolume"), 0.5F);
             }
-            if (Vanillabosses.getInstance().getConfig().getBoolean("Items.Slingshot.enableDamagingOnUse")) {
+            if (this.configuration.getBoolean("enableDamagingOnUse")) {
                 ItemStack item = event.getItem();
                 ItemMeta meta = item.getItemMeta();
 
-                if (((Damageable) meta).getDamage() + Vanillabosses.getInstance().getConfig().getInt("Items.Slingshot.damageOnUseAmount") > item.getType().getMaxDurability()) {      //Item breaking upon reaching 0 Durability
+                if (((Damageable) meta).getDamage() + this.configuration.getInt("damageOnUseAmount") > item.getType().getMaxDurability()) {      //Item breaking upon reaching 0 Durability
                     event.getPlayer().getEquipment().getItem(event.getHand()).setAmount(event.getPlayer().getEquipment().getItem(event.getHand()).getAmount() - 1);
                     event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
                     return;
                 }
-                ((Damageable) meta).setDamage(((Damageable) meta).getDamage() + Vanillabosses.getInstance().getConfig().getInt("Items.Slingshot.damageOnUseAmount"));
+                ((Damageable) meta).setDamage(((Damageable) meta).getDamage() + this.configuration.getInt("damageOnUseAmount"));
                 item.setItemMeta(meta);
             }
         }

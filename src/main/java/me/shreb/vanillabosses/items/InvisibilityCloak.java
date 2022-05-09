@@ -29,20 +29,17 @@ public class InvisibilityCloak extends VBItem {
 
     public static InvisibilityCloak instance = new InvisibilityCloak();
 
-    {
-        FileCreator.createAndLoad(FileCreator.invisibilityCloakPath, configuration);
-    }
-
     public InvisibilityCloak() {
         this.pdcKey = new NamespacedKey(Vanillabosses.getInstance(), "cloakOfInvisibility");
         this.configSection = "cloakOfInvisibility";
+        new FileCreator().createAndLoad(FileCreator.invisibilityCloakPath, this.configuration);
         try {
-            this.itemMaterial = Material.valueOf(config.getString("Items.cloakOfInvisibility.itemMaterial").toUpperCase());
+            this.itemMaterial = Material.valueOf(this.configuration.getString("itemMaterial").toUpperCase());
         } catch (NullPointerException | IllegalArgumentException e) {
-            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Invisibility cloak into an actual chestplate. Found: " + config.getString("Items.cloakOfInvisibility.itemMaterial")).logToFile();
+            new VBLogger(getClass().getName(), Level.SEVERE, "Unable to convert configuration of the Invisibility cloak into an actual chestplate. Found: " + this.configuration.getString("itemMaterial")).logToFile();
             return;
         }
-        this.lore = (ArrayList<String>) config.getStringList("Items.cloakOfInvisibility.Lore");
+        this.lore = (ArrayList<String>) this.configuration.getStringList("Lore");
         this.itemName = Vanillabosses.getCurrentLanguage().itemInvisibilityCloakName;
         this.itemGivenMessage = Vanillabosses.getCurrentLanguage().itemInvisibilityCloakNameGivenMessage;
     }
@@ -89,7 +86,7 @@ public class InvisibilityCloak extends VBItem {
     @Override
     public void itemAbility(LivingEntity entity) {
 
-        int time = config.getInt("Items.cloakOfInvisibility.delayBetweenChecks");
+        int time = this.configuration.getInt("delayBetweenChecks");
 
         if (time < 2) {
             new VBLogger(getClass().getName(), Level.WARNING, "Invisibility time is too short. Please set it to 2 or more seconds").logToFile();
@@ -145,6 +142,6 @@ public class InvisibilityCloak extends VBItem {
                     itemAbility(player);
                 }
             }
-        }, 10, config.getInt("Items.cloakOfInvisibility.delayBetweenChecks") * 20L);
+        }, 10, this.configuration.getInt("delayBetweenChecks") * 20L);
     }
 }

@@ -5,10 +5,12 @@ import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
+import org.yaml.snakeyaml.Yaml;
 
 import java.util.ArrayList;
 
@@ -17,7 +19,7 @@ public abstract class VBItem implements Listener {
     public static NamespacedKey VBItemKey = new NamespacedKey(Vanillabosses.getInstance(), "VB-Item");
     static final PluginManager pluginManager = Vanillabosses.getInstance().getServer().getPluginManager();
 
-    public FileConfiguration configuration;
+    public YamlConfiguration configuration;
     public NamespacedKey pdcKey; //The PDCKey which identifies this item as the specific special item it is
     public String configSection;
     public Material itemMaterial;

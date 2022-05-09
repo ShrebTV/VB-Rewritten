@@ -51,7 +51,7 @@ public class RespawningBoss extends Boss {
 
     // put the commands from the command list and their indexes into the commandMap in order to easily execute them later
     {
-        FileConfiguration config = new BossDataRetriever(this.type).instance.configuration;
+        FileConfiguration config = new BossDataRetriever(this.type).instance.config;
         List<String> bossJsonList = new ArrayList<>(config.getStringList("RespawningBosses"));
 
         for (String string : bossJsonList) {
