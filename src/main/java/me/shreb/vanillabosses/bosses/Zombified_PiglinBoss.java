@@ -6,7 +6,7 @@ import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.items.ButchersAxe;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
-import me.shreb.vanillabosses.utility.ConfigVerification;
+import me.shreb.vanillabosses.utility.Utility;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -14,12 +14,14 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -35,7 +37,7 @@ public class Zombified_PiglinBoss extends VBBoss {
     public static final String CONFIGSECTION = "Zombified_PiglinBoss";
     public static final String SCOREBOARDTAG = "BossZombified_Piglin";
 
-    public Zombified_PiglinBoss(){
+    public Zombified_PiglinBoss() {
         new FileCreator().createAndLoad(FileCreator.zombified_PiglinBossPath, this.config);
     }
 
@@ -182,6 +184,79 @@ public class Zombified_PiglinBoss extends VBBoss {
         return true;
     }
 
+    @EventHandler
+    public void ability(EntityDamageByEntityEvent event) {
+
+        double jumpChance = this.config.getDouble("onHitAbilities.Jump.Chance");
+        double pullChance = this.config.getDouble("onHitAbilities.Pull.Chance");
+        double pushChance = this.config.getDouble("onHitAbilities.Push.Chance");
+
+        double jumpStrengthMultiplier = config.getDouble("onHitAbilities.Jump.JumpStrengthMultiplier");
+        double pullStrengthMultiplier = config.getDouble("onHitAbilities.Pull.PullStrengthMultiplier");
+        double pushStrengthMultiplier = config.getDouble("onHitAbilities.Push.PushStrengthMultiplier");
+
+        System.out.println(jumpStrengthMultiplier);
+        System.out.println(pullStrengthMultiplier);
+        System.out.println(pushStrengthMultiplier);
+
+        System.out.println("first");
+
+        if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)
+                && event.getEntityType() == EntityType.ZOMBIFIED_PIGLIN
+                && (event.getDamager() instanceof Player || (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player))) {
+
+            System.out.println("second");
+
+            PigZombie entity = (PigZombie) event.getEntity();
+            Player player = null;
+
+            if (event.getDamager() instanceof Player) {
+                player = (Player) event.getDamager();
+            } else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
+                player = (Player) ((Projectile) event.getDamager()).getShooter();
+            }
+
+            if (player == null) return;
+
+            System.out.println("third");
+
+            if (Utility.roll(jumpChance)) {
+
+                System.out.println("jump");
+
+                entity.setVelocity(new Vector(0, 1 * jumpStrengthMultiplier, 0));
+
+            }
+
+            if (Utility.roll(pullChance)) {
+
+                System.out.println("pull");
+
+                Vector towardsBoss = new Vector(entity.getLocation().getX() - player.getLocation().getX(),
+                        entity.getLocation().getY() - player.getLocation().getY(),
+                        entity.getLocation().getZ() - player.getLocation().getZ());
+
+                towardsBoss.multiply(pullStrengthMultiplier);
+
+                player.setVelocity(towardsBoss);
+
+            }
+
+            if (Utility.roll(pushChance)) {
+
+                System.out.println("push");
+
+                Vector awayFromBoss = new Vector(player.getLocation().getX() - entity.getLocation().getX(),
+                        player.getLocation().getY() - entity.getLocation().getY(),
+                        player.getLocation().getZ() - entity.getLocation().getZ());
+
+                awayFromBoss.multiply(pushStrengthMultiplier);
+
+                player.setVelocity(awayFromBoss);
+
+            }
+        }
+    }
 
     /**
      * Runs a timer in order to make all registered Zombie piglin bosses agressive to players without being hit
