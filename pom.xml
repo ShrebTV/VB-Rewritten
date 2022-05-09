@@ -6,7 +6,7 @@
 
     <groupId>me.shreb</groupId>
     <artifactId>vanillabosses</artifactId>
-    <version>dev-1.0</version>
+    <version>dev-2.0</version>
     <packaging>jar</packaging>
 
     <name>Vanillabosses</name>
