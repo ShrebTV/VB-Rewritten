@@ -8,7 +8,10 @@ Bosses:
 
   bossesGetGlowingPotionEffect: false
 
-  AllBossesHaveBossBars: false #this set to true will give all bosses which spawn a boss bar. If set to false only respawning bosses will have boss bars
+  NaturalBossesHaveBossBars: true #this set to true will give all bosses which spawn a boss bar. If set to false only respawning bosses will have boss bars
+  CommandBossesHaveBossBars: false
+  RespawningBossesHaveBossbars: true
+  EggBossesHaveBossBars: true
 
   # The following 4 lines are for people who want to discourage autoclicking to farm mobs/bosses.
   enableAntiAFKTeleports: false # If set to true mobs will have a chance to be teleported to the attacking player. If the player is afk the mob could kill the player. This should discourage from using autoclickers and afk farming mobs.

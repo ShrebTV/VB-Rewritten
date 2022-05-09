@@ -338,7 +338,9 @@ public class BossEggs extends VBItem {
 
             try {
                 LivingEntity entity = bossData.instance.makeBoss(loc);
-                new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.YELLOW, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.EggBossesHaveBossBars")) {
+                    new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.YELLOW, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                }
             } catch (BossCreationException ex) {
                 new VBLogger(getClass().getName(), Level.WARNING, "An error occurred while spawning a boss from an egg. Error:\n" + ex).logToFile();
                 event.getPlayer().sendMessage("An error occurred! Error written to log file!");

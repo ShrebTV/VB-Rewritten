@@ -190,7 +190,10 @@ public class RespawningBoss extends Boss {
 
         entity.getScoreboardTags().add(RESPAWNING_BOSS_TAG);
         entity.getPersistentDataContainer().set(RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY, this.commandIndexes);
-        new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.RED, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+
+        if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.RespawningBossesHaveBossbars")) {
+            new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.RED, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+        }
         return entity;
     }
 

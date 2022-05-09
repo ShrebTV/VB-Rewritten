@@ -160,7 +160,7 @@ public class SpawnEvent implements Listener {
                     break;
             }
 
-            if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.AllBossesHaveBossBars")) {
+            if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.NaturalBossesHaveBossBars")) {
                 new VBBossBar(event.getEntity(), Bukkit.createBossBar(event.getEntity().getName(), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
             }
         }

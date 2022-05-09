@@ -425,7 +425,9 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
 
             try {
                 LivingEntity entity = retriever.instance.makeBoss(locationToSpawn);
-                new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.CommandBossesHaveBossBars")) {
+                    new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                }
             } catch (BossCreationException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
                 sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
@@ -493,7 +495,9 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
 
             try {
                 LivingEntity entity = retriever.instance.makeBoss(locationToSpawn);
-                new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.CommandBossesHaveBossBars")) {
+                    new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                }
             } catch (BossCreationException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
                 sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
