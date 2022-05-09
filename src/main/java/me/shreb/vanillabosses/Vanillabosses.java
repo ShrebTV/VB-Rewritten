@@ -12,6 +12,7 @@ import me.shreb.vanillabosses.items.utility.ItemListeners;
 import me.shreb.vanillabosses.items.utility.VBItemRecipe;
 import me.shreb.vanillabosses.listeners.VBListeners;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.Languages;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -77,6 +78,8 @@ public final class Vanillabosses extends JavaPlugin {
         Zombified_PiglinBoss.aggressionTimer();
 
         new VBLogger(getClass().getName(), Level.INFO, "Plugin enabled!").logToFile();
+
+        ConfigVerification.verifyAllConfigs();
 
     }
 
