@@ -7,16 +7,15 @@ import me.shreb.vanillabosses.items.Skeletor;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.listeners.SpawnEvent;
 import me.shreb.vanillabosses.logging.VBLogger;
-import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -227,9 +226,10 @@ public class SkeletonBoss extends VBBoss  {
     @SuppressWarnings("ConstantConditions")
     public void onHitAbility(EntityDamageByEntityEvent event) {
 
-        if (event.getEntity().getScoreboardTags().contains("BossSkeleton") && event.getEntityType() == EntityType.SKELETON) {
+        if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.SKELETON) {
 
-            if (!(event.getDamager() instanceof Player)) return;
+            if (!(event.getDamager() instanceof Player)
+            && !(event.getDamager() instanceof Arrow)) return;
 
             Entity entity = event.getEntity();
 
@@ -242,6 +242,7 @@ public class SkeletonBoss extends VBBoss  {
             double currentChance = chanceReflectDamage;
 
             if (rn <= currentChance) {
+                //Reflecting damage
 
                 event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.BLOCK_ANVIL_FALL, 1F, 2F);
 
@@ -249,7 +250,19 @@ public class SkeletonBoss extends VBBoss  {
 
                 damage *= config.getDouble("onHitEvents.reflectDamage.damageMultiplier");
 
-                ((Player) event.getDamager()).damage(damage);
+                Player playerToDamage;
+
+                if(event.getDamager() instanceof Arrow && ((Arrow) event.getDamager()).getShooter() instanceof Player){
+
+                    playerToDamage = (Player) ((Arrow) event.getDamager()).getShooter();
+
+                } else if(event.getDamager() instanceof Player){
+
+                    playerToDamage = (Player) event.getDamager();
+
+                } else return;
+
+                (playerToDamage).damage(damage);
 
                 event.setCancelled(true);
 
@@ -259,6 +272,7 @@ public class SkeletonBoss extends VBBoss  {
             currentChance += chanceInvulnerability;
 
             if (rn <= currentChance) {
+                //invulnerablility
 
                 if (!(entity.isInvulnerable())) {
 
@@ -281,6 +295,7 @@ public class SkeletonBoss extends VBBoss  {
             currentChance += chanceSpawnMinions;
 
             if (rn <= currentChance) {
+                //Minions
 
                 World w = entity.getWorld();
 
@@ -338,14 +353,16 @@ public class SkeletonBoss extends VBBoss  {
 
                     if (((LivingEntity) e).getEquipment() == null) return;
 
+                    EntityEquipment equipment = ((LivingEntity) e).getEquipment();
+
                     e.removeScoreboardTag("BossSkeleton");
                     e.setCustomName("The Kings Minion");
                     e.setCustomNameVisible(false);
-                    ((LivingEntity) e).getEquipment().setBoots(null);
-                    ((LivingEntity) e).getEquipment().setLeggings(null);
-                    ((LivingEntity) e).getEquipment().setChestplate(null);
-                    ((LivingEntity) e).getEquipment().setItemInOffHand(null);
-                    ((LivingEntity) e).getEquipment().setItemInMainHand(new ItemStack(Material.BOW));
+                    equipment.setBoots(null);
+                    equipment.setLeggings(null);
+                    equipment.setChestplate(null);
+                    equipment.setItemInOffHand(null);
+                    equipment.setItemInMainHand(new ItemStack(Material.BOW));
                 }
             }
         }
