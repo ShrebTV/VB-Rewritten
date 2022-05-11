@@ -16,7 +16,6 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -31,7 +30,7 @@ import java.util.logging.Level;
  * "bossInfo (type)"
  * "Item (current item material/name of the item in the currently active language)"
  */
-public class AdminCommands extends VBCommands implements CommandExecutor {
+public class AdminCommands extends VBCommands {
 
     private static final AdminCommands INSTANCE = new AdminCommands();
 
@@ -340,17 +339,6 @@ public class AdminCommands extends VBCommands implements CommandExecutor {
     }
 
     boolean spawnBossCommandReaction(CommandSender sender, String[] args) {
-        //Commands I want it to be able to take if the sender is not a player:
-        // /vbAdmin spawnBoss Skeleton <playerName>
-        // /vbAdmin spawnBoss Skeleton <worldName;X;Y;Z>
-
-        //Commands I want it to be able to take if the sender is a player:
-        // /vbAdmin spawnBoss Skeleton
-        // /vbAdmin spawnBoss Skeleton <playerName>
-        // /vbAdmin spawnBoss Skeleton <worldName;X;Y;Z>
-
-
-        //TODO Test command using the above commands
 
         //not enough arguments
         if (args.length < 2) {
