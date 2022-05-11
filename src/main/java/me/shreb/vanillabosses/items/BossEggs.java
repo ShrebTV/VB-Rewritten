@@ -4,6 +4,7 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.bosses.utility.VBBossBar;
+import me.shreb.vanillabosses.items.configDataReader.BossEggDataReader;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
@@ -12,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
@@ -302,7 +304,16 @@ public class BossEggs extends VBItem {
                     || event.getPlayer().getEquipment() == null
                     || event.getClickedBlock() == null) return;
 
-            Location loc = event.getClickedBlock().getLocation();
+            Block block = event.getClickedBlock();
+
+            if(block == null) return;
+
+            if(!new BossEggDataReader().checkAllowed(type, block.getType())){
+                event.getPlayer().sendMessage(ChatColor.GRAY + "This Egg cannot be placed on this Block!");
+                return;
+            }
+
+            Location loc = block.getLocation();
 
             //Make it so the boss doesn't get stuck in blocks as much
             switch (event.getBlockFace()) {

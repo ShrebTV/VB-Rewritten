@@ -1,2 +1,7 @@
 lore:
   - "Spawns a boss"
+
+CanSpawnOnBlocks:
+# - ZOMBIE:DIRT
+# - ZOMBIE:STONE
+# - SKELETON:BONE_BLOCK
