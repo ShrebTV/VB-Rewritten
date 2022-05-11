@@ -1,5 +1,6 @@
 package me.shreb.vanillabosses.bosses.utility;
 
+import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.*;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.DataRetriever;
@@ -28,6 +29,7 @@ public class BossDataRetriever extends DataRetriever {
     public ArrayList<String> droppedItems;
     public boolean spawnNaturally;
     public List<Integer> commandIndexes;
+    public String infoMessage;
 
     /**
      * Gets a new BossDataRetriever Object which contains the instance of the corresponding boss type, the corresponding Config section and the corresponding Scoreboard tag.
@@ -45,12 +47,14 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = BlazeBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = BlazeBoss.SCOREBOARDTAG;
                 this.instance = BlazeBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhBlaze;
                 break;
 
             case CREEPER:
                 this.CONFIGSECTION = CreeperBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = CreeperBoss.SCOREBOARDTAG;
                 this.instance = CreeperBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhCreeper;
                 break;
 
 
@@ -58,6 +62,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = EndermanBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = EndermanBoss.SCOREBOARDTAG;
                 this.instance = EndermanBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhEnderman;
                 break;
 
 
@@ -65,6 +70,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = MagmacubeBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = MagmacubeBoss.SCOREBOARDTAG;
                 this.instance = MagmacubeBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhMagmaCube;
                 break;
 
 
@@ -72,6 +78,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = SkeletonBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = SkeletonBoss.SCOREBOARDTAG;
                 this.instance = SkeletonBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhSkeleton;
                 break;
 
 
@@ -79,6 +86,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = SlimeBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = SlimeBoss.SCOREBOARDTAG;
                 this.instance = SlimeBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhSlime;
                 break;
 
 
@@ -86,6 +94,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = SpiderBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = SpiderBoss.SCOREBOARDTAG;
                 this.instance = SpiderBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhSpider;
                 break;
 
 
@@ -93,12 +102,14 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = WitchBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = WitchBoss.SCOREBOARDTAG;
                 this.instance = WitchBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhWitch;
                 break;
 
             case WITHER:
                 this.CONFIGSECTION = WitherBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = WitherBoss.SCOREBOARDTAG;
                 this.instance = WitherBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhWither;
                 break;
 
 
@@ -106,6 +117,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = ZombieBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = ZombieBoss.SCOREBOARDTAG;
                 this.instance = ZombieBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhZombie;
                 break;
 
 
@@ -113,6 +125,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = Zombified_PiglinBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = Zombified_PiglinBoss.SCOREBOARDTAG;
                 this.instance = Zombified_PiglinBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhPiglin;
                 break;
 
             default:
@@ -158,12 +171,14 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = BlazeBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = BlazeBoss.SCOREBOARDTAG;
                 this.instance = BlazeBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhBlaze;
                 break;
 
             case CREEPER:
                 this.CONFIGSECTION = CreeperBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = CreeperBoss.SCOREBOARDTAG;
                 this.instance = CreeperBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhCreeper;
                 break;
 
 
@@ -171,6 +186,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = EndermanBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = EndermanBoss.SCOREBOARDTAG;
                 this.instance = EndermanBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhEnderman;
                 break;
 
 
@@ -178,6 +194,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = MagmacubeBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = MagmacubeBoss.SCOREBOARDTAG;
                 this.instance = MagmacubeBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhMagmaCube;
                 break;
 
 
@@ -185,6 +202,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = SkeletonBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = SkeletonBoss.SCOREBOARDTAG;
                 this.instance = SkeletonBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhSkeleton;
                 break;
 
 
@@ -192,6 +210,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = SlimeBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = SlimeBoss.SCOREBOARDTAG;
                 this.instance = SlimeBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhSlime;
                 break;
 
 
@@ -199,6 +218,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = SpiderBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = SpiderBoss.SCOREBOARDTAG;
                 this.instance = SpiderBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhSpider;
                 break;
 
 
@@ -206,12 +226,14 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = WitchBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = WitchBoss.SCOREBOARDTAG;
                 this.instance = WitchBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhWitch;
                 break;
 
             case WITHER:
                 this.CONFIGSECTION = WitherBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = WitherBoss.SCOREBOARDTAG;
                 this.instance = WitherBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhWither;
                 break;
 
 
@@ -219,6 +241,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = ZombieBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = ZombieBoss.SCOREBOARDTAG;
                 this.instance = ZombieBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhZombie;
                 break;
 
 
@@ -226,6 +249,7 @@ public class BossDataRetriever extends DataRetriever {
                 this.CONFIGSECTION = Zombified_PiglinBoss.CONFIGSECTION;
                 this.SCOREBOARDTAG = Zombified_PiglinBoss.SCOREBOARDTAG;
                 this.instance = Zombified_PiglinBoss.instance;
+                this.infoMessage = Vanillabosses.getCurrentLanguage().vbhPiglin;
                 break;
 
             default:
