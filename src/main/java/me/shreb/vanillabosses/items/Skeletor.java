@@ -1,6 +1,5 @@
 package me.shreb.vanillabosses.items;
 
-import jdk.jshell.execution.Util;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.CreeperBoss;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
@@ -128,7 +127,7 @@ public class Skeletor extends VBItem {
         @EventHandler
         public void editArrowToTNT(ProjectileLaunchEvent event) {
 
-            if(!Skeletor.instance.configuration.getBoolean("ShootTNTFromOffHand.enabled")) return;
+            if (!Skeletor.instance.configuration.getBoolean("ShootTNTFromOffHand.enabled")) return;
 
             boolean isArrow = event.getEntity() instanceof Arrow;
 
@@ -145,13 +144,13 @@ public class Skeletor extends VBItem {
                         && shooter.getEquipment().getItemInMainHand().getItemMeta() != null
                         && shooter.getEquipment().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(Skeletor.instance.pdcKey, PersistentDataType.STRING);
 
-                if(!shooterHoldingSkeletorMain) return;
+                if (!shooterHoldingSkeletorMain) return;
 
                 boolean shooterHoldingTNTOffHand = (shooter.getEquipment().getItemInOffHand().getType() == Material.TNT);
 
-                if(shooterHoldingTNTOffHand){
+                if (shooterHoldingTNTOffHand) {
 
-                    if(shooter instanceof Player && ((Player) shooter).getGameMode() == GameMode.SURVIVAL){
+                    if (shooter instanceof Player && ((Player) shooter).getGameMode() == GameMode.SURVIVAL) {
                         //decrease amount of TNT in off hand only if the shooter is a player and they are in survival mode
                         shooter.getEquipment().getItemInOffHand().setAmount(shooter.getEquipment().getItemInOffHand().getAmount() - 1);
                     }
