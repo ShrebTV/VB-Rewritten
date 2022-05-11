@@ -1,6 +1,8 @@
 package me.shreb.vanillabosses.commands;
 
-public abstract class VBCommands {
+import org.bukkit.command.CommandExecutor;
+
+public abstract class VBCommands implements CommandExecutor {
 
     /**
      * Makes sure the command classes have this method so I don't forget to add it into registerAll()
