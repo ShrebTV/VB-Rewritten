@@ -17,9 +17,15 @@ import org.bukkit.entity.EntityType;
  */
 public class VBInfo extends VBCommands {
 
+    private static final VBInfo INSTANCE = new VBInfo();
+
+    public static VBInfo getInstance() {
+        return INSTANCE;
+    }
+
     @Override
     void registerCommand() {
-
+        Vanillabosses.getInstance().getCommand("vbInfo").setExecutor(new VBInfo());
     }
 
     @Override
@@ -66,7 +72,6 @@ public class VBInfo extends VBCommands {
                         "Slingshot \n" +
                         "Wither Egg";
                 break;
-
         }
 
         if (!message.equals("")) {
