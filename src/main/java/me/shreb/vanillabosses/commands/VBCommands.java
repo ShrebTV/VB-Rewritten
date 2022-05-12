@@ -12,5 +12,6 @@ public abstract class VBCommands implements CommandExecutor {
 
     public static void registerAll(){
        AdminCommands.getInstance().registerCommand();
+       VBInfo.getInstance().registerCommand();
     }
 }
