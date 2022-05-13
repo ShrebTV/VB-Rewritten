@@ -37,6 +37,7 @@ public class RespawningBoss extends Boss {
 
     //A map which contains all Respawning bosses from the bossList as keys and the UUID of the currently alive boss.
     public static final HashMap<RespawningBoss, UUID> livingRespawningBossesMap = new HashMap<>();
+    private static final HashMap<RespawningBoss, Boolean> respawningMap = new HashMap<>();
 
     @SerializedName("worldName")
     String world;
@@ -90,11 +91,11 @@ public class RespawningBoss extends Boss {
      */
     public static void spawnRespawningBosses() {
 
-        if(bossList.isEmpty()){
+        if (bossList.isEmpty()) {
             new VBLogger("RespawningBoss", Level.INFO, "Respawning boss list was empty. Not spawning any respawning bosses").logToFile();
         }
 
-        for(RespawningBoss boss : bossList){
+        for (RespawningBoss boss : bossList) {
             try {
                 boss.spawnBoss();
             } catch (BossCreationException e) {
@@ -152,6 +153,7 @@ public class RespawningBoss extends Boss {
      * fails if the enableBoss is set to false
      * fails if the world specified cannot be found
      * fails if there is a type mismatch between the specified type and a BossDataRetriever object
+     * sets the boolean on the respawningMap for this RespawningBoss instance to false since when this is called the boss is spawned.
      */
     public LivingEntity spawnBoss() throws BossCreationException {
 
@@ -189,6 +191,7 @@ public class RespawningBoss extends Boss {
         entity.setRemoveWhenFarAway(false);
 
         livingRespawningBossesMap.put(this, entity.getUniqueId());
+        respawningMap.put(this, false);
 
         entity.getScoreboardTags().add(RESPAWNING_BOSS_TAG);
         entity.getPersistentDataContainer().set(RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY, this.commandIndexes);
@@ -200,16 +203,17 @@ public class RespawningBoss extends Boss {
     }
 
     //Tag constants for PDC of respawning bosses
-    public static final NamespacedKey SPAWN_WORLD   = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnWorld");
-    public static final NamespacedKey COMMANDS      = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesCommandsOnDeath");
+    public static final NamespacedKey SPAWN_WORLD = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnWorld");
+    public static final NamespacedKey COMMANDS = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesCommandsOnDeath");
     public static final NamespacedKey RESPAWN_TIMER = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesRespawnTime");
-    public static final NamespacedKey X_COORDS      = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnLocationX");
-    public static final NamespacedKey Y_COORDS      = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnLocationY");
-    public static final NamespacedKey Z_COORDS      = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnLocationZ");
+    public static final NamespacedKey X_COORDS = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnLocationX");
+    public static final NamespacedKey Y_COORDS = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnLocationY");
+    public static final NamespacedKey Z_COORDS = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnLocationZ");
 
 
     /**
      * Adds the PDC tags of the respawning boss to the entity passed in
+     *
      * @param entity the entity to add the tags to
      */
     private void addPDCTags(LivingEntity entity) {
@@ -231,7 +235,7 @@ public class RespawningBoss extends Boss {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Type: '" + this.type + "'" +
                 "World: '" + this.world + "'" +
                 "Respawn Timer: '" + this.respawnTime + "'" +
@@ -247,23 +251,28 @@ public class RespawningBoss extends Boss {
      * Using this method will attempt to respawn all respawning bosses in the bossList created at startup of the plugin
      * Will log an error if the bossList contains a value not present in the livingRespawningBossesMap
      * Will log an error if the spawning process failed for any reason
+     * When called, sets the value of each respawning boss which is to be respawned to true since the boss is now respawning.
      */
-    public static void respawnBosses(){
-        for(RespawningBoss boss: bossList){
+    public static void respawnBosses() {
+        for (RespawningBoss boss : bossList) {
 
-            if(livingRespawningBossesMap.containsKey(boss)){
+            boolean isRespawning = respawningMap.get(boss);
+
+            if (livingRespawningBossesMap.containsKey(boss)) {
 
                 UUID uuid = livingRespawningBossesMap.get(boss);
                 Entity entity = Bukkit.getEntity(uuid);
 
-                if(entity == null || entity.isDead()){
+                if (!isRespawning && (entity == null || entity.isDead())) {
+                    respawningMap.put(boss, true);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
 
                         try {
-                            LivingEntity e = boss.spawnBoss();
+                            boss.spawnBoss();
                         } catch (BossCreationException e) {
                             new VBLogger("RespawningBoss", Level.WARNING, "Respawning Boss could not be respawned. Please report this.\n" +
                                     "Error: " + e).logToFile();
+                            respawningMap.put(boss, false);
                         }
 
                     }, boss.respawnTime * 20);
