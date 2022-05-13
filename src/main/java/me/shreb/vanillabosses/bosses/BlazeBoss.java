@@ -4,7 +4,6 @@ import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
-import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -21,7 +20,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class BlazeBoss extends VBBoss {
@@ -139,15 +141,11 @@ public class BlazeBoss extends VBBoss {
 
         if (!checkForBlazeBoss(event.getEntity().getShooter())) return;
 
-        System.out.println("isBlazeBoss");
-
         Vector v = null;
         Entity projectile = event.getEntity();
         World w = event.getEntity().getWorld();
 
         if (bossBlazeTargetMap.containsKey(((Entity) event.getEntity().getShooter()).getEntityId())) {
-
-            System.out.println("containsKey");
 
             v = Objects.requireNonNull(Vanillabosses.getInstance().getServer()
                             .getPlayer(bossBlazeTargetMap.get(((Entity) event.getEntity().getShooter()).getEntityId())))
@@ -165,8 +163,6 @@ public class BlazeBoss extends VBBoss {
         double currentChance = chanceWither;
         if (currentChance > random) {
 
-            System.out.println("wither");
-
             WitherSkull entity = (WitherSkull) w.spawnEntity(event.getEntity().getLocation(), EntityType.WITHER_SKULL);
 
             entity.setVelocity(Objects.requireNonNullElseGet(v, projectile::getVelocity));
@@ -182,8 +178,6 @@ public class BlazeBoss extends VBBoss {
 
         } else if ((currentChance += chanceEnder) > random) {
 
-            System.out.println("dragon");
-
             DragonFireball entity = (DragonFireball) w.spawnEntity(event.getEntity().getLocation(), EntityType.DRAGON_FIREBALL);
 
             entity.setVelocity(Objects.requireNonNullElseGet(v, projectile::getVelocity));
@@ -198,8 +192,6 @@ public class BlazeBoss extends VBBoss {
             }
 
         } else if ((currentChance + chanceLarge) > random) {
-
-            System.out.println("fireball");
 
             Fireball entity = (Fireball) w.spawnEntity(event.getEntity().getLocation(), EntityType.FIREBALL);
 

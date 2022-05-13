@@ -195,17 +195,9 @@ public class Zombified_PiglinBoss extends VBBoss {
         double pullStrengthMultiplier = config.getDouble("onHitAbilities.Pull.PullStrengthMultiplier");
         double pushStrengthMultiplier = config.getDouble("onHitAbilities.Push.PushStrengthMultiplier");
 
-        System.out.println(jumpStrengthMultiplier);
-        System.out.println(pullStrengthMultiplier);
-        System.out.println(pushStrengthMultiplier);
-
-        System.out.println("first");
-
         if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG)
                 && event.getEntityType() == EntityType.ZOMBIFIED_PIGLIN
                 && (event.getDamager() instanceof Player || (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player))) {
-
-            System.out.println("second");
 
             PigZombie entity = (PigZombie) event.getEntity();
             Player player = null;
@@ -218,19 +210,13 @@ public class Zombified_PiglinBoss extends VBBoss {
 
             if (player == null) return;
 
-            System.out.println("third");
-
             if (Utility.roll(jumpChance)) {
-
-                System.out.println("jump");
 
                 entity.setVelocity(new Vector(0, 1 * jumpStrengthMultiplier, 0));
 
             }
 
             if (Utility.roll(pullChance)) {
-
-                System.out.println("pull");
 
                 Vector towardsBoss = new Vector(entity.getLocation().getX() - player.getLocation().getX(),
                         entity.getLocation().getY() - player.getLocation().getY(),
@@ -243,8 +229,6 @@ public class Zombified_PiglinBoss extends VBBoss {
             }
 
             if (Utility.roll(pushChance)) {
-
-                System.out.println("push");
 
                 Vector awayFromBoss = new Vector(player.getLocation().getX() - entity.getLocation().getX(),
                         player.getLocation().getY() - entity.getLocation().getY(),
