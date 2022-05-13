@@ -10,8 +10,9 @@ import me.shreb.vanillabosses.items.*;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.items.utility.ItemDataRetriever;
 import me.shreb.vanillabosses.logging.VBLogger;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
@@ -47,6 +48,17 @@ public class AdminCommands extends VBCommands {
 
         if (!sender.isOp()) sender.sendMessage(ChatColor.RED + Vanillabosses.getCurrentLanguage().badPermissions);
 
+        if (sender instanceof Player && args[0].equalsIgnoreCase("readme")) {
+
+            ComponentBuilder builder = new ComponentBuilder(ChatColor.BLUE + "" + ChatColor.UNDERLINE + "Click here for the README");
+
+            BaseComponent[] component = builder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/ShrebTV/VB-Rewritten/blob/master/README.md")).create();
+
+            sender.spigot().sendMessage(component);
+
+            return true;
+        }
+
         if (args.length < 2) {
             sender.sendMessage(Vanillabosses.getCurrentLanguage().notEnoughArguments);
             return true;
@@ -71,13 +83,6 @@ public class AdminCommands extends VBCommands {
         } else if (args[0].equalsIgnoreCase("specialItem")) {
 
             return hmcBossEggsReaction(sender, args);
-
-        } else if (args[0].equalsIgnoreCase("readme")) {
-
-            TextComponent component = new TextComponent();
-            component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/ShrebTV/VB-Rewritten/blob/master/README.md"));
-            sender.sendMessage(component.getText());
-            return true;
 
         } else {
             return false;
