@@ -186,6 +186,8 @@ public class RespawningBoss extends Boss {
 
         addPDCTags(entity);
 
+        entity.setRemoveWhenFarAway(false);
+
         livingRespawningBossesMap.put(this, entity.getUniqueId());
 
         entity.getScoreboardTags().add(RESPAWNING_BOSS_TAG);

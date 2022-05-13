@@ -7,7 +7,6 @@ import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.logging.VBLogger;
-import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.Utility;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
@@ -257,6 +256,7 @@ public class CreeperBoss extends VBBoss {
             ((Creeper) creeperNew).setExplosionRadius(creeper.getExplosionRadius());
 
             VBBossBar.replaceAssignedEntity(creeper.getUniqueId(), creeperNew.getUniqueId());
+            creeperNew.setRemoveWhenFarAway(creeper.getRemoveWhenFarAway());
 
             BossCommand.replaceMappedUUIDs(creeper.getUniqueId(), creeperNew.getUniqueId());
 
