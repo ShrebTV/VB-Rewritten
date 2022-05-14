@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses.bosses;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.VBBossBar;
 import me.shreb.vanillabosses.logging.VBLogger;
@@ -52,6 +53,7 @@ public abstract class VBBoss implements Listener {
         pm.registerEvents(new ZombieBoss(), Vanillabosses.getInstance());
         pm.registerEvents(new Zombified_PiglinBoss(), Vanillabosses.getInstance());
 
+        RespawningBoss.registerListener();
         VBBossBar.registerListeners();
 
         new VBLogger("VBBoss", Level.INFO, "Registered Boss Event listeners!").logToFile();

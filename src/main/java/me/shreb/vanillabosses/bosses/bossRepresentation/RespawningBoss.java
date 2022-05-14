@@ -18,16 +18,21 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 import java.util.logging.Level;
 
-public class RespawningBoss extends Boss {
+public class RespawningBoss extends Boss implements Listener {
 
     //A list of respawning bosses which are enabled and spawned.
     static List<RespawningBoss> bossList = new ArrayList<>();
+    // A list to keep track of all entities which are and have been bosses since the last reload. May contain dead bosses
+    static List<UUID> allRespawningBosses = new LinkedList<>();
 
     // The String a respawning boss has in its ScoreboardTags container
     public static final String RESPAWNING_BOSS_TAG = "Respawning Boss";
@@ -60,6 +65,9 @@ public class RespawningBoss extends Boss {
                 new VBLogger("RespawningBoss", Level.WARNING, "Unable to create respawning Boss object from String: " + string).logToFile();
             }
         }
+    }
+
+    private RespawningBoss() {
     }
 
     /**
@@ -192,6 +200,7 @@ public class RespawningBoss extends Boss {
 
         livingRespawningBossesMap.put(this, entity.getUniqueId());
         respawningMap.put(this, false);
+        allRespawningBosses.add(entity.getUniqueId());
 
         entity.getScoreboardTags().add(RESPAWNING_BOSS_TAG);
         entity.getPersistentDataContainer().set(RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY, this.commandIndexes);
@@ -283,6 +292,22 @@ public class RespawningBoss extends Boss {
             }
         }
     }
+
+    public static void registerListener() {
+        Vanillabosses.getInstance().getServer().getPluginManager().registerEvents(new RespawningBoss(), Vanillabosses.getInstance());
+    }
+
+
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event) {
+
+        for (Entity entity : event.getChunk().getEntities()) {
+            if (entity.getScoreboardTags().contains(RESPAWNING_BOSS_TAG) && !allRespawningBosses.contains(entity.getUniqueId())) {
+                entity.remove();
+            }
+        }
+    }
+
 
     public EntityType getType() {
         return type;
