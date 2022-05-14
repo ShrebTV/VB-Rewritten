@@ -141,7 +141,14 @@ public class BossDeathEvent implements Listener {
             } catch (ItemCreationException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Could not make Blazer for Boss Drops." + e).logToFile();
             }
+        }
 
+        if (event.getEntityType() == EntityType.WITHER && event.getEntity().getScoreboardTags().contains(WitherBoss.SCOREBOARDTAG)) {
+            try {
+                event.getDrops().add(WitherEgg.instance.makeItem());
+            } catch (ItemCreationException e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not make Wither egg for Boss Drops." + e).logToFile();
+            }
         }
     }
 }
