@@ -40,7 +40,7 @@ public class VBInfo extends VBCommands {
         switch (subCommand) {
 
             case "info":
-                message = Vanillabosses.getCurrentLanguage().vbh0;
+                message = Vanillabosses.getCurrentLanguage().vbhInfo;
                 break;
 
             case "bosslist":
@@ -79,11 +79,9 @@ public class VBInfo extends VBCommands {
             return true;
         }
 
-        if(args.length < 2) return false;
-
         try {
 
-            EntityType type = EntityType.valueOf(args[1].toUpperCase());
+            EntityType type = EntityType.valueOf(args[0].toUpperCase());
 
             sender.sendMessage(new BossDataRetriever(type).infoMessage);
             return true;
