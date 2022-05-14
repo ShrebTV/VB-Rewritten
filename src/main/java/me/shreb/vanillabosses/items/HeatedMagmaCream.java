@@ -181,4 +181,28 @@ public class HeatedMagmaCream extends VBItem {
             }
         }
     }
+
+    public static ItemStack replaceHMC(ItemStack stack) {
+
+        if (!stack.hasItemMeta()
+                && !stack.getItemMeta().getPersistentDataContainer().has(instance.pdcKey, PersistentDataType.INTEGER))
+            return stack;
+
+        int level = stack.getEnchantmentLevel(Enchantment.ARROW_FIRE);
+
+        ItemStack helperStack;
+
+        if (level == 0) return stack;
+
+        int amount = stack.getAmount();
+        try {
+            helperStack = new HeatedMagmaCream(level).makeItem(amount);
+        } catch (ItemCreationException e) {
+            new VBLogger("HeatedMagmaCream", Level.SEVERE, "Could not create HMC for some reason. Exception: " + e).logToFile();
+            return stack;
+        }
+        return helperStack;
+
+    }
+
 }

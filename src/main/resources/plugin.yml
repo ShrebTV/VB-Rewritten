@@ -11,3 +11,6 @@ commands:
   vbInfo:
     description: Commands for the handling of items. This includes a give command, a info command and a refresh command for old items
     usage: /<command> <BossType/info/bosslist/itemlist>
+  vbUtil:
+    description: Utility commands for the Vanilla Bosses plugin
+    usage: /<command> replaceItems

@@ -73,4 +73,22 @@ public class BouncySlime extends VBItem {
         throw new ItemAbilityNotFoundException("Could not find ability for Bouncy Slime item");
 
     }
+
+    public static ItemStack replaceBouncySlime(ItemStack stack) {
+
+        if (!stack.hasItemMeta() && !stack.getItemMeta().getPersistentDataContainer().has(instance.pdcKey, PersistentDataType.STRING))
+            return stack;
+
+        ItemStack helperStack;
+
+        int amount = stack.getAmount();
+        try {
+            helperStack = instance.makeItem(amount);
+        } catch (ItemCreationException e) {
+            new VBLogger("BouncySlime", Level.SEVERE, "Could not create bouncy slime for some reason. Exception: " + e).logToFile();
+            return stack;
+        }
+        return helperStack;
+
+    }
 }
