@@ -106,11 +106,28 @@ The commands have certain Placeholders, such as:\
    for now) at hostile mobs in a configurable area)
 
 ### Commands
+
 A ? in front of a parameter means that this one is optional
- - /vbAdmin giveItem itemName/material ?playerName ?amount // gives the sender the specified item, or gives the specified player the item. 
- - /vbAdmin specialItem bossegg playerName amount Type // gives the specified player the specified amount of boss eggs for the specified type
- - /vbAdmin specialItem hmc playerName amount Level // gives the specified player the specified amount of heated magma cream of the specified level
- - /vbAdmin spawnBoss BossType worldName;X;Y;Z // spawns a boss at the specified Location
- - /vbAdmin spawnBoss BossType ?PlayerName  // spawns a boss on the player specified
- - /vbAdmin bossInfo BossType //displays most info about this boss in chat for the sender
- - /vbAdmin respawningBoss Type respawnTime commands // commands has to be like this: 1,2,3 in order to get the commands 1, 2 and 3 /Planning on giving this command more functionality in the future
+
+- /vbAdmin giveItem itemName/material ?playerName ?amount // gives the sender the specified item, or gives the specified
+  player the item.
+- /vbAdmin specialItem bossegg playerName amount Type // gives the specified player the specified amount of boss eggs
+  for the specified type
+- /vbAdmin specialItem hmc playerName amount Level // gives the specified player the specified amount of heated magma
+  cream of the specified level
+- /vbAdmin spawnBoss BossType worldName;X;Y;Z // spawns a boss at the specified Location
+- /vbAdmin spawnBoss BossType ?PlayerName // spawns a boss on the player specified
+- /vbAdmin bossInfo BossType //displays most info about this boss in chat for the sender
+- /vbAdmin respawningBoss Type respawnTime commands // commands has to be like this: 1,2,3 in order to get the commands
+  1, 2 and 3 /Planning on giving this command more functionality in the future
+
+
+- /vbUtil replaceItems // Replaces Heated Magma cream and Bouncy Slime in case they were made when the plugin was set to
+  a different language. You cannot craft with items of the wrong language
+
+
+- /vbInfo BossType //Bosstype can be any Entity type of the bosses in the plugin. Gives language specific information
+  about the boss specified
+- /vbInfo bossList // Gives a list of all available Bosses
+- /vbInfo itemList // Gives a list of all available Items
+- /vbInfo info // Gives general info about the plugin
