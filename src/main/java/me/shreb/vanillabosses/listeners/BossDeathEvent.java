@@ -37,6 +37,10 @@ public class BossDeathEvent implements Listener {
             return;
         }
 
+        if (bossData.instance.config.getBoolean("disableVanillaDrops")) {
+            event.getDrops().clear();
+        }
+
         if (event.getEntity().getKiller() != null) {
             new BossDeathMessage(bossData.bossKilledMessage, event).sendMessage();
         }
