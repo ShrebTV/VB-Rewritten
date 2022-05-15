@@ -28,6 +28,7 @@ public class ItemDataRetriever extends DataRetriever {
         materialInstanceMap.put(InvisibilityCloak.instance.itemMaterial, InvisibilityCloak.instance);
         materialInstanceMap.put(Skeletor.instance.itemMaterial, Skeletor.instance);
         materialInstanceMap.put(SlimeBoots.instance.itemMaterial, SlimeBoots.instance);
+        materialInstanceMap.put(BouncySlime.instance.itemMaterial, BouncySlime.instance);
         materialInstanceMap.put(Slingshot.instance.itemMaterial, Slingshot.instance);
         materialInstanceMap.put(WitherEgg.instance.itemMaterial, WitherEgg.instance);
 
