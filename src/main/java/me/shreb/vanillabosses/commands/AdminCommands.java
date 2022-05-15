@@ -48,6 +48,8 @@ public class AdminCommands extends VBCommands {
 
         if (!sender.isOp()) sender.sendMessage(ChatColor.RED + Vanillabosses.getCurrentLanguage().badPermissions);
 
+        if (args.length == 0) return false;
+
         if (sender instanceof Player && args[0].equalsIgnoreCase("readme")) {
 
             ComponentBuilder builder = new ComponentBuilder(ChatColor.BLUE + "" + ChatColor.UNDERLINE + "Click here for the README");
@@ -111,12 +113,12 @@ public class AdminCommands extends VBCommands {
         //Check whether the sender is a player who has op permissions
         if (!(sender instanceof Player) || !sender.isOp()) {
             sender.sendMessage("User of this command has to be a Player and OP");
-            return false;
+            return true;
         }
 
         if (args.length < 4) {
             sender.sendMessage("Not enough arguments");
-            return false;
+            return true;
         }
 
         Location location = ((Player) sender).getLocation();
@@ -132,16 +134,14 @@ public class AdminCommands extends VBCommands {
             respawnTime = Integer.parseInt(args[2]);
         } catch (NullPointerException e) {
             sender.sendMessage("An Error has occurred. Please look at the log file for more details.");
-            new VBLogger("RespawningBossCommand", Level.WARNING, "Nullpointer: " + e);
+            new VBLogger("RespawningBossCommand", Level.WARNING, "Nullpointer: " + e).logToFile();
             return false;
         } catch (NumberFormatException e) { // respawn time was not a number
             sender.sendMessage("Expected Integer number. Found: " + args[2]);
-            new VBLogger("RespawningBossCommand", Level.WARNING, "IllegalArgument: " + args[1]);
-            return false;
+            return true;
         } catch (IllegalArgumentException e) { // Entity type not found or couldn't make type into a boss data retriever
             sender.sendMessage("Could not resolve Boss type " + args[1]);
-            new VBLogger("RespawningBossCommand", Level.WARNING, "IllegalArgument: " + args[1]);
-            return false;
+            return true;
         }
 
         if (args[3] != null) {
