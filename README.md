@@ -42,6 +42,7 @@ In case you have never installed a plugin on your spigot server:
  - put the plugin.jar in the plugins folder
 
 ### Inside the config file
+**config.yml:**
  - CommandsExecutedOnBossDeath: // Copy and paste the standard values directly below the others in order to make a new command. In this new command you can now edit the command and the delay for the command to take effect. To edit the delay you just have to change the number behind the 'DELAY:' to the delay you want. If you want no delay you may leave out the 'DELAY:5' or put 'DELAY:0'.\
 The first command is an empty command by default and has the key '0'. After this you can begin counting up. the first non-empty command (so the second actual command) has the key '1'\
 Please ignore the "" inside the <> for placeholders, .md does not show the contents otherwise\
@@ -50,31 +51,45 @@ The commands have certain Placeholders, such as:\
 <"25"> executes the command for all players within the radius 25, can put that anywhere in the command basically\
 <"mostDamage"> executes the command for the player who did the most damage to the boss\
 <"damager"> executes the command for all players who damaged the boss\
- 
- - RespawningBosses: //This feature allows you to put a boss at a certain location whenever the server starts up and make it respawn if killed. the respawn delay is configurable, as are the commands this specific boss should execute when killed.
-  - "{\"type\":\"ZOMBIE\",\"worldName\":\"world\",\"x\":\"0.0\",\"y\":\"70.0\",\"z\":\"0.0\",\"respawnTime\":
-    \"20\",\"commands\":[\"1\",\"2\"],\"enableBoss\":\"false\"}"\
-    This is all you need to make a respawning boss. Put the "enableBoss" to true and you will get a respawning Zombie
-    boss at the coordinates 0,0,0 in the world "world" with a respawn time of 20 seconds. This boss will try to execute
-    the commands 1 and 2 when it dies. If the command does not exist, the boss will not attempt to execute it (
-    obviously).
 
- - killedMessage: // You will find this setting for each boss. this specifies what should be written in chat once a boss is defeated.
-   Placeholders for this are:
- <"mostDamage"> read above
- <"killedName"> replaces this placeholder with the name of the killed boss
-   <"killer"> read above
 
- - spawnNaturally: true/false //specifies, whether this boss should spawn naturally in the world without being a
-   respawning boss or being spawned via command or egg
- - Items:
- - DisableRepairAndEnchant: true/false true: prevents players from repairing and enchanting the plugin items at an anvil
-   false: Players can only repair plugin items using other plugin items of the same type. Players can enchant plugin
-   items at anvils
+- RespawningBosses: //This feature allows you to put a boss at a certain location whenever the server starts up and make
+  it respawn if killed. the respawn delay is configurable, as are the commands this specific boss should execute when
+  killed. \- "{\"type\":\"ZOMBIE\",\"worldName\":\"world\",\"x\":\"0.0\",\"y\":\"70.0\",\"z\":\"0.0\",\"respawnTime\":
+  \"20\",\"commands\":[\"1\",\"2\"],\"enableBoss\":\"false\"}"\
+  This is all you need to make a respawning boss. Put the "enableBoss" to true and you will get a respawning Zombie boss
+  at the coordinates 0,0,0 in the world "world" with a respawn time of 20 seconds. This boss will try to execute the
+  commands 1 and 2 when it dies. If the command does not exist, the boss will not attempt to execute it (
+  obviously).
 
- - itemMaterial: //Specifies which material the item should be made of. this enables you to switch the material of the
-   cloakOfInvisibility to Netherite_boots for example
- - dropChance: //Specifies the chance with which the item is dropped when the corresponding boss dies
+
+- DisableRepairAndEnchant: true/false true: prevents players from repairing and enchanting the plugin items at an anvil
+  false: Players can only repair plugin items using other plugin items of the same type. Players can enchant plugin
+  items at anvils
+
+**Boss configs:**
+
+For examples, look at the Skeleton boss config file.
+
+- killedMessage: // You will find this setting for each boss. this specifies what should be written in chat once a boss
+  is defeated. Placeholders for this are:
+  <"mostDamage"> read above
+  <"killedName"> replaces this placeholder with the name of the killed boss
+  <"killer"> read above
+
+- spawnNaturally: true/false //specifies, whether this boss should spawn naturally in the world without being a
+  respawning boss or being spawned via command or egg
+
+- displayNameColor: Hexcode of a color which will be applied to the name above the head of the boss
+
+- spawnWorlds: A list of world names the boss is allowed to naturally spawn in.
+
+**Item configs:**
+
+- itemMaterial: //Specifies which material the item should be made of. this enables you to switch the material of the
+  cloakOfInvisibility to Netherite_boots for example
+
+- dropChance: //Specifies the chance with which the item is dropped when the corresponding boss dies
 
 ### Available Bosses
 
