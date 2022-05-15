@@ -8,9 +8,9 @@ SpeedModifier: 1.0
 spawnChance: 0.005        # Chance of a Skeleton which was spawned into the world becoming a boss skeleton. 1 = 100%, 0.005 = 0.5% => every 200th skeleton will be a boss
 dropArmorChance: 0.0  # recommended to keep at 0 or at least pretty low since the armor is pretty op.
 dropOffHandChance: 0.3  # 0.1 = 10% chance of dropping the item. 1 = 100% chance of dropping it.
-ArmorMaterial: Iron # Possible accepted values: Leather; Gold; Iron; Diamond; Netherite
-ProtectionMin: 3      # Armor Protection Enchantment level
-ProtectionMax: 6     # ^^
+ArmorMaterial: Diamond # Possible accepted values: Leather; Gold; Iron; Diamond; Netherite
+ProtectionMin: 4      # Armor Protection Enchantment level
+ProtectionMax: 7     # ^^
 
 BowEnchants:
   Power:
