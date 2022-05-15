@@ -247,7 +247,8 @@ public class BossEggs extends VBItem {
         name = name + "Boss spawn egg";
 
         BossDataRetriever retriever = new BossDataRetriever(type);
-        String colorString = this.configuration.getString("displayNameColor");
+        String colorString = retriever.instance.config.getString("displayNameColor");
+
 
         if (colorString == null) {
             new VBLogger(getClass().getName(), Level.WARNING, "Color String could not be resolved for: " + type).logToFile();
