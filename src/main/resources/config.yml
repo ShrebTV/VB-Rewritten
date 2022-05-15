@@ -6,7 +6,7 @@ Bosses:
   enableBossKilledMessage: true
   disableBlazeBossesSpawningFromSpawners: false #no bosses except for the blaze boss can spawn from spawners. setting this to true will disable Blaze bosses from spawning from spawners aswell.
 
-  bossesGetGlowingPotionEffect: false
+  bossesGetGlowingPotionEffect: false # sets whether spawning bosses will have a glowing outline around them
 
   NaturalBossesHaveBossBars: true #this set to true will give all bosses which spawn a boss bar. If set to false only respawning bosses will have boss bars
   CommandBossesHaveBossBars: false
