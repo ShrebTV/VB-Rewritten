@@ -7,7 +7,7 @@ description: A plugin which naturally spawns bosses to fight in your world!
 commands:
   vbAdmin:
     description: Commands for admins of servers to check on the plugin and get important information in order to configure it
-    usage: /<command> <respawningBoss>|<bossInfo>
+    usage: /<command> <respawningBoss/bossinfo/giveItem/specialItem/spawnboss>
   vbInfo:
     description: Commands for the handling of items. This includes a give command, a info command and a refresh command for old items
     usage: /<command> <BossType/info/bosslist/itemlist>
