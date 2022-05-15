@@ -255,6 +255,7 @@ public class Skeletor extends VBItem {
 
             if (isCancelledTNT) {
                 event.setCancelled(true);
+                event.getEntity().getWorld().playSound(event.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 2f, 1f);
             }
         }
     }
