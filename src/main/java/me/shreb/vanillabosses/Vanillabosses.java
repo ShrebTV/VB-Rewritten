@@ -14,7 +14,11 @@ import me.shreb.vanillabosses.listeners.VBListeners;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.Languages;
+import me.shreb.vanillabosses.utility.Metrics;
+import me.shreb.vanillabosses.utility.UpdateChecker;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -78,6 +82,24 @@ public final class Vanillabosses extends JavaPlugin {
         Zombified_PiglinBoss.aggressionTimer();
 
         new VBLogger(getClass().getName(), Level.INFO, "Plugin enabled!").logToFile();
+
+        //Initializing metrics
+        int pluginId = 12433;
+        Metrics metrics = new Metrics(this, pluginId);
+
+        //Checking for an update on spigot
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+
+            new UpdateChecker(this, 95205).getVersion(version1 -> {
+
+                if (this.getDescription().getVersion().equals(version1)) {
+                    getLogger().info("There is not a new update available.");
+                } else {
+                    getLogger().info("There is a new update available.");
+                    getServer().getConsoleSender().sendMessage(ChatColor.RED + "New Update available for the Vanilla Bosses Plugin!");
+                }
+            });
+        });
 
         ConfigVerification.verifyAllConfigs();
 
