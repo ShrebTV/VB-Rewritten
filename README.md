@@ -135,6 +135,7 @@ A ? in front of a parameter means that this one is optional
 - /vbAdmin bossInfo BossType //displays most info about this boss in chat for the sender
 - /vbAdmin respawningBoss Type respawnTime commands // commands has to be like this: 1,2,3 in order to get the commands
   1, 2 and 3 /Planning on giving this command more functionality in the future
+- /vbAdmin readme //gives you a link to this readme file so you can access it easily
 
 
 - /vbUtil replaceItems // Replaces Heated Magma cream and Bouncy Slime in case they were made when the plugin was set to
