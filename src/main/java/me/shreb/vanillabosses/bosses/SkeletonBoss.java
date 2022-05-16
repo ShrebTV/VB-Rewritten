@@ -3,6 +3,9 @@ package me.shreb.vanillabosses.bosses;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
+import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorEquipException;
+import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSet;
+import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSetType;
 import me.shreb.vanillabosses.items.Skeletor;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.listeners.SpawnEvent;
@@ -26,7 +29,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
-public class SkeletonBoss extends VBBoss  {
+public class SkeletonBoss extends VBBoss {
 
     public static SkeletonBoss instance = new SkeletonBoss();
 
@@ -127,63 +130,33 @@ public class SkeletonBoss extends VBBoss  {
 
     private boolean putOnEquipment(Skeleton skeleton) {
 
-        ItemStack[] armor = new ItemStack[4];
-
         String armorType = config.getString("ArmorMaterial");
 
-        if (armorType == null) armorType = "Iron";
+        if (armorType == null) armorType = "IRON";
 
-        switch (armorType) {
+        armorType = armorType.toUpperCase();
 
-            case "Leather":
-                armor[0] = new ItemStack(Material.LEATHER_BOOTS);
-                armor[1] = new ItemStack(Material.LEATHER_LEGGINGS);
-                armor[2] = new ItemStack(Material.LEATHER_CHESTPLATE);
-                armor[3] = new ItemStack(Material.LEATHER_HELMET);
-                break;
+        ArmorSetType type;
 
-            case "Gold":
-                armor[0] = new ItemStack(Material.GOLDEN_BOOTS);
-                armor[1] = new ItemStack(Material.GOLDEN_LEGGINGS);
-                armor[2] = new ItemStack(Material.GOLDEN_CHESTPLATE);
-                armor[3] = new ItemStack(Material.GOLDEN_HELMET);
-                break;
-
-            case "Diamond":
-                armor[0] = new ItemStack(Material.DIAMOND_BOOTS);
-                armor[1] = new ItemStack(Material.DIAMOND_LEGGINGS);
-                armor[2] = new ItemStack(Material.DIAMOND_CHESTPLATE);
-                armor[3] = new ItemStack(Material.DIAMOND_HELMET);
-                break;
-
-            case "Netherite":
-                armor[0] = new ItemStack(Material.NETHERITE_BOOTS);
-                armor[1] = new ItemStack(Material.NETHERITE_LEGGINGS);
-                armor[2] = new ItemStack(Material.NETHERITE_CHESTPLATE);
-                armor[3] = new ItemStack(Material.NETHERITE_HELMET);
-                break;
-
-            //In any other case, including "Iron", give the boss Iron
-            default:
-                armor[0] = new ItemStack(Material.IRON_BOOTS);
-                armor[1] = new ItemStack(Material.IRON_LEGGINGS);
-                armor[2] = new ItemStack(Material.IRON_CHESTPLATE);
-                armor[3] = new ItemStack(Material.IRON_HELMET);
+        try {
+            type = ArmorSetType.valueOf(armorType);
+        } catch (IllegalArgumentException e) {
+            type = ArmorSetType.DIAMOND;
         }
+
+        ArmorSet set = new ArmorSet(type);
 
         int protMin = config.getInt("ProtectionMin");
         int protMax = config.getInt("ProtectionMax");
 
-        for (ItemStack itemStack : armor) {
-            int protLevel = ThreadLocalRandom.current().nextInt(protMin, protMax + 1);
-            itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
-            itemStack.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, protLevel);
-        }
+        set.enchantAllArmor(Enchantment.DURABILITY, 3);
+        set.enchantAllArmor(Enchantment.PROTECTION_ENVIRONMENTAL, protMin, protMax);
 
         try {
-            skeleton.getEquipment().setArmorContents(armor);
-        } catch (NullPointerException e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not put armor on the Skeleton boss. Nullpointer exception at SkeletonBoss.putOnArmor()").logToFile();
+            set.equipArmor(skeleton);
+        } catch (ArmorEquipException e) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not put armor on the Skeleton boss. ArmorEquipException at SkeletonBoss.putOnArmor().\n" +
+                    "Exception: " + e).logToFile();
             return false;
         }
 
@@ -229,7 +202,7 @@ public class SkeletonBoss extends VBBoss  {
         if (event.getEntity().getScoreboardTags().contains(SCOREBOARDTAG) && event.getEntityType() == EntityType.SKELETON) {
 
             if (!(event.getDamager() instanceof Player)
-            && !(event.getDamager() instanceof Arrow)) return;
+                    && !(event.getDamager() instanceof Arrow)) return;
 
             Entity entity = event.getEntity();
 
@@ -252,11 +225,11 @@ public class SkeletonBoss extends VBBoss  {
 
                 Player playerToDamage;
 
-                if(event.getDamager() instanceof Arrow && ((Arrow) event.getDamager()).getShooter() instanceof Player){
+                if (event.getDamager() instanceof Arrow && ((Arrow) event.getDamager()).getShooter() instanceof Player) {
 
                     playerToDamage = (Player) ((Arrow) event.getDamager()).getShooter();
 
-                } else if(event.getDamager() instanceof Player){
+                } else if (event.getDamager() instanceof Player) {
 
                     playerToDamage = (Player) event.getDamager();
 

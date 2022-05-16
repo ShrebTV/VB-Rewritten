@@ -3,6 +3,9 @@ package me.shreb.vanillabosses.bosses;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
+import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorEquipException;
+import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSet;
+import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSetType;
 import me.shreb.vanillabosses.items.ButchersAxe;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
@@ -12,13 +15,11 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -146,25 +147,18 @@ public class Zombified_PiglinBoss extends VBBoss {
      */
     private boolean putOnEquipment(PigZombie pigZombie) {
 
-        //Creating a new ItemStack array and filling it with the needed armor.
-        ItemStack[] armor = new ItemStack[]{
-                new ItemStack(Material.GOLDEN_BOOTS),
-                new ItemStack(Material.GOLDEN_LEGGINGS),
-                new ItemStack(Material.GOLDEN_CHESTPLATE),
-                new ItemStack(Material.GOLDEN_HELMET)
-        };
+        ArmorSet set = new ArmorSet(ArmorSetType.GOLD);
 
         //Enchanting armor
-        for (ItemStack itemStack : armor) {
-            itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 5);
-            itemStack.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
-        }
+        set.enchantAllArmor(Enchantment.DURABILITY, 5);
+        set.enchantAllArmor(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
 
         //Attempting to put the armor on the boss, Logging failure as warning and returning false
         try {
-            pigZombie.getEquipment().setArmorContents(armor);
-        } catch (NullPointerException e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not put armor on the zombie boss. Nullpointer exception at ZombieBoss.putOnArmor()").logToFile();
+            set.equipArmor(pigZombie);
+        } catch (ArmorEquipException e) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not put armor on the zombie boss. ArmorEquipException at ZombieBoss.putOnArmor()\n" +
+                    "Exception: " + e).logToFile();
             return false;
         }
 
