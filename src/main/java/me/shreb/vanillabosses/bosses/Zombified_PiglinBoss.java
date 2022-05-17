@@ -168,11 +168,7 @@ public class Zombified_PiglinBoss extends VBBoss {
         pigZombie.getEquipment().setLeggingsDropChance(0);
         pigZombie.getEquipment().setBootsDropChance(0);
 
-        try {
-            pigZombie.getEquipment().setItemInMainHand(ButchersAxe.instance.makeItem());
-        } catch (ItemCreationException e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not create Weapon for Zombified Piglin boss. Exception: " + e).logToFile();
-        }
+        ButchersAxe.instance.equipWeapon(pigZombie);
         pigZombie.getEquipment().setItemInMainHandDropChance((float) ButchersAxe.instance.configuration.getDouble("dropChance"));
 
         return true;

@@ -37,7 +37,7 @@ public class ZombieBoss extends VBBoss {
     public static final String CONFIGSECTION = "ZombieBoss";
     public static final String SCOREBOARDTAG = "BossZombie";
 
-    public ZombieBoss(){
+    public ZombieBoss() {
         new FileCreator().createAndLoad(FileCreator.zombieBossPath, this.config);
     }
 
@@ -155,12 +155,8 @@ public class ZombieBoss extends VBBoss {
         zombie.getEquipment().setLeggingsDropChance(0);
         zombie.getEquipment().setBootsDropChance(0);
 
-        try {
-            zombie.getEquipment().setItemInMainHand(BaseballBat.instance.makeItem());
-        } catch (ItemCreationException e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not create Weapon for Zombie boss. Exception: " + e).logToFile();
+        BaseballBat.instance.equipWeapon(zombie);
 
-        }
         zombie.getEquipment().setItemInMainHandDropChance((float) BaseballBat.instance.configuration.getDouble("dropChance"));
 
         return true;
