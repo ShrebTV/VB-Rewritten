@@ -18,35 +18,38 @@ public class ArmorSet {
 
     /**
      * Creates a new ArmorSet object from the material specified
+     *
      * @param material The material the armor should be made of
      */
-    public ArmorSet(ArmorSetType material){
+    public ArmorSet(ArmorSetType material) {
         this.armorSet = material.toFullSet();
     }
 
     /**
      * Puts the armor from this object onto the LivingEntity specified
+     *
      * @param entity The entity to put the armor on
      */
-    public void equipArmor(LivingEntity entity) throws ArmorEquipException{
+    public void equipArmor(LivingEntity entity) throws ArmorEquipException {
 
         EntityEquipment equipment = entity.getEquipment();
 
-        if(equipment == null){
+        if (equipment == null) {
             throw new ArmorEquipException("Could not put Armor on Entity. Equipment was null.");
         }
 
         equipment.setArmorContents(this.armorSet);
     }
-    
+
     /**
      * Enchants all armor with the specified enchantment of the level given
+     *
      * @param enchantment the enchantment to put on all armor in this object
-     * @param level the level the enchantment should be of
+     * @param level       the level the enchantment should be of
      */
-    public void enchantAllArmor(Enchantment enchantment, int level){
+    public void enchantAllArmor(Enchantment enchantment, int level) {
 
-        for(ItemStack stack : this.armorSet){
+        for (ItemStack stack : this.armorSet) {
             stack.addUnsafeEnchantment(enchantment, level);
         }
     }
@@ -56,8 +59,8 @@ public class ArmorSet {
      * The level of the enchantment will be a random number between the minLevel and maxLevel
      *
      * @param enchantment the enchantment to put on all armor in this object
-     * @param minLevel the minimum level of the enchantment
-     * @param maxLevel the maximum level of the enchantment
+     * @param minLevel    the minimum level of the enchantment
+     * @param maxLevel    the maximum level of the enchantment
      */
     public void enchantAllArmor(Enchantment enchantment, int minLevel, int maxLevel) {
 
