@@ -136,7 +136,6 @@ public class VBItemRecipe {
         }
 
         recipeList.add(recipe);
-        System.out.println("Adding recipe for: " + this.itemEnum);
         Vanillabosses.getInstance().getServer().addRecipe(recipe);
     }
 
