@@ -3,17 +3,18 @@ package me.shreb.vanillabosses.bosses;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.bossRepresentation.NormalBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
+import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorEquipException;
+import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSet;
+import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSetType;
 import me.shreb.vanillabosses.items.BaseballBat;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.listeners.SpawnEvent;
 import me.shreb.vanillabosses.logging.VBLogger;
-import me.shreb.vanillabosses.utility.ConfigVerification;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -36,7 +37,7 @@ public class ZombieBoss extends VBBoss {
     public static final String CONFIGSECTION = "ZombieBoss";
     public static final String SCOREBOARDTAG = "BossZombie";
 
-    public ZombieBoss(){
+    public ZombieBoss() {
         new FileCreator().createAndLoad(FileCreator.zombieBossPath, this.config);
     }
 
@@ -136,22 +137,16 @@ public class ZombieBoss extends VBBoss {
      */
     private boolean putOnEquipment(Zombie zombie) {
 
-        ItemStack[] armor = new ItemStack[]{
-                new ItemStack(Material.IRON_BOOTS),
-                new ItemStack(Material.IRON_LEGGINGS),
-                new ItemStack(Material.IRON_CHESTPLATE),
-                new ItemStack(Material.IRON_HELMET)
-        };
+        ArmorSet set = new ArmorSet(ArmorSetType.IRON);
 
-        for (ItemStack itemStack : armor) {
-            itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 3);
-            itemStack.addUnsafeEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
-        }
+        set.enchantAllArmor(Enchantment.DURABILITY, 3);
+        set.enchantAllArmor(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
 
         try {
-            zombie.getEquipment().setArmorContents(armor);
-        } catch (NullPointerException e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not put armor on the zombie boss. Nullpointer exception at ZombieBoss.putOnArmor()").logToFile();
+            set.equipArmor(zombie);
+        } catch (ArmorEquipException e) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not put armor on the zombie boss. ArmorEquipException at ZombieBoss.putOnArmor()\n" +
+                    "Exception: " + e).logToFile();
             return false;
         }
 
@@ -160,12 +155,8 @@ public class ZombieBoss extends VBBoss {
         zombie.getEquipment().setLeggingsDropChance(0);
         zombie.getEquipment().setBootsDropChance(0);
 
-        try {
-            zombie.getEquipment().setItemInMainHand(BaseballBat.instance.makeItem());
-        } catch (ItemCreationException e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not create Weapon for Zombie boss. Exception: " + e).logToFile();
+        BaseballBat.instance.equipWeapon(zombie);
 
-        }
         zombie.getEquipment().setItemInMainHandDropChance((float) BaseballBat.instance.configuration.getDouble("dropChance"));
 
         return true;

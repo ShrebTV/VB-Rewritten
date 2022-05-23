@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -22,7 +23,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class Skeletor extends VBItem {
+public class Skeletor extends VBItem implements BossWeapon {
 
     public static Skeletor instance = new Skeletor();
 
@@ -79,6 +80,20 @@ public class Skeletor extends VBItem {
 
     @Override
     public void itemAbility(LivingEntity entity) {
+
+    }
+
+    @Override
+    public void equipWeapon(LivingEntity entity) {
+        EntityEquipment equipment = entity.getEquipment();
+
+        if(equipment == null) return;
+
+        try {
+            equipment.setItemInMainHand(makeItem());
+        } catch (ItemCreationException e) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not equip Skeletor. Exception: " + e).logToFile();
+        }
 
     }
 

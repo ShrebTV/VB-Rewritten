@@ -69,9 +69,9 @@ public class VBItemRecipe {
 
         this.itemEnum = e;
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        FileConfiguration config = e.instance.configuration;
 
-        ArrayList<String> shape = (ArrayList<String>) config.getStringList(e.configSection + ".recipeShape");
+        ArrayList<String> shape = (ArrayList<String>) config.getStringList("recipeShape");
 
         if (shape.size() != 3) {
             throw new IllegalArgumentException("Shape list did not have the correct size. List in question: " + e.name());
@@ -96,16 +96,16 @@ public class VBItemRecipe {
 
         if (this.firstLine == null || this.firstLine.equals("")) return;
 
-        FileConfiguration config = Vanillabosses.getInstance().getConfig();
+        FileConfiguration config = this.itemEnum.instance.configuration;
 
         if (this.itemEnum == VBItemEnum.HMC) return;
 
-        if (!config.getBoolean(this.itemEnum.configSection + ".enableCraftingRecipe")) {
+        if (!config.getBoolean("enableCraftingRecipe")) {
             new VBLogger(getClass().getName(), Level.INFO, itemEnum.name() + " Recipe disabled or does not exist!").logToFile();
             return;
         }
 
-        ArrayList<String> ingredients = (ArrayList<String>) config.getStringList(itemEnum.configSection + ".recipeIngredients");
+        ArrayList<String> ingredients = (ArrayList<String>) config.getStringList("recipeIngredients");
 
         ShapedRecipe recipe;
         try {
@@ -136,6 +136,7 @@ public class VBItemRecipe {
         }
 
         recipeList.add(recipe);
+        System.out.println("Adding recipe for: " + this.itemEnum);
         Vanillabosses.getInstance().getServer().addRecipe(recipe);
     }
 

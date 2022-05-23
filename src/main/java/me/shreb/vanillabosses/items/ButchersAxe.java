@@ -14,6 +14,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -24,7 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class ButchersAxe extends VBItem {
+public class ButchersAxe extends VBItem implements BossWeapon{
 
     public static ButchersAxe instance = new ButchersAxe();
 
@@ -127,6 +128,19 @@ public class ButchersAxe extends VBItem {
             }
 
             this.itemAbility((LivingEntity) event.getEntity());
+        }
+    }
+
+    @Override
+    public void equipWeapon(LivingEntity entity) {
+        EntityEquipment equipment = entity.getEquipment();
+
+        if(equipment == null) return;
+
+        try {
+            equipment.setItemInMainHand(makeItem());
+        } catch (ItemCreationException e) {
+            new VBLogger(getClass().getName(), Level.WARNING, "Could not equip Butchers Axe. Exception: " + e).logToFile();
         }
     }
 }

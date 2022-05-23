@@ -3,13 +3,16 @@ package me.shreb.vanillabosses.bosses.utility.bossarmor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * A class which has the sole purpose of returning a set of armor corresponding to the enum object
+ */
 public enum ArmorSetType {
 
-    LEATHER(),
-    GOLD(),
-    IRON(),
-    DIAMOND(),
-    NETHERITE();
+    LEATHER,
+    GOLD,
+    IRON,
+    DIAMOND,
+    NETHERITE;
 
     /**
      * Turns this type of armor into a full set of armor ready to be put on a LivingEntity

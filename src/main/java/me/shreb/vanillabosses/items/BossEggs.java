@@ -311,6 +311,7 @@ public class BossEggs extends VBItem {
 
             if(!new BossEggDataReader().checkAllowed(type, block.getType())){
                 event.getPlayer().sendMessage(ChatColor.GRAY + "This Egg cannot be placed on this Block!");
+                event.setCancelled(true);
                 return;
             }
 
