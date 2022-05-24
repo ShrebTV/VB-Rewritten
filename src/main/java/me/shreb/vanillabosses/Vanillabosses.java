@@ -27,6 +27,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,9 +50,9 @@ public final class Vanillabosses extends JavaPlugin {
         instance = this;
 
         createConfigFile();
-        createLogFile();
-
         loadConfig();
+
+        createLogFile();
 
         Logger.getLogger("Vanilla Bosses").log(Level.INFO, "Vanilla Bosses plugin enabled! Check log file for warnings if you notice bugs or errors");
 
@@ -108,9 +111,62 @@ public final class Vanillabosses extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        // Plugin shutdown logic
-
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy_HHmmss");
         VBLogger.exitLogger();
+        //
+        // Plugin shutdown logic
+        if (!config.getBoolean("Bosses.CleanUpConfig")) {
+
+            File folder = new File(getDataFolder(), "Logs");
+            folder.mkdirs();
+
+            File lFile = new File(folder, "Logfile_" + dateFormat.format(new Date()) + ".txt");
+
+            if (logFile.renameTo(lFile)) {
+                System.out.println("Vanilla Bosses: Saved log file!");
+                logFile.delete();
+            } else {
+                System.out.println("Vanilla Bosses: Could not properly save log file!");
+            }
+
+            String[] strings = getDataFolder().list();
+
+            if (strings != null && strings.length > 1) {
+                for (String fileName : strings) {
+
+                    String[] nameParts = fileName.split("\\.");
+
+                    if (nameParts.length == 3) {
+                        try {
+                            Integer.parseInt(nameParts[2]);
+
+                            File file = new File(getDataFolder(), fileName);
+
+                            file.delete();
+
+                        } catch (NumberFormatException ignored) {
+
+                        }
+                    }
+                }
+            }
+        }
+
+
+        String[] names = getDataFolder().list();
+
+        if (names != null && names.length > 1) {
+            for (String s : names) {
+                if (s.endsWith(".lck")) {
+                    File file = new File(getDataFolder(), s);
+                    try {
+                        file.delete();
+                    } catch (SecurityException ignored) {
+                    }
+                }
+            }
+        }
+
 
         //remove all Entities in all worlds on the server which have the Scoreboard tag which marks the entity for removal on disable of the plugin
         getInstance().getServer().getWorlds()
@@ -150,7 +206,7 @@ public final class Vanillabosses extends JavaPlugin {
     private void createLogFile() {
         logFile = new File(getDataFolder(), "log.txt");
 
-        if (logFile.exists()) logFile.delete();
+        if (logFile.exists() && config.getBoolean("Bosses.CleanUpConfig")) logFile.delete();
 
         if (!logFile.exists()) {
             try {
