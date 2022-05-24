@@ -227,7 +227,6 @@ public class CreeperBoss extends VBBoss {
                     return;
                 }
 
-                creeperNew.setHealth(creeper.getHealth());
             } else {
 
                 //else, the boss is not a respawning boss. gotta have some stuff for that here
@@ -242,8 +241,6 @@ public class CreeperBoss extends VBBoss {
 
                 Utility.spawnParticles(Particle.FLAME, event.getEntity().getWorld(), event.getLocation(), 4, 2, 4, 30, 3);
 
-                creeperNew.setHealth(creeper.getHealth());
-
                 creeperNew.addScoreboardTag("ExplodingATM");
                 Creeper finalCreeper1 = (Creeper) creeperNew;
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
@@ -251,6 +248,13 @@ public class CreeperBoss extends VBBoss {
                 }, 20L * instance.config.getInt("thrownTNT.TNTFuse"));
 
                 //always have the same explosion radius
+            }
+
+            try {
+                creeperNew.setHealth(creeper.getHealth());
+            } catch (IllegalArgumentException e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not properly set Creeper health after exploding. \n" +
+                        "This is most likely caused by another plugin setting the hp of the boss or An old creeper exploding when you changed its settings").logToFile();
             }
 
             ((Creeper) creeperNew).setExplosionRadius(creeper.getExplosionRadius());
