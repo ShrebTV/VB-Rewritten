@@ -307,9 +307,9 @@ public class BossEggs extends VBItem {
 
             Block block = event.getClickedBlock();
 
-            if(block == null) return;
+            if (block == null) return;
 
-            if(!new BossEggDataReader().checkAllowed(type, block.getType())){
+            if (!new BossEggDataReader().checkAllowed(type, block.getType())) {
                 event.getPlayer().sendMessage(ChatColor.GRAY + "This Egg cannot be placed on this Block!");
                 event.setCancelled(true);
                 return;
@@ -351,9 +351,15 @@ public class BossEggs extends VBItem {
 
             try {
                 LivingEntity entity = bossData.instance.makeBoss(loc);
-                if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.EggBossesHaveBossBars")) {
-                    new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.YELLOW, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
-                }
+
+                Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
+
+                    if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.EggBossesHaveBossBars")) {
+                        new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.YELLOW, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                    }
+
+                }, 2);
+
             } catch (BossCreationException ex) {
                 new VBLogger(getClass().getName(), Level.WARNING, "An error occurred while spawning a boss from an egg. Error:\n" + ex).logToFile();
                 event.getPlayer().sendMessage("An error occurred! Error written to log file!");

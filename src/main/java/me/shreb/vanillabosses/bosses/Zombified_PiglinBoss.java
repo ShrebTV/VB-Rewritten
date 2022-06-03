@@ -7,7 +7,6 @@ import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorEquipException;
 import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSet;
 import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSetType;
 import me.shreb.vanillabosses.items.ButchersAxe;
-import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.Utility;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
@@ -72,7 +71,7 @@ public class Zombified_PiglinBoss extends VBBoss {
 
         if (!config.getBoolean("enabled")) return entity;
 
-        // checking wether the entity passed in is a pig zombie. Logging as a warning and throwing an exception if not.
+        // checking whether the entity passed in is a pig zombie. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof PigZombie)) {
             new VBLogger(getClass().getName(), Level.WARNING, "Attempted to make a Zombified Piglin boss out of an Entity.\n" +
                     "Entity passed in: " + entity.getType() + "\n" +
@@ -81,41 +80,45 @@ public class Zombified_PiglinBoss extends VBBoss {
             throw new BossCreationException("Attempted to make a boss out of an Entity. Could not make Zombified Piglin Boss out of this Entity.");
         }
 
-        //getting the Boss Attributes from the config file
-        double health = config.getDouble("health");
-        String nameColorString = config.getString("displayNameColor");
+        Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
 
-        ChatColor nameColor;
+            //getting the Boss Attributes from the config file
+            double health = config.getDouble("health");
+            String nameColorString = config.getString("displayNameColor");
 
-        //If the String is null or empty set it to a standard String
-        if (nameColorString == null || nameColorString.equals("")) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Zombified Piglin boss! Defaulting to #000000").logToFile();
-            nameColor = ChatColor.of("#000000");
-        } else {
-            try {
-                nameColor = ChatColor.of(nameColorString);
-            } catch (IllegalArgumentException e) {
+            ChatColor nameColor;
+
+            //If the String is null or empty set it to a standard String
+            if (nameColorString == null || nameColorString.equals("")) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Zombified Piglin boss! Defaulting to #000000").logToFile();
                 nameColor = ChatColor.of("#000000");
+            } else {
+                try {
+                    nameColor = ChatColor.of(nameColorString);
+                } catch (IllegalArgumentException e) {
+                    nameColor = ChatColor.of("#000000");
+                }
             }
-        }
 
-        String name = config.getString("displayName");
+            String name = config.getString("displayName");
 
-        double speedMultiplier = config.getDouble("SpeedModifier");
-        if (speedMultiplier < 0.0001) speedMultiplier = 1;
-        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
+            double speedMultiplier = config.getDouble("SpeedModifier");
+            if (speedMultiplier < 0.0001) speedMultiplier = 1;
+            entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
-        //setting the entity Attributes. Logging failure as Warning.
-        try {
-            entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
-            entity.setHealth(health);
-            entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
+            //setting the entity Attributes. Logging failure as Warning.
+            try {
+                entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+                entity.setHealth(health);
+                entity.setCustomName(nameColor + name);
+                entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
 
-        } catch (Exception e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Zombified Piglin Boss\n" +
-                    "Reason: " + e).logToFile();
-        }
+            } catch (Exception e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Zombified Piglin Boss\n" +
+                        "Reason: " + e).logToFile();
+            }
+
+        }, 1);
 
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);

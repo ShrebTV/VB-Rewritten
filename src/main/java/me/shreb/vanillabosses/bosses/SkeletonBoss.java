@@ -75,40 +75,44 @@ public class SkeletonBoss extends VBBoss {
             throw new BossCreationException("Attempted to make a boss out of an Entity. Could not make Skeleton Boss out of this Entity.");
         }
 
-        //getting the Boss Attributes from the config file
-        double health = instance.config.getDouble("health");
-        String nameColorString = instance.config.getString("displayNameColor");
+        Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
 
-        ChatColor nameColor = null;
+            //getting the Boss Attributes from the config file
+            double health = instance.config.getDouble("health");
+            String nameColorString = instance.config.getString("displayNameColor");
 
-        //If the String is null or empty set it to a standard String
-        if (nameColorString == null || nameColorString.equals("")) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Skeleton boss! Defaulting to #000000").logToFile();
-        } else {
-            try {
-                nameColor = ChatColor.of(nameColorString);
-            } catch (IllegalArgumentException e) {
-                nameColor = ChatColor.of("#000000");
+            ChatColor nameColor = null;
+
+            //If the String is null or empty set it to a standard String
+            if (nameColorString == null || nameColorString.equals("")) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Skeleton boss! Defaulting to #000000").logToFile();
+            } else {
+                try {
+                    nameColor = ChatColor.of(nameColorString);
+                } catch (IllegalArgumentException e) {
+                    nameColor = ChatColor.of("#000000");
+                }
             }
-        }
 
-        String name = instance.config.getString("displayName");
+            String name = instance.config.getString("displayName");
 
-        double speedMultiplier = instance.config.getDouble("SpeedModifier");
-        if (speedMultiplier < 0.0001) speedMultiplier = 1;
-        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
+            double speedMultiplier = instance.config.getDouble("SpeedModifier");
+            if (speedMultiplier < 0.0001) speedMultiplier = 1;
+            entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
-        //setting the Attributes. Logging to file if it fails at any point.
-        try {
-            entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
-            entity.setHealth(health);
-            entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(instance.config.getBoolean("showDisplayNameAlways"));
+            //setting the Attributes. Logging to file if it fails at any point.
+            try {
+                entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+                entity.setHealth(health);
+                entity.setCustomName(nameColor + name);
+                entity.setCustomNameVisible(instance.config.getBoolean("showDisplayNameAlways"));
 
-        } catch (Exception e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Skeleton Boss\n" +
-                    "Reason: " + e).logToFile();
-        }
+            } catch (Exception e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Skeleton Boss\n" +
+                        "Reason: " + e).logToFile();
+            }
+
+        }, 1);
 
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);

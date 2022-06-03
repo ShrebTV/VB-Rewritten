@@ -7,11 +7,11 @@ import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorEquipException;
 import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSet;
 import me.shreb.vanillabosses.bosses.utility.bossarmor.ArmorSetType;
 import me.shreb.vanillabosses.items.BaseballBat;
-import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.listeners.SpawnEvent;
 import me.shreb.vanillabosses.logging.VBLogger;
 import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -76,40 +76,44 @@ public class ZombieBoss extends VBBoss {
             throw new BossCreationException("Attempted to make a boss out of an Entity. Could not make Zombie Boss out of this Entity.");
         }
 
-        //getting the Boss Attributes from the config file
-        double health = config.getDouble("health");
-        String nameColorString = config.getString("displayNameColor");
+        Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
 
-        ChatColor nameColor = null;
+            //getting the Boss Attributes from the config file
+            double health = config.getDouble("health");
+            String nameColorString = config.getString("displayNameColor");
 
-        //If the String is null or empty set it to a standard String
-        if (nameColorString == null || nameColorString.equals("")) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Zombie boss! Defaulting to #000000").logToFile();
-        } else {
-            try {
-                nameColor = ChatColor.of(nameColorString);
-            } catch (IllegalArgumentException e) {
-                nameColor = ChatColor.of("#000000");
+            ChatColor nameColor = null;
+
+            //If the String is null or empty set it to a standard String
+            if (nameColorString == null || nameColorString.equals("")) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Zombie boss! Defaulting to #000000").logToFile();
+            } else {
+                try {
+                    nameColor = ChatColor.of(nameColorString);
+                } catch (IllegalArgumentException e) {
+                    nameColor = ChatColor.of("#000000");
+                }
             }
-        }
 
-        String name = config.getString("displayName");
+            String name = config.getString("displayName");
 
-        double speedMultiplier = config.getDouble("SpeedModifier");
-        if (speedMultiplier < 0.0001) speedMultiplier = 1;
-        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
+            double speedMultiplier = config.getDouble("SpeedModifier");
+            if (speedMultiplier < 0.0001) speedMultiplier = 1;
+            entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
-        //setting the Attributes. Logging to file if it fails at any point.
-        try {
-            entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
-            entity.setHealth(health);
-            entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
+            //setting the Attributes. Logging to file if it fails at any point.
+            try {
+                entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+                entity.setHealth(health);
+                entity.setCustomName(nameColor + name);
+                entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
 
-        } catch (Exception e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Zombie Boss\n" +
-                    "Reason: " + e).logToFile();
-        }
+            } catch (Exception e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Zombie Boss\n" +
+                        "Reason: " + e).logToFile();
+            }
+
+        }, 1);
 
         // Setting scoreboard tag so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);

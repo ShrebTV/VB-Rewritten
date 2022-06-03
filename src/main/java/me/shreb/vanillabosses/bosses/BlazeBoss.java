@@ -34,7 +34,7 @@ public class BlazeBoss extends VBBoss {
     public static final String SCOREBOARDTAG = "BossBlaze";
     Random abilityRandom = new Random();
 
-    public BlazeBoss(){
+    public BlazeBoss() {
         new FileCreator().createAndLoad(FileCreator.blazeBossPath, this.config);
     }
 
@@ -66,6 +66,7 @@ public class BlazeBoss extends VBBoss {
     @Override
     public LivingEntity makeBoss(LivingEntity entity) throws BossCreationException {
 
+
         if (!instance.config.getBoolean("enabled")) return entity;
 
         // checking wether the entity passed in is a Blaze. Logging as a warning and throwing an exception if not.
@@ -77,41 +78,45 @@ public class BlazeBoss extends VBBoss {
             throw new BossCreationException("Attempted to make a boss out of an Entity. Could not make Blaze Boss out of this Entity.");
         }
 
-        //getting the Boss Attributes from the config file
-        double health = instance.config.getDouble("health");
-        String nameColorString = instance.config.getString("displayNameColor");
+        Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
 
-        ChatColor nameColor;
+            //getting the Boss Attributes from the config file
+            double health = instance.config.getDouble("health");
+            String nameColorString = instance.config.getString("displayNameColor");
 
-        //If the String is null or empty set it to a standard String
-        if (nameColorString == null || nameColorString.equals("")) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Blaze boss! Defaulting to #000000").logToFile();
-            nameColor = ChatColor.of("#000000");
-        } else {
-            try {
-                nameColor = ChatColor.of(nameColorString);
-            } catch (IllegalArgumentException e) {
+            ChatColor nameColor;
+
+            //If the String is null or empty set it to a standard String
+            if (nameColorString == null || nameColorString.equals("")) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not get name Color String for Blaze boss! Defaulting to #000000").logToFile();
                 nameColor = ChatColor.of("#000000");
+            } else {
+                try {
+                    nameColor = ChatColor.of(nameColorString);
+                } catch (IllegalArgumentException e) {
+                    nameColor = ChatColor.of("#000000");
+                }
             }
-        }
 
-        double speedMultiplier = instance.config.getDouble("SpeedModifier");
-        if (speedMultiplier < 0.0001) speedMultiplier = 1;
-        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
+            double speedMultiplier = instance.config.getDouble("SpeedModifier");
+            if (speedMultiplier < 0.0001) speedMultiplier = 1;
+            entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
-        String name = instance.config.getString("displayName");
+            String name = instance.config.getString("displayName");
 
-        //setting the entity Attributes. Logging failure as Warning.
-        try {
-            entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
-            entity.setHealth(health);
-            entity.setCustomName(nameColor + name);
-            entity.setCustomNameVisible(instance.config.getBoolean("showDisplayNameAlways"));
+            //setting the entity Attributes. Logging failure as Warning.
+            try {
+                entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+                entity.setHealth(health);
+                entity.setCustomName(nameColor + name);
+                entity.setCustomNameVisible(instance.config.getBoolean("showDisplayNameAlways"));
 
-        } catch (Exception e) {
-            new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Blaze Boss\n" +
-                    "Reason: " + e).logToFile();
-        }
+            } catch (Exception e) {
+                new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Blaze Boss\n" +
+                        "Reason: " + e).logToFile();
+            }
+
+        }, 1);
 
         // Setting scoreboard tags so the boss can be recognised.
         entity.getScoreboardTags().add(SCOREBOARDTAG);
