@@ -425,15 +425,20 @@ public class AdminCommands extends VBCommands {
 
             }
 
-            try {
-                LivingEntity entity = retriever.instance.makeBoss(locationToSpawn);
-                if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.CommandBossesHaveBossBars")) {
-                    new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+            Location finalLocationToSpawn = locationToSpawn;
+            Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
+
+                try {
+                    LivingEntity entity = retriever.instance.makeBoss(finalLocationToSpawn);
+                    if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.CommandBossesHaveBossBars")) {
+                        new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                    }
+                } catch (BossCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
+                    sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
                 }
-            } catch (BossCreationException e) {
-                new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
-                sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
-            }
+
+            }, 2);
 
             return true;
 
@@ -495,16 +500,20 @@ public class AdminCommands extends VBCommands {
                 }
             }
 
-            try {
-                LivingEntity entity = retriever.instance.makeBoss(locationToSpawn);
-                if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.CommandBossesHaveBossBars")) {
-                    new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+            Location finalLocationToSpawn1 = locationToSpawn;
+            Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
+
+                try {
+                    LivingEntity entity = retriever.instance.makeBoss(finalLocationToSpawn1);
+                    if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.CommandBossesHaveBossBars")) {
+                        new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                    }
+                } catch (BossCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
+                    sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
                 }
-            } catch (BossCreationException e) {
-                new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
-                sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
-                return true;
-            }
+
+            }, 2);
 
         }
         return false;

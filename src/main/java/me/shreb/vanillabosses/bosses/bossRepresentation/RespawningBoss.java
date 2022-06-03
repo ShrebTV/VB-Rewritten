@@ -205,9 +205,14 @@ public class RespawningBoss extends Boss implements Listener {
         entity.getScoreboardTags().add(RESPAWNING_BOSS_TAG);
         entity.getPersistentDataContainer().set(RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY, this.commandIndexes);
 
-        if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.RespawningBossesHaveBossbars")) {
-            new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.RED, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
-        }
+        Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
+
+            if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.RespawningBossesHaveBossbars")) {
+                new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.RED, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+            }
+
+        }, 2);
+
         return entity;
     }
 

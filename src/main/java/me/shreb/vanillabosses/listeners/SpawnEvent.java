@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
@@ -25,8 +26,10 @@ public class SpawnEvent implements Listener {
 
     public static boolean spawn = true;
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
+
+        if (event.isCancelled()) return;
 
         if (!spawn) return;
 
@@ -160,9 +163,14 @@ public class SpawnEvent implements Listener {
                     break;
             }
 
-            if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.NaturalBossesHaveBossBars")) {
-                new VBBossBar(event.getEntity(), Bukkit.createBossBar(event.getEntity().getName(), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
-            }
+            Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
+
+                if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.NaturalBossesHaveBossBars")) {
+                    new VBBossBar(event.getEntity(), Bukkit.createBossBar(event.getEntity().getName(), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                }
+
+            }, 2);
+
         }
     }
 
