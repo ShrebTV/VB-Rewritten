@@ -4,7 +4,7 @@ Bosses:
   #In case the entered language is not implemented. it will default to English
 
   LogLevel: WARNING #Can be INFO, WARNING or SEVERE depending on how much you want to know. Standard is warning.
-  CleanUpConfig: true #if set to true removes the log file every time the plugin is started and replaces it with an empty one
+  DeleteConfig: true #if set to true removes the log file every time the plugin is started and replaces it with an empty one. if false, the old configs get saved to a logs folder
 
   enableBossKilledMessage: true
   disableBlazeBossesSpawningFromSpawners: false #no bosses except for the blaze boss can spawn from spawners. setting this to true will disable Blaze bosses from spawning from spawners aswell.
