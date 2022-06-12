@@ -33,6 +33,16 @@ public class SpawnEvent implements Listener {
 
         if (!spawn) return;
 
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER
+                && !Vanillabosses.getInstance().getConfig().getBoolean("Bosses.enableBossesFromSpawners")) {
+            return;
+        }
+
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER_EGG
+                && !Vanillabosses.getInstance().getConfig().getBoolean("Bosses.enableBossesFromSpawnEggs")) {
+            return;
+        }
+
         EntityType type = event.getEntityType();
 
         LivingEntity entity = event.getEntity();
