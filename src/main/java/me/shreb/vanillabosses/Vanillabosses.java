@@ -115,7 +115,7 @@ public final class Vanillabosses extends JavaPlugin {
         VBLogger.exitLogger();
         //
         // Plugin shutdown logic
-        if (!config.getBoolean("Bosses.DeleteConfig")) {
+        if (!config.getBoolean("Bosses.SaveLog")) {
 
             File folder = new File(getDataFolder(), "Logs");
             folder.mkdirs();
