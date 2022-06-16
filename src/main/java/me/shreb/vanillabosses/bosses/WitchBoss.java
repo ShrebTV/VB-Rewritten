@@ -413,7 +413,9 @@ public class WitchBoss extends VBBoss {
             stacksForDropping.add(makeWitherPot());
             stacksForDropping.add(makeHungerPot());
 
-            ArrayList<Double> chancesList = new ArrayList<>(Vanillabosses.getInstance().getConfig().getDoubleList("Bosses.WitchBoss.dropCustomPotionsChances"));
+            ArrayList<Double> chancesList = new ArrayList<>(config.getDoubleList("dropCustomPotionsChances"));
+
+            if (chancesList.isEmpty()) return;
 
             for (ItemStack stack : stacksForDropping) {
                 int i = stacksForDropping.indexOf(stack);
