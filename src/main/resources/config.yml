@@ -37,7 +37,7 @@ Bosses:
 
   CommandsExecutedOnBossDeath:  # first command is an example of how to set an empty command. selecting '0' as a command for a boss with the command being empty will result in no command being executed.
     - ""
-    - "give <10> minecraft:diamond 5 DELAY:5"   # in case you have essentials installed you may have to remove the 'minecraft:', aka just use the item name.
+    - "give <10> minecraft:diamond 5 DELAY:5 CHANCE:0.5"   # in case you have essentials installed you may have to remove the 'minecraft:', aka just use the item name.
 
 # Boss type, name of the world, coordinates, respawn time in seconds, commands that are to be executed when the boss dies, whether the boss should actually spawn
   RespawningBosses:
