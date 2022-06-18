@@ -3,6 +3,7 @@ package me.shreb.vanillabosses.bosses.utility;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.VBBoss;
 import me.shreb.vanillabosses.logging.VBLogger;
+import me.shreb.vanillabosses.utility.Utility;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandException;
@@ -31,6 +32,7 @@ public class BossCommand implements Listener {
     public int delay;
     public String command;
     public int radius;
+    public double chance = 1.0;
     public ArrayList<UUID> damagers = new ArrayList<>();
     public ArrayList<UUID> playersToExecuteFor = new ArrayList<>();
 
@@ -77,6 +79,13 @@ public class BossCommand implements Listener {
     private void setDelay() {
 
         if (this.command == null) return;
+
+        if (this.command.contains("CHANCE:")) {
+
+            this.chance = Double.parseDouble(this.command.split("CHANCE:")[1]);
+
+            this.command = this.command.replace("CHANCE:", "");
+        }
 
         if (!this.command.contains("DELAY:")) {
             delay = 0;
@@ -136,6 +145,8 @@ public class BossCommand implements Listener {
 
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) continue;
+
+            if (!Utility.roll(this.chance)) continue;
 
             if (this.command.contains("%name%")) {
                 this.command = this.command.replace("%name%", player.getName());

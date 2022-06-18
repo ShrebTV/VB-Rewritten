@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses.commands;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.VBBoss;
 import me.shreb.vanillabosses.bosses.WitherBoss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
@@ -20,11 +21,13 @@ import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 /**
@@ -57,6 +60,26 @@ public class AdminCommands extends VBCommands {
             BaseComponent[] component = builder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/ShrebTV/VB-Rewritten/blob/master/README.md")).create();
 
             sender.spigot().sendMessage(component);
+
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("removeNearby")) {
+
+            return removeNearbyReaction(sender);
+
+        } else if (args[0].equalsIgnoreCase("removeAllBosses")) {
+
+            if (RespawningBoss.livingRespawningBossesMap.size() > 0) {
+                sender.sendMessage("This will sometimes break respawning bosses");
+                return true;
+            }
+
+            Vanillabosses.getInstance().getServer().getWorlds()
+                    .forEach(world -> world.getEntities()
+                            .stream()
+                            .filter(n -> n.getScoreboardTags().contains(VBBoss.BOSSTAG))
+                            .forEach(Entity::remove));
 
             return true;
         }
@@ -633,4 +656,31 @@ public class AdminCommands extends VBCommands {
         giveItemToPlayer(sender, receivingPlayer, itemToGive, retriever.instance);
         return true;
     }
+
+    private boolean removeNearbyReaction(CommandSender sender) {
+
+        if (!(sender instanceof Player)) return true;
+
+        Player player = (Player) sender;
+
+        ArrayList<Entity> entities = new ArrayList<>(player.getWorld().getNearbyEntities(player.getLocation(), 10, 10, 10, n -> n instanceof LivingEntity));
+
+        entities.removeIf(n -> !n.getScoreboardTags().contains(VBBoss.BOSSTAG));
+
+        if (entities.isEmpty()) {
+            player.sendMessage(ChatColor.GRAY + "No bosses detected");
+            return true;
+        }
+
+        for (Entity e : entities) {
+            LivingEntity entity = (LivingEntity) e;
+
+            entity.remove();
+
+        }
+
+        return true;
+    }
+
+
 }
