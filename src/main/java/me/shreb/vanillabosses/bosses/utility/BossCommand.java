@@ -80,11 +80,11 @@ public class BossCommand implements Listener {
 
         if (this.command == null) return;
 
-        if (this.command.contains("CHANCE:")) {
+        if (this.command.contains(" CHANCE:")) {
 
-            this.chance = Double.parseDouble(this.command.split("CHANCE:")[1]);
+            this.chance = Double.parseDouble(this.command.split(" CHANCE:")[1]);
 
-            this.command = this.command.replace("CHANCE:", "");
+            this.command = this.command.split(" CHANCE:")[0];
         }
 
         if (!this.command.contains("DELAY:")) {

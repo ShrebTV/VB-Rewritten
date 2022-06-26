@@ -64,10 +64,10 @@ public class BossDeathEvent implements Listener {
                 //replace and read all placeholders, add necessary players to a list to execute the commands for, then execute the command for the players in that list
                 command.executeBossCommand(event);
             }
-        } else if (entity.getPersistentDataContainer().has(RespawningBoss.RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY)
-                && entity.getPersistentDataContainer().get(RespawningBoss.RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY) != null) {
+        } else if (entity.getPersistentDataContainer().has(BossCommand.COMMAND_INDEX_KEY, PersistentDataType.INTEGER_ARRAY)
+                && entity.getPersistentDataContainer().get(BossCommand.COMMAND_INDEX_KEY, PersistentDataType.INTEGER_ARRAY) != null) {
 
-            int[] indexes = entity.getPersistentDataContainer().get(RespawningBoss.RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY);
+            int[] indexes = entity.getPersistentDataContainer().get(BossCommand.COMMAND_INDEX_KEY, PersistentDataType.INTEGER_ARRAY);
 
             if (indexes == null) return;
 

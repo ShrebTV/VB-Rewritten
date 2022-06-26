@@ -49,7 +49,10 @@ public class AdminCommands extends VBCommands {
      */
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if (!sender.isOp()) sender.sendMessage(ChatColor.RED + Vanillabosses.getCurrentLanguage().badPermissions);
+        if (!sender.isOp()) {
+            sender.sendMessage(ChatColor.RED + Vanillabosses.getCurrentLanguage().badPermissions);
+            return true;
+        }
 
         if (args.length == 0) return false;
 
@@ -75,7 +78,7 @@ public class AdminCommands extends VBCommands {
                 return true;
             }
 
-            Vanillabosses.getInstance().getServer().getWorlds()
+            Bukkit.getWorlds()
                     .forEach(world -> world.getEntities()
                             .stream()
                             .filter(n -> n.getScoreboardTags().contains(VBBoss.BOSSTAG))
@@ -422,7 +425,7 @@ public class AdminCommands extends VBCommands {
 
                 //attempt to get a valid location from the 3rd argument, setting the locationToSpawn to the new location in case it was successfully read
                 try {
-                    World world = Vanillabosses.getInstance().getServer().getWorld(strings[0]);
+                    World world = Bukkit.getWorld(strings[0]);
                     double x = Double.parseDouble(strings[1]);
                     double y = Double.parseDouble(strings[2]);
                     double z = Double.parseDouble(strings[3]);
@@ -494,7 +497,7 @@ public class AdminCommands extends VBCommands {
 
                 //attempt to get a valid location from the 3rd argument, setting the locationToSpawn to the new location in case it was successfully read
                 try {
-                    World world = Vanillabosses.getInstance().getServer().getWorld(strings[0]);
+                    World world = Bukkit.getWorld(strings[0]);
                     double x = Double.parseDouble(strings[1]);
                     double y = Double.parseDouble(strings[2]);
                     double z = Double.parseDouble(strings[3]);

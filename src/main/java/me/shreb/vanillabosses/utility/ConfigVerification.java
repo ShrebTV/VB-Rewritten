@@ -6,6 +6,7 @@ import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.bosses.utility.BossDrops;
 import me.shreb.vanillabosses.logging.VBLogger;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -175,7 +176,7 @@ public class ConfigVerification {
         if (worldList.isEmpty()) return true;
 
         for (String s : worldList) {
-            World world = Vanillabosses.getInstance().getServer().getWorld(s);
+            World world = Bukkit.getWorld(s);
             if (world == null) {
                 new VBLogger(name, Level.SEVERE, "Could not find Boss Spawn world: " + s).logToFile();
                 return false;

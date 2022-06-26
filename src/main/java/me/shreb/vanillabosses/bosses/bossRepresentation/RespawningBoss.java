@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.utility.BossCommand;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import me.shreb.vanillabosses.bosses.utility.VBBossBar;
@@ -107,7 +108,7 @@ public class RespawningBoss extends Boss implements Listener {
             try {
                 boss.spawnBoss();
             } catch (BossCreationException e) {
-                new VBLogger("RespawningBoss", Level.WARNING, "Could not initially spawn respawning boss. Boss: " + boss).logToFile();
+                new VBLogger("RespawningBoss", Level.WARNING, "Could not initially spawn respawning boss. Boss: " + boss + "\nError: " + e).logToFile();
             }
         }
     }
@@ -130,7 +131,7 @@ public class RespawningBoss extends Boss implements Listener {
             throw new IllegalArgumentException("Could not deserialize Respawning Boss Data");
         }
 
-        if (Vanillabosses.getInstance().getServer().getWorld(boss.world) == null) {
+        if (Bukkit.getWorld(boss.world) == null) {
             new VBLogger("RespawningBoss", Level.SEVERE, "Could not find specified world: " + boss.world).logToFile();
         }
         try {
@@ -170,13 +171,13 @@ public class RespawningBoss extends Boss implements Listener {
             return null;
         }
 
-        World world = Vanillabosses.getInstance().getServer().getWorld(this.world);
-        if (world == null) {
+        World world1 = Bukkit.getWorld(this.world);
+        if (world1 == null) {
             new VBLogger("RespawningBoss", Level.SEVERE, "Could not find specified world for respawning boss. World: " + this.world).logToFile();
             throw new BossCreationException("Could not find specified world for respawning boss");
         }
 
-        Location location = new Location(world, this.x, this.y, this.z);
+        Location location = new Location(world1, this.x, this.y, this.z);
         BossDataRetriever retriever;
         try {
             retriever = new BossDataRetriever(this.type);
@@ -185,7 +186,10 @@ public class RespawningBoss extends Boss implements Listener {
             throw new BossCreationException("An Error occurred while matching the type of a Respawning boss to a boss type");
         }
 
-        LivingEntity entity = (LivingEntity) world.spawnEntity(location, this.type);
+        LivingEntity entity = (LivingEntity) world1.spawnEntity(location, this.type);
+
+        entity.getScoreboardTags().add(RESPAWNING_BOSS_TAG);
+        entity.getPersistentDataContainer().set(RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY, this.commandIndexes);
 
         try {
             retriever.instance.makeBoss(entity);
@@ -202,9 +206,6 @@ public class RespawningBoss extends Boss implements Listener {
         respawningMap.put(this, false);
         allRespawningBosses.add(entity.getUniqueId());
 
-        entity.getScoreboardTags().add(RESPAWNING_BOSS_TAG);
-        entity.getPersistentDataContainer().set(RESPAWNING_BOSS_PDC, PersistentDataType.INTEGER_ARRAY, this.commandIndexes);
-
         Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
 
             if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.RespawningBossesHaveBossbars")) {
@@ -218,7 +219,6 @@ public class RespawningBoss extends Boss implements Listener {
 
     //Tag constants for PDC of respawning bosses
     public static final NamespacedKey SPAWN_WORLD = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnWorld");
-    public static final NamespacedKey COMMANDS = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesCommandsOnDeath");
     public static final NamespacedKey RESPAWN_TIMER = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesRespawnTime");
     public static final NamespacedKey X_COORDS = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnLocationX");
     public static final NamespacedKey Y_COORDS = new NamespacedKey(Vanillabosses.getInstance(), "VanillaBossesSpawnLocationY");
@@ -236,7 +236,7 @@ public class RespawningBoss extends Boss implements Listener {
 
         container.set(SPAWN_WORLD, PersistentDataType.STRING, this.world);
 
-        container.set(COMMANDS, PersistentDataType.INTEGER_ARRAY, this.commandIndexes);
+        container.set(BossCommand.COMMAND_INDEX_KEY, PersistentDataType.INTEGER_ARRAY, this.commandIndexes);
 
         container.set(RESPAWN_TIMER, PersistentDataType.LONG, this.respawnTime);
 
@@ -250,14 +250,14 @@ public class RespawningBoss extends Boss implements Listener {
 
     @Override
     public String toString() {
-        return "Type: '" + this.type + "'" +
-                "World: '" + this.world + "'" +
-                "Respawn Timer: '" + this.respawnTime + "'" +
-                "Commands: '" + Arrays.toString(this.commandIndexes) + "'" +
-                "Enabled: '" + this.enableBoss + "'" +
-                "X-Coordinates: '" + this.x + "'" +
-                "Y-Coordinates: '" + this.y + "'" +
-                "Y-Coordinates: '" + this.z + "'";
+        return "Type: '" + this.type + "' " +
+                "World: '" + this.world + "' " +
+                "Respawn Timer: '" + this.respawnTime + "' " +
+                "Commands: '" + Arrays.toString(this.commandIndexes) + "' " +
+                "Enabled: '" + this.enableBoss + "' " +
+                "X-Coordinates: '" + this.x + "' " +
+                "Y-Coordinates: '" + this.y + "' " +
+                "Y-Coordinates: '" + this.z + "' ";
     }
 
     /**
@@ -270,7 +270,10 @@ public class RespawningBoss extends Boss implements Listener {
     public static void respawnBosses() {
         for (RespawningBoss boss : bossList) {
 
-            boolean isRespawning = respawningMap.get(boss);
+            boolean isRespawning = false;
+            if (respawningMap.containsKey(boss)) {
+                isRespawning = respawningMap.get(boss);
+            }
 
             if (livingRespawningBossesMap.containsKey(boss)) {
 
@@ -297,6 +300,7 @@ public class RespawningBoss extends Boss implements Listener {
             }
         }
     }
+
 
     public static void registerListener() {
         Vanillabosses.getInstance().getServer().getPluginManager().registerEvents(new RespawningBoss(), Vanillabosses.getInstance());

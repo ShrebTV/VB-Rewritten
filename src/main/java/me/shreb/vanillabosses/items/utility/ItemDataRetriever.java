@@ -82,7 +82,7 @@ public class ItemDataRetriever extends DataRetriever {
         ItemDataRetriever retriever;
 
         if (!itemStack.getItemMeta().getPersistentDataContainer().has(VBItem.VBItemKey, PersistentDataType.STRING)) {
-            return;
+            throw new ItemCreationException("Item is not a plugin item");
         } else {
 
             Material mat = itemStack.getType();

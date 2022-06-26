@@ -76,11 +76,15 @@ public final class Vanillabosses extends JavaPlugin {
         VBItemRecipe.registerAllRecipes();
 
         //initialize respawning bosses
-        RespawningBoss.spawnRespawningBosses();
+
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            RespawningBoss.spawnRespawningBosses();
+            VBBossBar.startBarShowTimer();
+        }, 100);
+
 
         InvisibilityCloak.instance.initializeChecks();
 
-        VBBossBar.startBarShowTimer();
 
         Zombified_PiglinBoss.aggressionTimer();
 

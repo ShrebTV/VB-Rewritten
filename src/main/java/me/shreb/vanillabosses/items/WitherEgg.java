@@ -9,7 +9,6 @@ import me.shreb.vanillabosses.utility.configFiles.FileCreator;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -206,7 +205,7 @@ public class WitherEgg extends VBItem {
 
     public static void initializePassiveWithers() {
 
-        for (World w : Vanillabosses.getInstance().getServer().getWorlds()) {
+        for (World w : Bukkit.getWorlds()) {
             w.getEntities().stream()
                     .filter(n -> n.getScoreboardTags().contains("PassiveWither") || n.getPersistentDataContainer().has(WitherEgg.PASSIVE_WITHER_PDC_KEY, PersistentDataType.STRING))
                     .forEach(n -> passiveWitherList.add(n.getUniqueId()));
