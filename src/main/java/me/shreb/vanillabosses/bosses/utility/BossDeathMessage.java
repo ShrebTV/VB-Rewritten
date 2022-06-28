@@ -27,7 +27,6 @@ public class BossDeathMessage {
             UUID id = BossCommand.MostDamagePHReplacer.getMostDamageUUID(event.getEntity().getUniqueId());
 
             if (id == null) {
-                new VBLogger(getClass().getName(), Level.WARNING, "Could not replace <mostDamage> Placeholder. UUID was null. Did the player leave before the boss was killed?").logToFile();
                 return;
             }
 

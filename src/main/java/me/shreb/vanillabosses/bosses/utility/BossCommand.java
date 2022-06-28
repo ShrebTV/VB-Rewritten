@@ -188,10 +188,11 @@ public class BossCommand implements Listener {
             UUID id = MostDamagePHReplacer.getMostDamageUUID(event.getEntity().getUniqueId());
 
             Player player = Bukkit.getPlayer(id);
+            if (player == null) {
+                return;
+            }
             playersToExecuteFor.add(id);
             this.command = this.command.replace(PLACEHOLDER_MOST_DAMAGE, "%name%");
-            if (player == null)
-                new VBLogger(getClass().getName(), Level.WARNING, "Could not replace <mostDamage> Placeholder. Player was null").logToFile();
         }
         replaceRadiusPlaceHolder();
     }
@@ -433,6 +434,10 @@ public class BossCommand implements Listener {
 
             MostDamagePHReplacer replacer = damagePHReplacerHashMap.get(bossUUID);
             Map.Entry<UUID, Double> entry = null;
+
+            if (replacer == null) {
+                return null;
+            }
 
             for (Map.Entry<UUID, Double> tmpEntry : replacer.playerDamageMap.entrySet()) {
                 if (entry == null || entry.getValue() < tmpEntry.getValue()) {
