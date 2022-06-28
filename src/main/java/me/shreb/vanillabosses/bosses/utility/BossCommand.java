@@ -126,6 +126,11 @@ public class BossCommand implements Listener {
      * has to call replacePlaceholders before actually executing
      */
     public void executeBossCommand(EntityDeathEvent event) {
+
+        if(this.command.equals("")) {
+            return;
+        }
+
         replacePlaceholders(event);
 
         this.playersToExecuteFor.addAll(this.damagers);
@@ -187,12 +192,17 @@ public class BossCommand implements Listener {
         if (this.command.contains(PLACEHOLDER_MOST_DAMAGE)) {
             UUID id = MostDamagePHReplacer.getMostDamageUUID(event.getEntity().getUniqueId());
 
-            Player player = Bukkit.getPlayer(id);
-            if (player == null) {
-                return;
+            if (id != null) {
+
+                Player player = Bukkit.getPlayer(id);
+                if (player == null) {
+                    return;
+                }
+                playersToExecuteFor.add(id);
+                this.command = this.command.replace(PLACEHOLDER_MOST_DAMAGE, "%name%");
+            } else {
+                this.command = "";
             }
-            playersToExecuteFor.add(id);
-            this.command = this.command.replace(PLACEHOLDER_MOST_DAMAGE, "%name%");
         }
         replaceRadiusPlaceHolder();
     }
