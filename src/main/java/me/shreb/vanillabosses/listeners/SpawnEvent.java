@@ -55,6 +55,8 @@ public class SpawnEvent implements Listener {
             return;
         }
 
+        if (!retriever.spawnNaturally) return;
+
         FileConfiguration config = retriever.instance.config;
 
         String chancePath = "spawnChance";
