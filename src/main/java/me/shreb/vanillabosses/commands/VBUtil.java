@@ -3,6 +3,7 @@ package me.shreb.vanillabosses.commands;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.items.BouncySlime;
 import me.shreb.vanillabosses.items.HeatedMagmaCream;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
  */
 public class VBUtil extends VBCommands {
 
+    public static final String PERMISSION_NAME = "vbUtil";
     private static final VBUtil INSTANCE = new VBUtil();
 
     public static VBUtil getInstance() {
@@ -28,11 +30,16 @@ public class VBUtil extends VBCommands {
 
     @Override
     public void registerCommand() {
-        Vanillabosses.getInstance().getCommand("vbUtil").setExecutor(new VBUtil());
+        Vanillabosses.getInstance().getCommand(PERMISSION_NAME).setExecutor(new VBUtil());
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+        if (!sender.hasPermission(PERMISSION_NAME)) {
+            sender.sendMessage(ChatColor.RED + Vanillabosses.getCurrentLanguage().badPermissions);
+            return true;
+        }
 
         if (sender instanceof Player && args.length == 1 && args[0].equalsIgnoreCase("replaceitems")) {
             ArrayList<ItemStack> replaceableItems = (ArrayList<ItemStack>) Arrays.stream(((Player) sender).getInventory().getContents())

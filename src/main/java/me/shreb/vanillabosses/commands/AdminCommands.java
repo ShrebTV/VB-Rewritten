@@ -38,6 +38,8 @@ import java.util.logging.Level;
  */
 public class AdminCommands extends VBCommands {
 
+    private static final String PERMISSION_NAME = "vbAdmin";
+
     private static final AdminCommands INSTANCE = new AdminCommands();
 
     public static AdminCommands getInstance() {
@@ -49,7 +51,7 @@ public class AdminCommands extends VBCommands {
      */
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if (!sender.isOp()) {
+        if (!sender.hasPermission(PERMISSION_NAME)) {
             sender.sendMessage(ChatColor.RED + Vanillabosses.getCurrentLanguage().badPermissions);
             return true;
         }
@@ -120,7 +122,7 @@ public class AdminCommands extends VBCommands {
     @Override
     void registerCommand() {
         try {
-            Vanillabosses.getInstance().getCommand("vbAdmin").setExecutor(getInstance());
+            Vanillabosses.getInstance().getCommand(PERMISSION_NAME).setExecutor(getInstance());
             new VBLogger("AdminCommands", Level.INFO, "Successfully registered command \"vbAdmin\"").logToFile();
         } catch (NullPointerException e) {
             new VBLogger("AdminCommands", Level.SEVERE, "Could not register command \"vbAdmin\"").logToFile();
@@ -137,8 +139,8 @@ public class AdminCommands extends VBCommands {
     boolean respawningBossCommandReaction(CommandSender sender, String[] args) {
 
         //Check whether the sender is a player who has op permissions
-        if (!(sender instanceof Player) || !sender.isOp()) {
-            sender.sendMessage("User of this command has to be a Player and OP");
+        if (!(sender instanceof Player) || !sender.hasPermission(PERMISSION_NAME)) {
+            sender.sendMessage("User of this command has to be a Player and have the necessary permission");
             return true;
         }
 

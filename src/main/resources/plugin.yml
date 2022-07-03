@@ -14,3 +14,13 @@ commands:
   vbUtil:
     description: Utility commands for the Vanilla Bosses plugin
     usage: /<command> replaceItems
+permissions:
+  vbAdmin:
+    description: Allows you to use /vbAdmin commands
+    default: op
+  vbUtil:
+    description: Allows you to use /vbUtil replaceItems
+    default: true
+  vbInfo:
+    description: Allows you to use /vbInfo <BossType/info/bosslist/itemlist> commands
+    default: true

@@ -17,6 +17,8 @@ import org.bukkit.entity.EntityType;
  */
 public class VBInfo extends VBCommands {
 
+    private static final String PERMISSION_NAME = "vbInfo";
+
     private static final VBInfo INSTANCE = new VBInfo();
 
     public static VBInfo getInstance() {
@@ -25,11 +27,16 @@ public class VBInfo extends VBCommands {
 
     @Override
     void registerCommand() {
-        Vanillabosses.getInstance().getCommand("vbInfo").setExecutor(new VBInfo());
+        Vanillabosses.getInstance().getCommand(PERMISSION_NAME).setExecutor(new VBInfo());
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+        if (!sender.hasPermission(PERMISSION_NAME)) {
+            sender.sendMessage(ChatColor.RED + Vanillabosses.getCurrentLanguage().badPermissions);
+            return true;
+        }
 
         String message = "";
 
