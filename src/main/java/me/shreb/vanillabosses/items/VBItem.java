@@ -11,11 +11,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class VBItem implements Listener {
 
     public static NamespacedKey VBItemKey = new NamespacedKey(Vanillabosses.getInstance(), "VB-Item");
     static final PluginManager pluginManager = Vanillabosses.getInstance().getServer().getPluginManager();
+
+    private static final ArrayList<String> ITEM_NAMES = new ArrayList<>();
+    private static final ArrayList<String> SPECIAL_ITEM_NAMES = new ArrayList<>();
 
     public YamlConfiguration configuration = new YamlConfiguration();
     public NamespacedKey pdcKey; //The PDCKey which identifies this item as the specific special item it is
@@ -25,6 +29,29 @@ public abstract class VBItem implements Listener {
     public String itemGivenMessage;
 
     public ArrayList<String> lore;
+
+    static {
+        ITEM_NAMES.add("BaseballBat");
+        ITEM_NAMES.add("Blazer");
+        ITEM_NAMES.add("BouncySlime");
+        ITEM_NAMES.add("ButchersAxe");
+        ITEM_NAMES.add("InvisibilityCloak");
+        ITEM_NAMES.add("Skeletor");
+        ITEM_NAMES.add("SlimeBoots");
+        ITEM_NAMES.add("Slingshot");
+        ITEM_NAMES.add("WitherEgg");
+
+        SPECIAL_ITEM_NAMES.add("bossegg");
+        SPECIAL_ITEM_NAMES.add("hmc");
+    }
+
+    public static List<String> getItemNames() {
+        return ITEM_NAMES;
+    }
+
+    public static List<String> getSpecialItemNames() {
+        return SPECIAL_ITEM_NAMES;
+    }
 
     /**
      * This method is used to activate the ability of the item.

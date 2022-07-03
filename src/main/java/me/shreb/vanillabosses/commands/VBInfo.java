@@ -1,11 +1,15 @@
 package me.shreb.vanillabosses.commands;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is supposed to take and react to following commands:
@@ -98,5 +102,23 @@ public class VBInfo extends VBCommands {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+        ArrayList<String> result = new ArrayList<>();
+
+        if (args.length <= 1) {
+            result.add("info");
+            result.add("bosslist");
+            result.add("itemlist");
+
+            result.addAll(Boss.getBossNames());
+
+        }
+
+        return result;
+
     }
 }

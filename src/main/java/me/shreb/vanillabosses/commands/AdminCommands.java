@@ -3,6 +3,7 @@ package me.shreb.vanillabosses.commands;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.VBBoss;
 import me.shreb.vanillabosses.bosses.WitherBoss;
+import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
 import me.shreb.vanillabosses.bosses.utility.BossDataRetriever;
@@ -21,14 +22,13 @@ import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Command name -> "vbAdmin"
@@ -118,6 +118,58 @@ public class AdminCommands extends VBCommands {
             return false;
         }
     }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+        ArrayList<String> result = new ArrayList<>();
+
+        if (args.length <= 1) {
+            result.add("readme");
+            result.add("bossInfo");
+            result.add("respawningBoss");
+            result.add("spawnBoss");
+            result.add("specialItem");
+            result.add("giveItem");
+            result.add("removeNearby");
+            result.add("removeAllBosses");
+        } else if (args.length <= 2) {
+
+            if (args[0].equalsIgnoreCase("bossInfo")
+                    || args[0].equalsIgnoreCase("spawnBoss")) {
+                result.addAll(Boss.getBossNames());
+            } else if (args[0].equalsIgnoreCase("specialItem")) {
+                result.addAll(VBItem.getSpecialItemNames());
+            } else if (args[0].equalsIgnoreCase("giveItem")) {
+                result.addAll(VBItem.getItemNames());
+            }
+        } else if (args.length <= 3) {
+
+            if (args[0].equalsIgnoreCase("spawnBoss")
+                    || args[0].equalsIgnoreCase("specialItem")
+                    || args[0].equalsIgnoreCase("giveItem")) {
+                result.addAll(Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toList()));
+            }
+        } else if (args.length <= 4) {
+            if (args[0].equalsIgnoreCase("spawnBoss")
+                    || args[0].equalsIgnoreCase("specialItem")
+                    || args[0].equalsIgnoreCase("giveItem")) {
+                result.add("1");
+                result.add("2");
+                result.add("64");
+            }
+        } else if (args.length <= 5) {
+            if (args[1].equalsIgnoreCase("bossegg")) {
+                result.addAll(Boss.getBossNames());
+            } else if (args[1].equalsIgnoreCase("hmc")) {
+                result.add("1");
+                result.add("2");
+                result.add("3");
+            }
+        }
+        return result;
+    }
+
 
     @Override
     void registerCommand() {
@@ -394,6 +446,7 @@ public class AdminCommands extends VBCommands {
 
         String type = args[1];
         BossDataRetriever retriever;
+
 
         try {
             retriever = new BossDataRetriever(EntityType.valueOf(type.toUpperCase()));
@@ -691,6 +744,4 @@ public class AdminCommands extends VBCommands {
 
         return true;
     }
-
-
 }
