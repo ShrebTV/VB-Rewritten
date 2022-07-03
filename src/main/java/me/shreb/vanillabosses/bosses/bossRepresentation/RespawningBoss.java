@@ -311,7 +311,7 @@ public class RespawningBoss extends Boss implements Listener {
     public void onChunkLoad(ChunkLoadEvent event) {
 
         for (Entity entity : event.getChunk().getEntities()) {
-            if (entity.getScoreboardTags().contains(RESPAWNING_BOSS_TAG) && !allRespawningBosses.contains(entity.getUniqueId())) {
+            if (entity.getScoreboardTags().contains(RESPAWNING_BOSS_TAG) && !livingRespawningBossesMap.containsValue(entity.getUniqueId())) {
                 entity.remove();
             }
         }
