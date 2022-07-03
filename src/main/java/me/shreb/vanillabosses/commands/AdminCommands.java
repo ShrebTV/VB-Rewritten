@@ -278,6 +278,11 @@ public class AdminCommands extends VBCommands {
 
         ItemStack itemToGive = parseForItem(itemGetterString, amount);
 
+        if (itemToGive == null) {
+            sender.sendMessage(Vanillabosses.getCurrentLanguage().badArgument);
+            return true;
+        }
+
         ItemDataRetriever retriever;
         try {
             retriever = new ItemDataRetriever(itemToGive.getType());
