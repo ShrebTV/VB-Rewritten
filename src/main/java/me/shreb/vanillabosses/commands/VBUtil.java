@@ -13,6 +13,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -78,5 +79,18 @@ public class VBUtil extends VBCommands {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+        ArrayList<String> result = new ArrayList<>();
+
+        if (args.length <= 1) {
+            result.add("replaceItems");
+        }
+
+        return result;
+
     }
 }
