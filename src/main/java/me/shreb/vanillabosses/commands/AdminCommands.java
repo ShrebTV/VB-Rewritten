@@ -124,6 +124,8 @@ public class AdminCommands extends VBCommands {
 
         ArrayList<String> result = new ArrayList<>();
 
+        // /vbAdmin respawningBoss Type respawnTime 0,1
+
         if (args.length <= 1) {
             result.add("readme");
             result.add("bossInfo");
@@ -136,7 +138,8 @@ public class AdminCommands extends VBCommands {
         } else if (args.length <= 2) {
 
             if (args[0].equalsIgnoreCase("bossInfo")
-                    || args[0].equalsIgnoreCase("spawnBoss")) {
+                    || args[0].equalsIgnoreCase("spawnBoss")
+                    || args[0].equalsIgnoreCase("respawningBoss")) {
                 result.addAll(Boss.getBossNames());
             } else if (args[0].equalsIgnoreCase("specialItem")) {
                 result.addAll(VBItem.getSpecialItemNames());
@@ -149,7 +152,13 @@ public class AdminCommands extends VBCommands {
                     || args[0].equalsIgnoreCase("specialItem")
                     || args[0].equalsIgnoreCase("giveItem")) {
                 result.addAll(Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toList()));
+            } else if (args[0].equalsIgnoreCase("respawningBoss")) {
+                result.add("Respawn_Time");
+                result.add("10");
+                result.add("60");
+                result.add("600");
             }
+
         } else if (args.length <= 4) {
             if (args[0].equalsIgnoreCase("spawnBoss")
                     || args[0].equalsIgnoreCase("specialItem")
@@ -157,7 +166,13 @@ public class AdminCommands extends VBCommands {
                 result.add("1");
                 result.add("2");
                 result.add("64");
+            } else if (args[0].equalsIgnoreCase("respawningBoss")) {
+                result.add("Commands");
+                result.add("0");
+                result.add("1");
+                result.add("0,1");
             }
+
         } else if (args.length <= 5) {
             if (args[1].equalsIgnoreCase("bossegg")) {
                 result.addAll(Boss.getBossNames());
