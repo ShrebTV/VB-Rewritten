@@ -62,7 +62,6 @@ public class VBBossBar implements Listener {
      */
     public static void replaceAssignedEntity(UUID oldID, UUID newID) {
 
-        //TODO test boss bar support for respawning bosses
         //get the referenced bar with the old id
         VBBossBar bar = bossBarMap.get(oldID);
 
@@ -71,6 +70,8 @@ public class VBBossBar implements Listener {
             //return if not
             return;
         }
+
+        bar.bossBar.removeAll();
 
         //remove the old bar from the map
         bossBarMap.remove(oldID);
