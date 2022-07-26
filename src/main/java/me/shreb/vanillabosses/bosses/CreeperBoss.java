@@ -187,6 +187,9 @@ public class CreeperBoss extends VBBoss {
                 return;
             }
 
+            double health = creeper.getHealth();
+            double maxHealth = creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+
             //new boolean to check whether the respawning boss map contains this specific boss and the boss has the respawning boss scoreboard tag
             boolean isRespawningBoss = RespawningBoss.livingRespawningBossesMap.entrySet()
                     .stream()
@@ -255,7 +258,8 @@ public class CreeperBoss extends VBBoss {
             }
 
             try {
-                creeperNew.setHealth(creeper.getHealth());
+                creeperNew.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
+                creeperNew.setHealth(health);
             } catch (IllegalArgumentException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Could not properly set Creeper health after exploding. \n" +
                         "This is most likely caused by another plugin setting the hp of the boss or An old creeper exploding when you changed its settings").logToFile();
@@ -270,7 +274,7 @@ public class CreeperBoss extends VBBoss {
 
             if (instance.config.getBoolean("thrownTNT.throwTNTEnable")) {
 
-                Entity[] TNTArry = {
+                Entity[] tntArray = {
                         creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
                         creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
                         creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
@@ -281,7 +285,7 @@ public class CreeperBoss extends VBBoss {
                         creeperNew.getWorld().spawnEntity(creeperNew.getLocation(), EntityType.PRIMED_TNT),
                 };
 
-                for (Entity e : TNTArry
+                for (Entity e : tntArray
                 ) {
                     ((TNTPrimed) e).setYield(instance.config.getInt("thrownTNT.TNTYield"));
                     ((TNTPrimed) e).setFuseTicks(20 * instance.config.getInt("thrownTNT.TNTFuse"));
@@ -289,17 +293,17 @@ public class CreeperBoss extends VBBoss {
 
                 double multiplier = instance.config.getDouble("thrownTNT.TNTSpreadMultiplier");
 
-                TNTArry[0].setVelocity(new Vector(0.25 * multiplier, 0.5, 0));
-                TNTArry[1].setVelocity(new Vector(-0.25 * multiplier, 0.5, 0));
-                TNTArry[2].setVelocity(new Vector(0, 0.5, 0.25 * multiplier));
-                TNTArry[3].setVelocity(new Vector(0, 0.5, -0.25 * multiplier));
-                TNTArry[4].setVelocity(new Vector(0.25 * multiplier, 0.5, 0.25 * multiplier));
-                TNTArry[5].setVelocity(new Vector(-0.25 * multiplier, 0.5, 0.25 * multiplier));
-                TNTArry[6].setVelocity(new Vector(0.25 * multiplier, 0.5, -0.25 * multiplier));
-                TNTArry[7].setVelocity(new Vector(-0.25 * multiplier, 0.5, -0.25 * multiplier));
+                tntArray[0].setVelocity(new Vector(0.25 * multiplier, 0.5, 0));
+                tntArray[1].setVelocity(new Vector(-0.25 * multiplier, 0.5, 0));
+                tntArray[2].setVelocity(new Vector(0, 0.5, 0.25 * multiplier));
+                tntArray[3].setVelocity(new Vector(0, 0.5, -0.25 * multiplier));
+                tntArray[4].setVelocity(new Vector(0.25 * multiplier, 0.5, 0.25 * multiplier));
+                tntArray[5].setVelocity(new Vector(-0.25 * multiplier, 0.5, 0.25 * multiplier));
+                tntArray[6].setVelocity(new Vector(0.25 * multiplier, 0.5, -0.25 * multiplier));
+                tntArray[7].setVelocity(new Vector(-0.25 * multiplier, 0.5, -0.25 * multiplier));
 
                 if (instance.config.getBoolean("thrownTNT.TNTDoesNoBlockDamage")) {
-                    for (Entity e : TNTArry) {
+                    for (Entity e : tntArray) {
                         e.addScoreboardTag(CANCEL_EXPLOSION);
                         e.getScoreboardTags().add(CANCEL_BLOWUP_ITEMS);
                     }
