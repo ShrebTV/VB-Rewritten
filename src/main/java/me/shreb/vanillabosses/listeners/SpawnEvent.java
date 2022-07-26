@@ -181,7 +181,7 @@ public class SpawnEvent implements Listener {
                     new VBBossBar(event.getEntity(), Bukkit.createBossBar(event.getEntity().getName(), BarColor.BLUE, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
                 }
 
-            }, 2);
+            }, 3);
 
         }
     }
