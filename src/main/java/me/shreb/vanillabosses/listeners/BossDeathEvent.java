@@ -147,7 +147,9 @@ public class BossDeathEvent implements Listener {
             }
         }
 
-        if (event.getEntityType() == EntityType.WITHER && event.getEntity().getScoreboardTags().contains(WitherBoss.SCOREBOARDTAG)) {
+        if (event.getEntityType() == EntityType.WITHER
+                && event.getEntity().getScoreboardTags().contains(WitherBoss.SCOREBOARDTAG)
+                && WitherEgg.instance.configuration.getBoolean("witherBossDropsEgg")) {
             try {
                 event.getDrops().add(WitherEgg.instance.makeItem());
             } catch (ItemCreationException e) {
