@@ -65,7 +65,7 @@ public class WitherBoss extends VBBoss {
 
         if (!config.getBoolean("enabled")) return entity;
 
-        // checking wether the entity passed in is a Wither. Logging as a warning and throwing an exception if not.
+        // checking whether the entity passed in is a Wither. Logging as a warning and throwing an exception if not.
         if (!(entity instanceof Wither)) {
             new VBLogger(getClass().getName(), Level.WARNING, "Attempted to make a Wither boss out of an Entity.\n" +
                     "Entity passed in: " + entity.getType() + "\n" +
@@ -101,11 +101,13 @@ public class WitherBoss extends VBBoss {
             entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speedMultiplier * entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 
             //setting the entity Attributes. Logging failure as Warning.
+
+            entity.setCustomName(nameColor + name);
+            entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
+
             try {
                 entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
                 entity.setHealth(health);
-                entity.setCustomName(nameColor + name);
-                entity.setCustomNameVisible(config.getBoolean("showDisplayNameAlways"));
 
             } catch (Exception e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Could not set Attributes on Wither Boss\n" +
