@@ -188,7 +188,7 @@ public class CreeperBoss extends VBBoss {
             }
 
             double health = creeper.getHealth();
-            double maxHealth = creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+            double maxHealth = creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
             //new boolean to check whether the respawning boss map contains this specific boss and the boss has the respawning boss scoreboard tag
             boolean isRespawningBoss = RespawningBoss.livingRespawningBossesMap.entrySet()
@@ -258,7 +258,7 @@ public class CreeperBoss extends VBBoss {
             }
 
             try {
-                creeperNew.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
+                creeperNew.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(this.config.getDouble("health"));
                 creeperNew.setHealth(health);
             } catch (IllegalArgumentException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Could not properly set Creeper health after exploding. \n" +

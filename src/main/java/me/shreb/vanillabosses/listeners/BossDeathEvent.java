@@ -156,5 +156,37 @@ public class BossDeathEvent implements Listener {
                 new VBLogger(getClass().getName(), Level.WARNING, "Could not make Wither egg for Boss Drops." + e).logToFile();
             }
         }
+
+        if (event.getEntity() instanceof Zombie && event.getEntity().getScoreboardTags().contains(ZombieBoss.SCOREBOARDTAG)) {
+            if (Utility.roll(BaseballBat.instance.configuration.getDouble("dropChance"))) {
+                try {
+                    event.getDrops().add(BaseballBat.instance.makeItem());
+                } catch (ItemCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Could not make a Baseball bat for Boss Drops." + e).logToFile();
+                }
+            }
+        }
+
+        if (event.getEntity() instanceof PigZombie && event.getEntity().getScoreboardTags().contains(Zombified_PiglinBoss.SCOREBOARDTAG)) {
+            if (Utility.roll(ButchersAxe.instance.configuration.getDouble("dropChance"))) {
+                try {
+                    event.getDrops().add(ButchersAxe.instance.makeItem());
+                } catch (ItemCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Could not make a Butchers axe for Boss Drops." + e).logToFile();
+                }
+            }
+        }
+
+
+        if (event.getEntity() instanceof Skeleton && event.getEntity().getScoreboardTags().contains(SkeletonBoss.SCOREBOARDTAG)) {
+            if (Utility.roll(Skeletor.instance.configuration.getDouble("dropChance"))) {
+                try {
+                    event.getDrops().add(Skeletor.instance.makeItem());
+                } catch (ItemCreationException e) {
+                    new VBLogger(getClass().getName(), Level.WARNING, "Could not make a Skeletor for Boss Drops." + e).logToFile();
+                }
+            }
+        }
+
     }
 }
