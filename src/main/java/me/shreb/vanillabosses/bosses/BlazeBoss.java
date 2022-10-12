@@ -161,9 +161,9 @@ public class BlazeBoss extends VBBoss {
 
         double random = abilityRandom.nextDouble();
 
-        double chanceWither = instance.config.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.witherSkull");
-        double chanceEnder = instance.config.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.enderDragonFireBall");
-        double chanceLarge = instance.config.getDouble("Bosses.BlazeBoss.blazeShootEventsChances.largeFireBall");
+        double chanceWither = instance.config.getDouble("blazeShootEventsChances.witherSkull");
+        double chanceEnder = instance.config.getDouble("blazeShootEventsChances.enderDragonFireBall");
+        double chanceLarge = instance.config.getDouble("blazeShootEventsChances.largeFireBall");
 
         double currentChance = chanceWither;
         if (currentChance > random) {
