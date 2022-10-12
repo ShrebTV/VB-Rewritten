@@ -3,6 +3,7 @@ package me.shreb.vanillabosses.commands;
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.VBBoss;
 import me.shreb.vanillabosses.bosses.WitherBoss;
+import me.shreb.vanillabosses.bosses.ZombieBoss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.Boss;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCreationException;
@@ -606,6 +607,13 @@ public class AdminCommands extends VBCommands {
 
                 try {
                     LivingEntity entity = retriever.instance.makeBoss(finalLocationToSpawn1);
+                    if (type.equalsIgnoreCase("ZOMBIE")) {
+                        ZombieBoss.zombieHorde(
+                                retriever.instance.config.getInt("zombieHorde.radius"),
+                                retriever.instance.config.getInt("zombieHorde.amount"),
+                                finalLocationToSpawn1
+                        );
+                    }
                     if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.CommandBossesHaveBossBars")) {
                         new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
                     }
