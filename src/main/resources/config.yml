@@ -1,6 +1,7 @@
 Bosses:
 
-  PluginLanguage: EN  # Currently implemented Languages: EN (English), GER (German), CN (Chinese)
+  PluginLanguage: EN  # Currently implemented Languages: EN (English), GER (German), CN (Chinese),
+  #PL (Polish without special characters), PLS (Polish with special characters)
   #In case the entered language is not implemented. it will default to English
 
   LogLevel: WARNING #Can be INFO, WARNING or SEVERE depending on how much you want to know. Standard is warning.

@@ -1,5 +1,6 @@
 package me.shreb.vanillabosses.listeners;
 
+import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.*;
 import me.shreb.vanillabosses.bosses.bossRepresentation.RespawningBoss;
 import me.shreb.vanillabosses.bosses.utility.BossCommand;
@@ -41,7 +42,7 @@ public class BossDeathEvent implements Listener {
             event.getDrops().clear();
         }
 
-        if (event.getEntity().getKiller() != null) {
+        if (event.getEntity().getKiller() != null && Vanillabosses.getInstance().getConfig().getBoolean("Bosses.enableBossKilledMessage")) {
             new BossDeathMessage(bossData.bossKilledMessage, event).sendMessage();
         }
 

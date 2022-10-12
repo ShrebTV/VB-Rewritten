@@ -244,6 +244,244 @@ public enum Languages {
             "Boss Ei"
     ),
 
+    PL(
+            "Za malo argumentow!",
+
+            "Zly argument, prosze sprobuj ponownie!",
+
+            "You do not have the necessary Permissions!",
+
+            "Wystapil blad, prosze powiadom Autora o tym bledzie i napisz co robiles przed jego wystapieniem.",
+
+            "Ta komenda jest wylaczona.",
+
+            "Ten ekwipunek jest pelny.",
+
+            "Podana ilosc jest niedozwolona!",
+
+            "zostal pomyslnie zrespiony!",
+
+            "Mozliwe komendy:\n" +
+                    " - /vbh discord (wysyla link do discorda Autora)\n" +
+                    " - /vbh  (wyswietla ta komende pomocy)\n" +
+                    " - /vbh <EntityType>  (wyswietla informacje o wybranym bossie. wpisz '/boss list' aby zobaczyc wszystkie dostepne bossy!)\n" +
+                    " - /vbh info  (wyswietla informacje o pluginie)\n" +
+                    " - /vbh replaceItems (zamienia wszystkie materialy do craftowania w ekwipunku z dopasowanymi do obecnie wybranego jezyka.)",
+
+            "Zwykly blaze, ktory studiowal sztuke niewiedzenia czym sie strzela.\n" +
+                    "Ten blaze ma wiecej zdrowia niz normalny, ale moze zostac szybko zabity przez widmowa strzale, ktora zadaje wiecej obrazen..\n" +
+                    "Podczas strzelania widmowa strzala blaze moze wyrzucic specjalna rzecz (jezeli nie zostala wylaczona w configu.)",
+
+            "Bomby to creeper, ktory swietnie kontroluje zlosc.\n" +
+                    "Wyzywa sie w formie wypuszczania 8 TNT, ktore leca we wszystkie strony w momencie kiedy wybucha.\n" +
+                    "Bomby zadaje duze obrazenia kiedy sie denerwuje ale moze zostac latwo pokonany z luku.",
+
+            "Enderman, ktory ma problemy z piciem. \n" +
+                    "Kiedy uderzysz tego enderman ma on szanse na stanie sie jeszcze bardziej zdenerwowany niz normalny enderman.\n" +
+                    "Kiedy uderzy ma szanse na zdobycie konfigurowalnego efektu.\n" +
+                    "Ten enderman respi Endermity kiedy sie teleportuje (Jezeli wlaczone w configu.)\n" +
+                    "Mozliwosc wyrzucenia peleryny niewidki.",
+
+            "Zawsze chce kazdego przytulac!\n" +
+                    "Moze sie bardzo zdenerwowac po uderzeniu i podpalic wszystko do okola.\n" +
+                    "Nie chce byc zly ale przytulanie ludzi kiedy jestes goracy jak lawa troche boli.\n" +
+                    "Ma szanse na wyrzucenie po smierci jeden z 3 levelow Rozgrzanego Kremu Magmy.",
+
+            "Krol Szkieletow, kiedys regent zamoznego narodu.\n" +
+                    "Zginal wraz ze swoja armia i narodem w ostatecznej wojnie przed murami swojego zamku.\n" +
+                    "Dzieki swojemu wiernemu lukowi wykonanemu z jelenich kosci zadaje bardzo duze obrazenia i strzela TNT w swoich wrogow.\n" +
+                    "Po uderzeniu moze odbic obrazenia, stac sie niesmiertelnym na okreslony czas lub wezwac czesc swojej kiedys poteznej armii, aby znow mu sluzyla.\n" +
+                    "Kiedy wrocil do swiata zywych, byl w stanie zabrac ze soba niewielka ilosc rzeczy, ktore moze upuscic po zabiciu.\n" +
+                    "Poniewaz jego luk jest w dosyc zlym stanie, nie mozna go uratowac po jego smierci.\n" +
+                    "Wyrzuca Szkieletor.",
+
+            "Najbardziej skoczny i szlamowy!\n" +
+                    "Po uderzeniu moze przekierowac odrzut w dol, aby skoczyc wysoko w powietrze, a nastepnie z duza predkoscia uderzyc w ziemie.\n" +
+                    "Kazdy gracz, ktory bedzie dotykac ziemi w momencie, gdy szlam uderza w ziemie, zostanie wyrzucony do gory!\n" +
+                    "Wyrzuca szlamowe buty i skocznego szlama.",
+
+            "Dolores jest pajakiem.\n" +
+                    "Jezeli ja uderzysz, moze stac sie niewidzialna i zyskac moc teleportacji za ciebie.\n" +
+                    "dodatkowo ma potezny skok, dzieki ktoremu moze blyskawicznie sie do ciebie zblizyc.\n" +
+                    "Wyrzuca Proce.",
+
+            "Ta wiedzma jest ponadprzecietna.\n" +
+                    "Odkryla jak zrobic o wiele lepsze mikstury niz te, ktorych ucza w akademii.\n" +
+                    "Eksperymentujac ze skladnikami, zrobila rowniez kilka zapomnianych mikstur, ale niestety nie powie nam jakich skladnikow uzyla.",
+
+            "Wither Boss to raczej niefortunny eksperyment.\n" +
+                    "Proba zrobienia antychrysta nie zakonczyla sie dla nikogo dobrze. Nigdy.\n" +
+                    "Ale oto jestes ty. Łaczenie dwoch rzeczy, ktore najbardziej przypominaja ludziom o Netherze.\n" +
+                    "Powstaje poprzez zbudowanie standardowego Withera gdzie blok na samym dole jest Blokiem Netherytu. Blok Netherytu zniknie, jezeli nie zostanie zmieniona opcja w konfiguracji.\n" +
+                    "Po smierci on (lub ona?) wyrzuci jajko withera.\n" +
+                    "Aby go wykluc, musisz postepowac zgodnie z instrukcjami napisanymi na czarno pod nazwa jajka.",
+
+            "Znany w niektorych miejscach jako \"Bob\", ten Zombie zawsze ma w poblizu swoj gang, ktory z wielka checia mu pomoze.\n" +
+                    "Z Bobem noszacym wymaksowana zelazna zbroje i posiadajacym duza ilosc zdrowia, jego gang nie ma wiele do roboty.\n" +
+                    "Wyrzuca Kij Baseballowy.",
+
+            "Jeden z niewielu Pigmenow, ktorzy potrafili wydobywac zloto i enchantowac swoja zbroje!!\n" +
+                    "Siekiera Rzeznika, ktora trzyma Pigman, ma szanse okaleczyc kazdego, kto niefortunnie zostanie nim uderzony.\n" +
+                    "Wyrzuca Siekiere Rzeznika",
+
+            "Plugin Vanilla Bosses zostal zrobiony przez Shreb (Na Spigocie)\n" +
+                    "Prosze zglaszac wszelkie proby kopiowania moich tresci poprzez Spigota lub Discorda.\n" +
+                    "Jezeli podoba Ci sie moj plugin, prosze zostaw ocene i polec go swoim znajomym :D\n" +
+                    "W przypadku, gdy masz jakies pomysly na nowe bossy lub przedmioty i chcialbys je zobaczyc w pluginie, prosze napisz do mnie.\n" +
+                    "Dobrej zabawy i zdrowia :)",
+
+            "Kij Baseballowy",
+            "Zyskales Kij Baseballowy!",
+
+            "Plomyka",
+            "Zyskales Plomyka!",
+
+            "Siekiera Rzeznika",
+            "Zyskales Siekiere Rzeznika!",
+
+            "Rozgrzany Krem Magmy",
+            "Zyskales Rozgrzany Krem Magmy!",
+
+            "Peleryna Niewidka",
+            "Zyskales Peleryne Niewidke!",
+
+            "Szkieletor",
+            "Zyskales Szkieletora!",
+
+            "Szlamowe Buty",
+            "Zyskales Szlamowe Buty!",
+
+            "Skoczny Szlam",
+            "Zyskales Skocznego Szlama",
+
+            "Proca",
+            "Zyskales Proce!",
+
+            "Jajko Withera",
+            "Zyskales Jajko Withera!",
+
+            "Zyskales Jajko(a) Bossa",
+            "Jajko Bossa"
+    ),
+    PLS(
+            "Za mało argumentów!",
+
+            "Zły argument, proszę spróbuj ponownie!",
+
+            "You do not have the necessary Permissions!",
+
+            "Wystąpił błąd, proszę powiadom Autora o tym błędzie i napisz co robiłeś przed jego wystąpieniem.",
+
+            "Ta komenda jest wyłączona.",
+
+            "Ten ekwipunek jest pełny.",
+
+            "Podana ilość jest niedozwolona!",
+
+            "został pomyślnie zrespiony!",
+
+            "Możliwe komendy:\n" +
+                    " - /vbh discord (wysyła link do discorda Autora)\n" +
+                    " - /vbh  (wyświetla tą komende pomocy)\n" +
+                    " - /vbh <EntityType>  (wyświetla informacje o wybranym bossie. wpisz '/boss list' aby zobaczyć wszystkie dostępne bossy!)\n" +
+                    " - /vbh info  (wyświetla informacje o pluginie)\n" +
+                    " - /vbh replaceItems (zamienia wszystkie materiały do craftowania w ekwipunku z dopasowanymi do obecnie wybranego języka.)",
+
+            "Zwykły blaze, który studiował sztuke niewiedzenia czym się strzela.\n" +
+                    "Ten blaze ma więcej zdrowia niż normalny, ale może zostać szybko zabity przez widmową strzałe, która zadaje więcej obrażeń..\n" +
+                    "Podczas strzelania widmową strzałą blaze może wyrzucić specjalną rzecz (jeżeli nie została wyłączona w configu.)",
+
+            "Bomby to creeper, który świetnie kontroluje złość.\n" +
+                    "Wyżywa się w formie wypuszczania 8 TNT, które lecą we wszystkie strony w momencie kiedy wybucha.\n" +
+                    "Bomby zadaje duże obrażenia kiedy się denerwuje ale może zostać łatwo pokonany z łuku.",
+
+            "Enderman, który ma problemy z piciem. \n" +
+                    "Kiedy uderzysz tego enderman ma on szanse na stanie się jeszcze bardziej zdenerwowany niż normalny enderman.\n" +
+                    "Kiedy uderzy ma szanse na zdobycie konfigurowalnego efektu.\n" +
+                    "Ten enderman respi Endermity kiedy się teleportuje (Jeżeli włączone w configu.)\n" +
+                    "Możliwość wyrzucenia peleryny niewidki.",
+
+            "Zawsze chce każdego przytulać!\n" +
+                    "Może się bardzo zdenerwować po uderzeniu i podpalić wszystko do okoła.\n" +
+                    "Nie chce być zły ale przytulanie ludzi kiedy jesteś gorący jak lawa troche boli.\n" +
+                    "Ma szanse na wyrzucenie po śmierci jeden z 3 levelów Rozgrzanego Kremu Magmy.",
+
+            "Król Szkieletów, kiedyś regent zamożnego narodu.\n" +
+                    "Zginął wraz ze swoją armią i narodem w ostatecznej wojnie przed murami swojego zamku.\n" +
+                    "Dzięki swojemu wiernemu łukowi wykonanemu z jelenich kości zadaje bardzo duże obrażenia i strzela TNT w swoich wrogów.\n" +
+                    "Po uderzeniu może odbić obrażenia, stać się nieśmiertelnym na określony czas lub wezwać część swojej kiedyś potężnej armii, aby znów mu służyła.\n" +
+                    "Kiedy wrócił do świata żywych, był w stanie zabrać ze sobą niewielką ilość rzeczy, które może upuścić po zabiciu.\n" +
+                    "Ponieważ jego łuk jest w dosyć złym stanie, nie można go uratować po jego śmierci.\n" +
+                    "Wyrzuca Szkieletor.",
+
+            "Najbardziej skoczny i szlamowy!\n" +
+                    "Po uderzeniu może przekierować odrzut w dół, aby skoczyć wysoko w powietrze, a następnie z dużą prędkością uderzyć w ziemie.\n" +
+                    "Każdy gracz, który będzie dotykać ziemi w momencie, gdy szlam uderza w ziemię, zostanie wyrzucony do góry!\n" +
+                    "Wyrzuca szlamowe buty i skocznego szlama.",
+
+            "Dolores jest pająkiem.\n" +
+                    "Jeżeli ją uderzysz, może stać się niewidzialna i zyskać moc teleportacji za ciebie.\n" +
+                    "dodatkowo ma potężny skok, dzięki któremu może błyskawicznie się do ciebie zbliżyć.\n" +
+                    "Wyrzuca Proce.",
+
+            "Ta wiedźma jest ponadprzeciętna.\n" +
+                    "Odkryła jak zrobić o wiele lepsze mikstury niż te, których uczą w akademii.\n" +
+                    "Eksperymentując ze składnikami, zrobiła również kilka zapomnianych mikstur, ale niestety nie powie nam jakich składników użyła.",
+
+            "Wither Boss to raczej niefortunny eksperyment.\n" +
+                    "Próba zrobienia antychrysta nie zakończyła się dla nikogo dobrze. Nigdy.\n" +
+                    "Ale oto jesteś ty. Łączenie dwóch rzeczy, które najbardziej przypominają ludziom o Netherze.\n" +
+                    "Powstaje poprzez zbudowanie standardowego Withera gdzie blok na samym dole jest Blokiem Netherytu. Blok Netherytu zniknie, jeżeli nie zostanie zmieniona opcja w konfiguracji.\n" +
+                    "Po śmierci on (lub ona?) wyrzuci jajko withera.\n" +
+                    "Aby go wykluć, musisz postępować zgodnie z instrukcjami napisanymi na czarno pod nazwą jajka.",
+
+            "Znany w niektórych miejscach jako \"Bob\", ten Zombie zawsze ma w pobliżu swój gang, który z wielką chęcią mu pomoże.\n" +
+                    "Z Bobem noszącym wymaksowaną żelazną zbroje i posiadającym dużą ilość zdrowia, jego gang nie ma wiele do roboty.\n" +
+                    "Wyrzuca Kij Baseballowy.",
+
+            "Jeden z niewielu Pigmenów, którzy potrafili wydobywać złoto i enchantować swoją zbroje!!\n" +
+                    "Siekiera Rzeźnika, którą trzyma Pigman, ma szansę okaleczyć każdego, kto niefortunnie zostanie nim uderzony.\n" +
+                    "Wyrzuca Siekiere Rzeźnika",
+
+            "Plugin Vanilla Bosses został zrobiony przez Shreb (Na Spigocie)\n" +
+                    "Proszę zgłaszać wszelkie próby kopiowania moich treści poprzez Spigota lub Discorda.\n" +
+                    "Jeżeli podoba Ci się mój plugin, proszę zostaw ocenę i poleć go swoim znajomym :D\n" +
+                    "W przypadku, gdy masz jakieś pomysły na nowe bossy lub przedmioty i chciałbyś je zobaczyć w pluginie, proszę napisz do mnie.\n" +
+                    "Dobrej zabawy i zdrowia :)",
+
+            "Kij Baseballowy",
+            "Zyskałeś Kij Baseballowy!",
+
+            "Płomyka",
+            "Zyskałeś Płomyka!",
+
+            "Siekiera Rzeźnika",
+            "Zyskałeś Siekiere Rzeźnika!",
+
+            "Rozgrzany Krem Magmy",
+            "Zyskałeś Rozgrzany Krem Magmy!",
+
+            "Peleryna Niewidka",
+            "Zyskałeś Peleryne Niewidke!",
+
+            "Szkieletor",
+            "Zyskałeś Szkieletora!",
+
+            "Szlamowe Buty",
+            "Zyskałeś Szlamowe Buty!",
+
+            "Skoczny Szlam",
+            "Zyskałeś Skocznego Szlama",
+
+            "Proca",
+            "Zyskałeś Proce!",
+
+            "Jajko Withera",
+            "Zyskałeś Jajko Withera!",
+
+            "Zyskałeś Jajko(a) Bossa",
+            "Jajko Bossa"
+    ),
     CN(
 
             "命令参数不足！",

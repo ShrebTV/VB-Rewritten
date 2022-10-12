@@ -187,8 +187,7 @@ public class CreeperBoss extends VBBoss {
                 return;
             }
 
-            double health = creeper.getHealth();
-            double maxHealth = creeper.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+            double creeperHealth = creeper.getHealth();
 
             //new boolean to check whether the respawning boss map contains this specific boss and the boss has the respawning boss scoreboard tag
             boolean isRespawningBoss = RespawningBoss.livingRespawningBossesMap.entrySet()
@@ -259,7 +258,6 @@ public class CreeperBoss extends VBBoss {
 
             try {
                 creeperNew.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(this.config.getDouble("health"));
-                creeperNew.setHealth(health);
             } catch (IllegalArgumentException e) {
                 new VBLogger(getClass().getName(), Level.WARNING, "Could not properly set Creeper health after exploding. \n" +
                         "This is most likely caused by another plugin setting the hp of the boss or An old creeper exploding when you changed its settings").logToFile();
@@ -268,6 +266,15 @@ public class CreeperBoss extends VBBoss {
             ((Creeper) creeperNew).setExplosionRadius(creeper.getExplosionRadius());
 
             VBBossBar.replaceAssignedEntity(creeper.getUniqueId(), creeperNew.getUniqueId());
+
+            Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
+                if (creeperHealth >= creeperNew.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+                    creeperNew.setHealth(creeperNew.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                } else {
+                    creeperNew.setHealth(creeperHealth);
+                }
+            }, 1);
+
             creeperNew.setRemoveWhenFarAway(creeper.getRemoveWhenFarAway());
 
             BossCommand.replaceMappedUUIDs(creeper.getUniqueId(), creeperNew.getUniqueId());
