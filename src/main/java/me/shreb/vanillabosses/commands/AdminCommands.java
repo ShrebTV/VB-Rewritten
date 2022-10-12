@@ -614,9 +614,11 @@ public class AdminCommands extends VBCommands {
                                 finalLocationToSpawn1
                         );
                     }
-                    if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.CommandBossesHaveBossBars")) {
-                        new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
-                    }
+                    Bukkit.getScheduler().runTaskLater(Vanillabosses.getInstance(), () -> {
+                        if (Vanillabosses.getInstance().getConfig().getBoolean("Bosses.CommandBossesHaveBossBars")) {
+                            new VBBossBar(entity, Bukkit.createBossBar(entity.getName(), BarColor.GREEN, BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC));
+                        }
+                    }, 2);
                 } catch (BossCreationException e) {
                     new VBLogger(getClass().getName(), Level.WARNING, "Something went wrong while spawning a boss via command. Exception: " + e).logToFile();
                     sender.sendMessage(Vanillabosses.getCurrentLanguage().errorMessage);
