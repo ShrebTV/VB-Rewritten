@@ -150,7 +150,21 @@ public class Zombified_PiglinBoss extends VBBoss {
      */
     private boolean putOnEquipment(PigZombie pigZombie) {
 
-        ArmorSet set = new ArmorSet(ArmorSetType.GOLD);
+        String armorType = config.getString("ArmorMaterial");
+
+        if (armorType == null) armorType = "GOLD";
+
+        armorType = armorType.toUpperCase();
+
+        ArmorSetType type;
+
+        try {
+            type = ArmorSetType.valueOf(armorType);
+        } catch (IllegalArgumentException e) {
+            type = ArmorSetType.GOLD;
+        }
+
+        ArmorSet set = new ArmorSet(type);
 
         //Enchanting armor
         set.enchantAllArmor(Enchantment.DURABILITY, 5);

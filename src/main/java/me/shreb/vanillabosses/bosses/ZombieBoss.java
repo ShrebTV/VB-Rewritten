@@ -141,7 +141,21 @@ public class ZombieBoss extends VBBoss {
      */
     private boolean putOnEquipment(Zombie zombie) {
 
-        ArmorSet set = new ArmorSet(ArmorSetType.IRON);
+        String armorType = config.getString("ArmorMaterial");
+
+        if (armorType == null) armorType = "IRON";
+
+        armorType = armorType.toUpperCase();
+
+        ArmorSetType type;
+
+        try {
+            type = ArmorSetType.valueOf(armorType);
+        } catch (IllegalArgumentException e) {
+            type = ArmorSetType.IRON;
+        }
+
+        ArmorSet set = new ArmorSet(type);
 
         set.enchantAllArmor(Enchantment.DURABILITY, 3);
         set.enchantAllArmor(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
