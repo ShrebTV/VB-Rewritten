@@ -1,7 +1,6 @@
 package me.shreb.vanillabosses.listeners;
 
 import me.shreb.vanillabosses.Vanillabosses;
-import me.shreb.vanillabosses.items.*;
 import me.shreb.vanillabosses.logging.VBLogger;
 import org.bukkit.plugin.PluginManager;
 
@@ -15,6 +14,7 @@ public class VBListeners {
 
         pm.registerEvents(new AntiRepairListener(), Vanillabosses.getInstance());
         pm.registerEvents(new BossDeathEvent(), Vanillabosses.getInstance());
+        pm.registerEvents(new BossUsePortalListener(), Vanillabosses.getInstance());
         pm.registerEvents(new DamageModifiers(), Vanillabosses.getInstance());
         pm.registerEvents(new SpawnEvent(), Vanillabosses.getInstance());
         pm.registerEvents(new AFKChecker(), Vanillabosses.getInstance());
