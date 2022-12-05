@@ -39,6 +39,7 @@ public class BossCommand implements Listener {
     public static final String PLACEHOLDER_KILLER = "<killer>";
     public static final String PLACEHOLDER_DAMAGER = "<damager>";
     public static final String PLACEHOLDER_MOST_DAMAGE = "<mostDamage>";
+    public static final String PLACEHOLDER_KILLED_NAME = "<killedName>";
 
     static {
         DamagerPHReplacer.cleanUp();
@@ -127,7 +128,7 @@ public class BossCommand implements Listener {
      */
     public void executeBossCommand(EntityDeathEvent event) {
 
-        if(this.command.equals("")) {
+        if (this.command.equals("")) {
             return;
         }
 
@@ -172,7 +173,7 @@ public class BossCommand implements Listener {
      * replaces all placeholders which are in the command String.
      * Has to call replaceRadiusPlaceHolder() as last call
      */
-    private void replacePlaceholders(EntityDeathEvent event) {
+    public void replacePlaceholders(EntityDeathEvent event) {
 
         if (!this.command.contains("<") || !this.command.contains(">")) {
             return;
@@ -204,6 +205,13 @@ public class BossCommand implements Listener {
                 this.command = "";
             }
         }
+
+        if (event.getEntity().getCustomName() != null && !event.getEntity().getCustomName().isEmpty()) {
+            this.command = this.command.replace(PLACEHOLDER_KILLED_NAME, event.getEntity().getCustomName());
+        } else {
+            this.command = this.command.replace(PLACEHOLDER_KILLED_NAME, event.getEntity().getName());
+        }
+
         replaceRadiusPlaceHolder();
     }
 

@@ -18,11 +18,12 @@ public class BossDeathMessage {
 
 
     public BossDeathMessage(String rawMessage, EntityDeathEvent event) {
-        this.rawMessage = rawMessage;
         BossCommand helperCommand = new BossCommand(0);
         helperCommand.command = rawMessage;
 
         killerReplacer.replaceKiller(helperCommand, event);
+
+
         if (helperCommand.command.contains(BossCommand.PLACEHOLDER_MOST_DAMAGE)) {
             UUID id = BossCommand.MostDamagePHReplacer.getMostDamageUUID(event.getEntity().getUniqueId());
 
@@ -39,14 +40,21 @@ public class BossDeathMessage {
 
             helperCommand.command = helperCommand.command.replace(BossCommand.PLACEHOLDER_MOST_DAMAGE, player.getName());
         }
-        this.processedMessage = helperCommand.command;
 
+        helperCommand.replacePlaceholders(event);
+
+        this.processedMessage = helperCommand.command;
         replaceKilledName(event);
     }
 
 
-    private void replaceKilledName(EntityDeathEvent event) {
-        this.processedMessage = this.processedMessage.replace("<killedName>", event.getEntity().getName());
+    public void replaceKilledName(EntityDeathEvent event) {
+
+        if (event.getEntity().getCustomName() != null && !event.getEntity().getCustomName().isEmpty()) {
+            this.processedMessage = this.processedMessage.replace(BossCommand.PLACEHOLDER_KILLED_NAME, event.getEntity().getCustomName());
+        } else {
+            this.processedMessage = this.processedMessage.replace(BossCommand.PLACEHOLDER_KILLED_NAME, event.getEntity().getName());
+        }
     }
 
     public void sendMessage() {
