@@ -50,6 +50,8 @@ public class BossDeathMessage {
 
     public void replaceKilledName(EntityDeathEvent event) {
 
+        if (!this.processedMessage.contains(BossCommand.PLACEHOLDER_KILLED_NAME)) return;
+
         if (event.getEntity().getCustomName() != null && !event.getEntity().getCustomName().isEmpty()) {
             this.processedMessage = this.processedMessage.replace(BossCommand.PLACEHOLDER_KILLED_NAME, event.getEntity().getCustomName());
         } else {
