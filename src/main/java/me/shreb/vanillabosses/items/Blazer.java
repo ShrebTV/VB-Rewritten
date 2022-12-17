@@ -20,7 +20,9 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.logging.Level;
+import java.util.stream.Stream;
 
 public class Blazer extends VBItem {
 
@@ -108,15 +110,22 @@ public class Blazer extends VBItem {
     @EventHandler
     public void itemAbility(final EntityDamageByEntityEvent event) {
 
+        Stream<ItemStack> stream = Arrays.stream(((LivingEntity) event.getEntity()).getEquipment().getArmorContents())
+                .filter(n -> n != null && n.getType() != Material.AIR && n.hasItemMeta())
+                .filter(n -> n.getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER));
+
+
+        Optional<ItemStack> item = stream.findFirst();
+
+        if (!item.isPresent()) return;
+
+        ItemStack itemStack = item.get();
+
         boolean executeAbility =
                 //check whether the entity is a living entity
                 event.getEntity() instanceof LivingEntity
-                        //checking whether the attacked entity is wearing a blazer. could theoretically be set to be any armor
-                        && Arrays.stream(((LivingEntity) event.getEntity()).getEquipment().getArmorContents())
-                        .filter(n -> n != null && n.getType() != Material.AIR && n.hasItemMeta())
-                        .anyMatch(n -> n.getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER))
-                        //check whether the chance applies
-                        && Utility.roll(this.configuration.getDouble("chanceToCombust"));
+                        && Utility.roll(this.configuration.getDouble("chanceToCombust"))
+                        && this.cooldownsetter.checkCooldown(itemStack);
 
         if (executeAbility) {
 

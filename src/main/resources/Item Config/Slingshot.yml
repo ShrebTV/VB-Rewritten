@@ -8,6 +8,7 @@ enableDamagingOnUse: true
 damageOnUseAmount: 1
 antiFallDamageTime: 5 #in seconds, how long after you use the slingshot you are protected from fall damage for. Fall damage is cancelled once at the most
 enableCraftingRecipe: true
+AbilityCooldown: 20 #in ticks, 20 means 1 second
 Lore:
   - Makes you leap forward when rightclicked!
   - sneak to use

@@ -13,7 +13,6 @@ import org.bukkit.Particle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -124,6 +123,8 @@ public class BaseballBat extends VBItem implements BossWeapon {
         if(hasPluginItemInHand) {
 
             ItemStack stack = ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand();
+
+            if (!this.cooldownsetter.checkCooldown(stack)) return;
 
             try {
                 new ItemDataRetriever(stack);

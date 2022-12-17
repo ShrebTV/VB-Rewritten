@@ -102,7 +102,8 @@ public class Slingshot extends VBItem {
 
         if (ret) return;
 
-        if (event.getItem().getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER)) {
+        if (event.getItem().getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER)
+                && this.cooldownsetter.checkCooldown(event.getItem())) {
             event.getPlayer().getScoreboardTags().add("NoFallDMG");
             fallDamageTags.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
 

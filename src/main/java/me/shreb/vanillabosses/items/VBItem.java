@@ -1,6 +1,7 @@
 package me.shreb.vanillabosses.items;
 
 import me.shreb.vanillabosses.Vanillabosses;
+import me.shreb.vanillabosses.items.utility.Cooldownsetter;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -29,6 +30,8 @@ public abstract class VBItem implements Listener {
     public String itemGivenMessage;
 
     public ArrayList<String> lore;
+
+    protected Cooldownsetter cooldownsetter = new Cooldownsetter();
 
     static {
         ITEM_NAMES.add("BaseballBat");
