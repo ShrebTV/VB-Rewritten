@@ -124,8 +124,6 @@ public class BaseballBat extends VBItem implements BossWeapon {
 
             ItemStack stack = ((LivingEntity) event.getDamager()).getEquipment().getItemInMainHand();
 
-            if (!this.cooldownsetter.checkCooldown(stack)) return;
-
             try {
                 new ItemDataRetriever(stack);
             } catch (ItemCreationException itemCreationException) {

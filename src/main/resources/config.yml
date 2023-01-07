@@ -48,3 +48,4 @@ Bosses:
 
 Items:
   DisableRepairAndEnchant: false   #if enabled this will prevent repair, combining and renaming of items added by this plugin (at an anvil)
+  CooldownMessage: "Cooldown: ? seconds" # Message a player receives as their action bar when using an item which has a cooldown. Question mark is placeholder for amount of seconds

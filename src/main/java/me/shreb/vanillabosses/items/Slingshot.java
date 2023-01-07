@@ -102,8 +102,17 @@ public class Slingshot extends VBItem {
 
         if (ret) return;
 
-        if (event.getItem().getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER)
-                && this.cooldownsetter.checkCooldown(event.getItem())) {
+        if (!this.cooldownsetter.checkCooldown(event.getItem()) //check for cooldown and whether the item is an actual plugin item
+                && this.cooldownsetter.calculateCooldownLeft(event.getItem()) >= 0) {
+
+            Player player = event.getPlayer();
+
+            this.cooldownsetter.sendCooldownMessage(player, event.getItem());
+
+            return;
+        }
+
+        if (event.getItem().getItemMeta().getPersistentDataContainer().has(this.pdcKey, PersistentDataType.INTEGER)) {
             event.getPlayer().getScoreboardTags().add("NoFallDMG");
             fallDamageTags.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
 

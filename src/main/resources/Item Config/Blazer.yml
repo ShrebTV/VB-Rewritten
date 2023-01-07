@@ -3,7 +3,7 @@ dropChance: 0.1 #drops from the Blaze Boss!
 enableCraftingRecipe: true
 chanceToCombust: 0.333  # in %
 ticksOfFire: 140 # 20 ticks = 1 second, defines how long the attacker will be set on fire for
-AbilityCooldown: 50 #in ticks, 20 means 1 second
+AbilityCooldown: 2500 #in milliseconds, 1000 means 1 second
 Lore:
   - Has a fiery aura
 
