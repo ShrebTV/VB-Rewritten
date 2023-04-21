@@ -251,21 +251,20 @@ public class SkeletonBoss extends VBBoss {
             if (rn <= currentChance) {
                 //invulnerablility
 
-                if (!(entity.isInvulnerable())) {
 
-                    int seconds = config.getInt("onHitEvents.invulnerability.durationInSeconds");
+                int seconds = config.getInt("onHitEvents.invulnerability.durationInSeconds");
 
-                    entity.setInvulnerable(true);
-                    entity.getWorld().spawnParticle(Particle.FLAME, entity.getLocation(), 25);
+                entity.setInvulnerable(true);
+                entity.getWorld().spawnParticle(Particle.FLAME, entity.getLocation(), 25);
 
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
 
-                        entity.setInvulnerable(false);
-                        entity.getWorld().spawnParticle(Particle.HEART, entity.getLocation(), 25);
-                        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 10 * 20, 5));
+                    entity.setInvulnerable(false);
+                    entity.getWorld().spawnParticle(Particle.HEART, entity.getLocation(), 25);
+                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 10 * 20, 5));
 
-                    }, seconds * 20L);
-                }
+                }, seconds * 20L);
+
                 return;
             }
 
