@@ -97,6 +97,11 @@ public class VBBossBar implements Listener {
         if (assignedEntity != null && !assignedEntity.isDead()) {
             //Update progress of the bar
             this.bossBar.setProgress(assignedEntity.getHealth() / assignedEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+            if (this.assignedEntity.getCustomName() != null) {
+                this.bossBar.setTitle(this.assignedEntity.getCustomName());
+            } else {
+                this.bossBar.setTitle(this.assignedEntity.getName());
+            }
 
         } else {
             //if not valid, kill the bossBar
