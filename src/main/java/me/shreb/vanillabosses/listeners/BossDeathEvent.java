@@ -46,6 +46,8 @@ public class BossDeathEvent implements Listener {
             new BossDeathMessage(bossData.bossKilledMessage, event).sendMessage();
         }
 
+        event.setDroppedExp(bossData.droppedXP);
+
         //Get the boss drops corresponding to the boss data object
         BossDrops drops = new BossDrops(bossData);
         //Drop the items from the BossDrops object after converting them toItemStacks()

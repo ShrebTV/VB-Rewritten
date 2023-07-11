@@ -152,6 +152,13 @@ public class WitherBoss extends VBBoss {
         return witherEgg;
     }
 
+    public static boolean checkForWitherEgg(ItemStack toCheck) {
+        return toCheck.hasItemMeta()
+                && toCheck.getItemMeta().getLore().contains("What will hatch from this?")
+                && toCheck.getItemMeta().getLore().contains(org.bukkit.ChatColor.BLACK + "Place on an Anvil to find out!")
+                && toCheck.getType() == Material.DRAGON_EGG;
+    }
+
     /**
      * The method which is meant to edit a wither spawned over a netherite block into a boss wither.
      *

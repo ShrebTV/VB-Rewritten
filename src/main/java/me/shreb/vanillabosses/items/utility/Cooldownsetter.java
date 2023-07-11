@@ -119,7 +119,7 @@ public class Cooldownsetter {
 
         cooldownLeftInMillis = Math.max(cooldownLeftInMillis, 0L);
 
-        return Math.floorDiv(cooldownLeftInMillis, 1000);
+        return cooldownLeftInMillis;
     }
 
     public void sendCooldownMessage(Player player, ItemStack itemStack) {
@@ -131,9 +131,9 @@ public class Cooldownsetter {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(replacePlaceholderOnCooldownMessage(timeLeft), ChatColor.RED));
     }
 
-    private String replacePlaceholderOnCooldownMessage(long timeLeftInSeconds) {
+    private String replacePlaceholderOnCooldownMessage(long timeLeftInMilliseconds) {
         if (COOLDOWN_MESSAGE == null || COOLDOWN_MESSAGE.isEmpty()) return "";
-        return COOLDOWN_MESSAGE.replace("?", String.valueOf(timeLeftInSeconds));
+        return COOLDOWN_MESSAGE.replace("?", String.valueOf(timeLeftInMilliseconds));
     }
 
 }

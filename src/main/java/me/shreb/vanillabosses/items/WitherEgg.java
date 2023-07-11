@@ -2,6 +2,7 @@ package me.shreb.vanillabosses.items;
 
 import me.shreb.vanillabosses.Vanillabosses;
 import me.shreb.vanillabosses.bosses.VBBoss;
+import me.shreb.vanillabosses.bosses.WitherBoss;
 import me.shreb.vanillabosses.items.utility.ItemAbilityNotFoundException;
 import me.shreb.vanillabosses.items.utility.ItemCreationException;
 import me.shreb.vanillabosses.logging.VBLogger;
@@ -21,7 +22,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -100,20 +100,26 @@ public class WitherEgg extends VBItem {
         if (!(event.getBlock().getType().equals(Material.DRAGON_EGG))) return;
         if (!event.getItemInHand().getItemMeta().hasLore()) return;
 
-        if (Objects.requireNonNull(event.getItemInHand().getItemMeta().getLore()).contains("What will hatch from this?")) {
+        if (WitherBoss.checkForWitherEgg(event.getItemInHand())) {
 
             BlockData data = event.getBlock().getBlockData();
 
-            if (event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation().getBlockX(), event.getBlock().getLocation().getBlockY() - 1, event.getBlock().getLocation().getBlockZ()).getType().equals(Material.ANVIL)) {
+            ArrayList<Material> allowedBlocksToPlaceOn = new ArrayList<>();
+            allowedBlocksToPlaceOn.add(Material.ANVIL);
+            allowedBlocksToPlaceOn.add(Material.CHIPPED_ANVIL);
+            allowedBlocksToPlaceOn.add(Material.DAMAGED_ANVIL);
+            Material targetMaterial = event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation().getBlockX(), event.getBlock().getLocation().getBlockY() - 1, event.getBlock().getLocation().getBlockZ()).getType();
 
-                Location eggLoc = event.getBlock().getLocation();
-                Location anvilLoc = event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation().getBlockX(), event.getBlock().getLocation().getBlockY() - 1, event.getBlock().getLocation().getBlockZ()).getLocation();
+            Location eggLoc = event.getBlock().getLocation();
+            Location anvilLoc = event.getBlock().getWorld().getBlockAt(event.getBlock().getLocation().getBlockX(), event.getBlock().getLocation().getBlockY() - 1, event.getBlock().getLocation().getBlockZ()).getLocation();
+
+            if (allowedBlocksToPlaceOn.contains(targetMaterial)) {
 
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Vanillabosses.getInstance(), () -> {
 
                     if (eggLoc.getBlock().getType().equals(Material.DRAGON_EGG)
                             && eggLoc.getBlock().getBlockData().matches(data)
-                            && anvilLoc.getBlock().getType().equals(Material.ANVIL)) {
+                            && allowedBlocksToPlaceOn.contains(anvilLoc.getBlock().getType())) {
 
                         Wither wither = (Wither) event.getPlayer().getWorld().spawnEntity(eggLoc, EntityType.WITHER);
 
@@ -140,26 +146,20 @@ public class WitherEgg extends VBItem {
                         }, 20, 15);
 
                     } else if (eggLoc.getBlock().getType().equals(Material.DRAGON_EGG) && eggLoc.getBlock().getBlockData().matches(data)) {
-                        eggLoc.getBlock().setType(Material.AIR);
-
-                        ItemStack egg = new ItemStack(Material.DRAGON_EGG);
-
-                        ItemMeta meta = egg.getItemMeta();
-                        meta.setDisplayName("A Withers Egg");
-
-                        ArrayList<String> lore = new ArrayList<>();
-                        lore.add("What will hatch from this?");
-                        lore.add(org.bukkit.ChatColor.BLACK + "Place on an Anvil to find out!");
-                        meta.setLore(lore);
-
-                        egg.setItemMeta(meta);
-                        event.getBlock().getWorld().dropItem(eggLoc, egg);
+                        dropWitherEgg(event.getBlock().getWorld(), eggLoc);
                     }
 
-
                 }, this.configuration.getInt("timeToHatch") * 20L);
+            } else if (eggLoc.getBlock().getType().equals(Material.DRAGON_EGG) && eggLoc.getBlock().getBlockData().matches(data)) {
+                dropWitherEgg(event.getBlock().getWorld(), eggLoc);
             }
         }
+    }
+
+    public static void dropWitherEgg(World world, Location eggLocation) {
+        eggLocation.getBlock().setType(Material.AIR);
+        ItemStack egg = WitherBoss.makeWitherEgg();
+        world.dropItem(eggLocation, egg);
     }
 
 
@@ -174,6 +174,7 @@ public class WitherEgg extends VBItem {
                 .filter(n -> n instanceof LivingEntity)
                 .filter(n -> n instanceof Monster)
                 .filter(wither::hasLineOfSight)
+                .filter(n -> n.getType() != EntityType.WITHER)
                 .collect(Collectors.toList());
 
         if (targetList.isEmpty()) return;
